@@ -39,6 +39,21 @@
   --sidebar-accent-foreground: oklch(0.205 0 0);
   --sidebar-border: oklch(0.922 0 0);
   --sidebar-ring: oklch(0.708 0 0);
+
+  /* Docassist brand tokens */
+  --docassist-primary:        oklch(0.62 0.14 165);
+  --docassist-primary-hover:  oklch(0.68 0.13 165);
+  --docassist-primary-light:  oklch(0.75 0.10 168);
+  --docassist-primary-subtle: oklch(0.96 0.03 165);
+  --docassist-accent:         oklch(0.52 0.18 264);
+  --docassist-accent-hover:   oklch(0.62 0.15 264);
+  --docassist-accent-subtle:  oklch(0.96 0.04 264);
+  --docassist-sidebar-width:  180px;
+
+  /* Override shadcn semantic vars to teal brand */
+  --primary:            var(--docassist-primary);
+  --primary-foreground: oklch(1 0 0);
+  --ring:               var(--docassist-primary);
 }
 
 .dark {
@@ -118,6 +133,15 @@
   --radius-2xl: calc(var(--radius) * 1.8);
   --radius-3xl: calc(var(--radius) * 2.2);
   --radius-4xl: calc(var(--radius) * 2.6);
+
+  /* Docassist Tailwind utilities */
+  --color-docassist-primary:        var(--docassist-primary);
+  --color-docassist-primary-hover:  var(--docassist-primary-hover);
+  --color-docassist-primary-light:  var(--docassist-primary-light);
+  --color-docassist-primary-subtle: var(--docassist-primary-subtle);
+  --color-docassist-accent:         var(--docassist-accent);
+  --color-docassist-accent-hover:   var(--docassist-accent-hover);
+  --color-docassist-accent-subtle:  var(--docassist-accent-subtle);
 }
 
 @layer base {

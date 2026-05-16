@@ -113,12 +113,15 @@ const resources = {
 	},
 };
 
-void i18n.use(LanguageDetector).use(initReactI18next).init({
-	resources,
-	lng: 'en',
-	fallbackLng: 'en',
-	defaultNS: 'common',
-	interpolation: { escapeValue: false },
-});
+void i18n
+	.use(LanguageDetector)
+	.use(initReactI18next)
+	.init({
+		resources,
+		lng: 'en',
+		fallbackLng: 'en',
+		defaultNS: 'common',
+		interpolation: { escapeValue: false },
+	});
 
 export { i18n };

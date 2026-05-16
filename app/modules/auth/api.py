@@ -4,6 +4,8 @@ from app.modules.auth.dependencies import get_auth_service, get_current_user
 from app.modules.auth.schemas import (
     AccountDeletionResponse,
     LoginRequest,
+    PasswordChangeRequest,
+    PatientTempLoginRequest,
     RefreshRequest,
     RegisterRequest,
     TokenPair,
@@ -27,7 +29,7 @@ async def register(
     body: RegisterRequest,
     service: AuthService = Depends(get_auth_service),
 ) -> TokenPair:
-    return await service.register(body.email, body.password)
+    return await service.register(body.email, body.password, body.full_name)
 
 
 @router.post("/refresh", response_model=TokenPair)
@@ -36,6 +38,24 @@ async def refresh(
     service: AuthService = Depends(get_auth_service),
 ) -> TokenPair:
     return await service.refresh(body.refresh_token)
+
+
+@router.post("/patient-login", response_model=TokenPair)
+async def patient_login(
+    body: PatientTempLoginRequest,
+    service: AuthService = Depends(get_auth_service),
+) -> TokenPair:
+    return await service.patient_login(body.temp_login, body.password)
+
+
+@router.patch("/me/password", status_code=status.HTTP_200_OK)
+async def change_password(
+    body: PasswordChangeRequest,
+    current_user: User = Depends(get_current_user),
+    service: AuthService = Depends(get_auth_service),
+) -> dict[str, bool]:
+    await service.change_password(current_user, body.current_password, body.new_password)
+    return {"ok": True}
 
 
 @router.get("/me", response_model=UserOut)

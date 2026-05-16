@@ -12,14 +12,24 @@ from app.modules.auth.utils import (
     hash_password,
     verify_password,
 )
+from app.modules.doctors.models import DoctorProfile
+from app.modules.doctors.repository import DoctorRepository
+from app.modules.patients.repository import PatientRepository
 from app.modules.users import EmailAlreadyExists, User, UserNotFound, UserRole, UserService
 
 
 class AuthService:
-    def __init__(self, user_service: UserService) -> None:
+    def __init__(
+        self,
+        user_service: UserService,
+        doctor_repository: DoctorRepository,
+        patient_repository: PatientRepository,
+    ) -> None:
         self._user_service = user_service
+        self._doctor_repository = doctor_repository
+        self._patient_repository = patient_repository
 
-    async def register(self, email: str, password: str) -> TokenPair:
+    async def register(self, email: str, password: str, full_name: str) -> TokenPair:
         existing = await self._user_service.find_by_email(email)
         if existing is not None:
             raise EmailAlreadyExists()
@@ -28,12 +38,17 @@ class AuthService:
             User(
                 email=email,
                 hashed_password=hash_password(password),
-                role=UserRole.user,
+                role=UserRole.doctor,
                 consent_152fz=True,
                 consent_at=datetime.now(),
                 is_active=True,
             )
         )
+
+        await self._doctor_repository.add(
+            DoctorProfile(user_id=user.id, full_name=full_name)
+        )
+
         claims = {
             JWT_CLAIM_SUBJECT: str(user.id),
             JWT_CLAIM_ROLE: user.role.value,
@@ -49,8 +64,34 @@ class AuthService:
         except UserNotFound as exc:
             raise InvalidCredentials() from exc
 
+        if user.role != UserRole.doctor:
+            raise InvalidCredentials()
+
         if not verify_password(password, user.hashed_password):
             raise InvalidCredentials()
+
+        if not user.is_active:
+            raise AccountDisabled()
+
+        claims = {
+            JWT_CLAIM_SUBJECT: str(user.id),
+            JWT_CLAIM_ROLE: user.role.value,
+        }
+        
+        return TokenPair(
+            access_token=create_access_token(claims),
+            refresh_token=create_refresh_token(claims),
+        )
+
+    async def patient_login(self, temp_login: str, password: str) -> TokenPair:
+        patient = await self._patient_repository.get_by_temp_login(temp_login)
+        if patient is None or not verify_password(password, patient.temp_password_hash or ""):
+            raise InvalidCredentials()
+
+        try:
+            user = await self._user_service.get_by_id(patient.user_id)
+        except UserNotFound as exc:
+            raise InvalidCredentials() from exc
 
         if not user.is_active:
             raise AccountDisabled()
@@ -63,6 +104,12 @@ class AuthService:
             access_token=create_access_token(claims),
             refresh_token=create_refresh_token(claims),
         )
+
+    async def change_password(self, user: User, current: str, new: str) -> None:
+        if not verify_password(current, user.hashed_password):
+            raise InvalidCredentials()
+        user.hashed_password = hash_password(new)
+        await self._user_service.add(user)
 
     async def delete_account(self, user: User) -> None:
         await self._user_service.delete(user)

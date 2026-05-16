@@ -9,20 +9,20 @@ from app.db.base import Base, TimestampMixin, UUIDMixin
 
 
 class UserRole(enum.StrEnum):
-    user = "user"
-    admin = "admin"
+    doctor = "doctor"
+    patient = "patient"
 
 
 class User(UUIDMixin, TimestampMixin, Base):
     __tablename__ = "users"
 
-    email: Mapped[str] = mapped_column(CITEXT(), unique=True, nullable=False, index=True)
+    email: Mapped[str | None] = mapped_column(CITEXT(), unique=True, nullable=True, index=True)
     hashed_password: Mapped[str] = mapped_column(String(100), nullable=False)
     role: Mapped[UserRole] = mapped_column(
         Enum(UserRole, name="user_role"),
-        default=UserRole.user,
+        default=UserRole.doctor,
         nullable=False,
-        server_default=UserRole.user.value,
+        server_default=UserRole.doctor.value,
     )
     consent_152fz: Mapped[bool] = mapped_column(Boolean, default=False, nullable=False)
     consent_at: Mapped[datetime | None] = mapped_column(nullable=True)

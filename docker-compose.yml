@@ -5,7 +5,7 @@ services:
     environment:
       POSTGRES_USER: ${POSTGRES_USER:-app_user}
       POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-changeme}
-      POSTGRES_DB: ${POSTGRES_DB:-template_app}
+      POSTGRES_DB: ${POSTGRES_DB:-patient_tracker}
     volumes:
       - pgdata:/var/lib/postgresql
     healthcheck:
@@ -49,8 +49,8 @@ services:
     restart: unless-stopped
     env_file: .env
     environment:
-      VITE_API_BASE_URL: ${API_BASE_URL:-http://localhost:8000/api/v1}
-      API_BASE_INTERNAL_URL: ${API_BASE_INTERNAL_URL:-http://backend:8000/api/v1}
+      VITE_API_BASE_URL: ${API_BASE_URL:-http://localhost:8000}
+      API_BASE_INTERNAL_URL: ${API_BASE_INTERNAL_URL:-http://backend:8000}
     depends_on:
       - backend
     healthcheck:

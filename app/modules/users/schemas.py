@@ -10,7 +10,7 @@ class UserOut(BaseModel):
     model_config = ConfigDict(from_attributes=True)
 
     id: UUID
-    email: str
+    email: str | None
     role: UserRole
     is_active: bool
     consent_152fz: bool

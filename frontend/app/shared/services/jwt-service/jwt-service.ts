@@ -7,8 +7,8 @@ import type { components } from '@shared/types/schema';
 type TokenPair = components['schemas']['TokenPair'];
 
 const AUTH_TOKEN_STORAGE: SafeLsTypes.Key<TokenPair> = {
-	key: 'template_app.auth.token',
-	version: 1,
+	key: 'docassist.auth.token',
+	version: 2,
 	guard: isTokenPair,
 };
 

@@ -13,6 +13,7 @@ async def test_register_requires_152fz_consent(client: AsyncClient) -> None:
         json={
             "email": "new-user@example.com",
             "password": "password123",
+            "full_name": "Test Doctor",
             "consent_152fz": False,
         },
     )
@@ -29,6 +30,7 @@ async def test_register_returns_tokens_and_persists_consent(
         json={
             "email": "registered@example.com",
             "password": "password123",
+            "full_name": "Dr. Registered",
             "consent_152fz": True,
         },
     )
@@ -43,7 +45,7 @@ async def test_register_returns_tokens_and_persists_consent(
         select(User).where(User.email == "registered@example.com")
     )
     assert user is not None
-    assert user.role == UserRole.user
+    assert user.role == UserRole.doctor
     assert user.consent_152fz is True
     assert user.consent_at is not None
 
@@ -56,7 +58,7 @@ async def test_register_rejects_duplicate_email(
         User(
             email="duplicate@example.com",
             hashed_password="hashed",
-            role=UserRole.user,
+            role=UserRole.doctor,
             consent_152fz=True,
             is_active=True,
         )
@@ -68,6 +70,7 @@ async def test_register_rejects_duplicate_email(
         json={
             "email": "duplicate@example.com",
             "password": "password123",
+            "full_name": "Dr. Duplicate",
             "consent_152fz": True,
         },
     )

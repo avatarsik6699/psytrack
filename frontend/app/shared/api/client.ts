@@ -2,6 +2,75 @@ import { queryClient } from '@shared/api/query-client';
 import { env } from '@shared/config/env';
 import { runtime } from '@shared/config/runtime';
 import { jwtService } from '@shared/services/jwt-service';
+import type { components, paths } from '@shared/types/schema';
+
+// ── Token refresh mutex ───────────────────────────────────────────────────────
+
+type TokenPair = components['schemas']['TokenPair'];
+
+const REFRESH_PATH = '/api/v1/public/auth/refresh';
+
+let refreshPromise: Promise<TokenPair | null> | null = null;
+
+async function attemptRefresh(): Promise<TokenPair | null> {
+	if (refreshPromise !== null) return refreshPromise;
+
+	refreshPromise = (async () => {
+		const current = jwtService.read();
+		if (!current?.refresh_token) return null;
+
+		try {
+			const res = await fetch(buildUrl(REFRESH_PATH), {
+				method: 'POST',
+				headers: { 'Content-Type': 'application/json' },
+				body: JSON.stringify({ refresh_token: current.refresh_token }),
+			});
+			if (!res.ok) {
+				jwtService.set(queryClient, null);
+				return null;
+			}
+			const newTokens = (await res.json()) as TokenPair;
+			jwtService.set(queryClient, newTokens);
+			return newTokens;
+		} catch {
+			jwtService.set(queryClient, null);
+			return null;
+		}
+	})().finally(() => {
+		refreshPromise = null;
+	});
+
+	return refreshPromise;
+}
+
+// ── Schema-driven utility types ──────────────────────────────────────────────
+
+type HttpMethod = 'get' | 'post' | 'put' | 'patch' | 'delete';
+type ApiPath = keyof paths;
+
+type PathsWithMethod<M extends HttpMethod> = {
+	[P in ApiPath]: M extends keyof paths[P] ? P : never;
+}[ApiPath];
+
+type RequestBody<P extends ApiPath, M extends HttpMethod> = M extends keyof paths[P]
+	? paths[P][M] extends { requestBody: { content: { 'application/json': infer B } } }
+		? B
+		: never
+	: never;
+
+type SuccessResponse<P extends ApiPath, M extends HttpMethod> = M extends keyof paths[P]
+	? paths[P][M] extends { responses: infer R }
+		? R extends { 200: { content: { 'application/json': infer T } } }
+			? T
+			: R extends { 201: { content: { 'application/json': infer T } } }
+				? T
+				: R extends { 204: unknown }
+					? undefined
+					: never
+		: never
+	: never;
+
+// ─────────────────────────────────────────────────────────────────────────────
 
 type QueryValue = string | number | boolean | null | undefined;
 type PathParamValue = string | number | boolean;
@@ -31,6 +100,14 @@ export class ApiError extends Error {
 	}
 }
 
+async function readErrorDetail(response: Response): Promise<unknown> {
+	try {
+		return await response.clone().json();
+	} catch {
+		return response.text();
+	}
+}
+
 function getApiBaseUrl(): string {
 	return runtime.isServer ? env.server.apiBaseUrl : env.client.apiBaseUrl;
 }
@@ -45,7 +122,11 @@ function resolvePath(path: string, pathParams?: Record<string, PathParamValue>):
 	});
 }
 
-function buildUrl(path: string, query?: Record<string, QueryValue>, pathParams?: Record<string, PathParamValue>): string {
+function buildUrl(
+	path: string,
+	query?: Record<string, QueryValue>,
+	pathParams?: Record<string, PathParamValue>
+): string {
 	const apiBaseUrl = getApiBaseUrl();
 	const normalizedBase = apiBaseUrl.endsWith('/') ? apiBaseUrl : `${apiBaseUrl}/`;
 	const resolvedPath = resolvePath(path, pathParams);
@@ -82,12 +163,30 @@ async function request<TResponse, TBody = unknown>(
 	});
 
 	if (!response.ok) {
-		let detail: unknown;
-		try {
-			detail = await response.json();
-		} catch {
-			detail = await response.text();
+		if (response.status === 401 && path !== REFRESH_PATH) {
+			const newTokens = await attemptRefresh();
+			if (newTokens) {
+				const retryHeaders = new Headers(options.headers);
+				retryHeaders.set('Authorization', `Bearer ${newTokens.access_token}`);
+				if (options.body !== undefined && !retryHeaders.has('Content-Type')) {
+					retryHeaders.set('Content-Type', 'application/json');
+				}
+				const retryRes = await fetch(buildUrl(path, query, pathParams), {
+					method,
+					headers: retryHeaders,
+					body: requestBody,
+					signal: options.signal,
+				});
+				if (!retryRes.ok) {
+					const retryDetail = await readErrorDetail(retryRes);
+					throw new ApiError(retryRes.status, retryDetail, retryRes.headers.get('X-Request-ID') ?? undefined);
+				}
+				if (retryRes.status === 204) return undefined as TResponse;
+				return (await retryRes.json()) as TResponse;
+			}
 		}
+
+		const detail = await readErrorDetail(response);
 		throw new ApiError(response.status, detail, response.headers.get('X-Request-ID') ?? undefined);
 	}
 
@@ -96,11 +195,28 @@ async function request<TResponse, TBody = unknown>(
 }
 
 export const api = {
-	get: <TResponse = unknown>(path: string, options?: Omit<RequestOptions<never>, 'body' | 'rawBody'>) => request<TResponse>('GET', path, options),
-	post: <TResponse = unknown, TBody = unknown>(path: string, options: RequestOptions<TBody>) => request<TResponse, TBody>('POST', path, options),
-	postForm: <TResponse = unknown>(path: string, options: { formData: FormData; signal?: AbortSignal; headers?: HeadersInit; params?: RequestOptions<never>['params'] }) =>
-		request<TResponse>('POST', path, { ...options, rawBody: options.formData }),
-	put: <TResponse = unknown, TBody = unknown>(path: string, options: RequestOptions<TBody>) => request<TResponse, TBody>('PUT', path, options),
-	patch: <TResponse = unknown, TBody = unknown>(path: string, options: RequestOptions<TBody>) => request<TResponse, TBody>('PATCH', path, options),
-	delete: <TResponse = unknown>(path: string, options?: Omit<RequestOptions<never>, 'body' | 'rawBody'>) => request<TResponse>('DELETE', path, options),
+	get: <P extends PathsWithMethod<'get'>>(path: P, options?: Omit<RequestOptions<never>, 'body' | 'rawBody'>) =>
+		request<SuccessResponse<P, 'get'>>('GET', path, options),
+
+	post: <P extends PathsWithMethod<'post'>>(path: P, options: RequestOptions<RequestBody<P, 'post'>>) =>
+		request<SuccessResponse<P, 'post'>, RequestBody<P, 'post'>>('POST', path, options),
+
+	postForm: <TResponse = unknown>(
+		path: string,
+		options: {
+			formData: FormData;
+			signal?: AbortSignal;
+			headers?: HeadersInit;
+			params?: RequestOptions<never>['params'];
+		}
+	) => request<TResponse>('POST', path, { ...options, rawBody: options.formData }),
+
+	put: <P extends PathsWithMethod<'put'>>(path: P, options: RequestOptions<RequestBody<P, 'put'>>) =>
+		request<SuccessResponse<P, 'put'>, RequestBody<P, 'put'>>('PUT', path, options),
+
+	patch: <P extends PathsWithMethod<'patch'>>(path: P, options: RequestOptions<RequestBody<P, 'patch'>>) =>
+		request<SuccessResponse<P, 'patch'>, RequestBody<P, 'patch'>>('PATCH', path, options),
+
+	delete: <P extends PathsWithMethod<'delete'>>(path: P, options?: Omit<RequestOptions<never>, 'body' | 'rawBody'>) =>
+		request<SuccessResponse<P, 'delete'>>('DELETE', path, options),
 };

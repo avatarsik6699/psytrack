@@ -18,7 +18,7 @@ async def test_user(db_session: AsyncSession) -> User:
     user = User(
         email=f"test_user_{unique}@example.com",
         hashed_password=hash_password("testpass123"),
-        role=UserRole.admin,
+        role=UserRole.doctor,
         is_active=True,
         consent_152fz=True,
     )

@@ -1,6 +1,12 @@
 """Auth module public API."""
 
-from app.modules.auth.dependencies import get_auth_service, get_current_user, require_role
+from app.modules.auth.dependencies import (
+    get_auth_service,
+    get_current_user,
+    require_doctor,
+    require_patient,
+    require_role,
+)
 from app.modules.auth.exceptions import (
     AccountDisabled,
     InsufficientRole,
@@ -11,6 +17,8 @@ from app.modules.auth.exceptions import (
 from app.modules.auth.schemas import (
     AccountDeletionResponse,
     LoginRequest,
+    PasswordChangeRequest,
+    PatientTempLoginRequest,
     RefreshRequest,
     RegisterRequest,
     TokenPair,
@@ -32,6 +40,8 @@ __all__ = [
     "InvalidToken",
     "LoginRequest",
     "NotAuthenticated",
+    "PasswordChangeRequest",
+    "PatientTempLoginRequest",
     "RefreshRequest",
     "RegisterRequest",
     "AccountDeletionResponse",
@@ -42,6 +52,8 @@ __all__ = [
     "get_auth_service",
     "get_current_user",
     "hash_password",
+    "require_doctor",
+    "require_patient",
     "require_role",
     "verify_password",
 ]

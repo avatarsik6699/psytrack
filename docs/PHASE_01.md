@@ -35,31 +35,31 @@ Screenshots provided during `/spec-init` establish the overall visual language u
 
 ### Data
 
-- [ ] `D1` Create SQLAlchemy async base + Alembic environment (`app/models/base.py`, `app/core/database.py`, `alembic/env.py` wired to async engine) — _Depends on:_ —
-- [ ] `D2` ORM models: `User`, `DoctorProfile`, `Patient` (columns verbatim from SPEC §3) — _Depends on:_ `D1`
-- [ ] `D3` Alembic initial migration — auto-generate from `D2` models, review, commit migration file — _Depends on:_ `D2`
+- [x] `D1` Create SQLAlchemy async base + Alembic environment (`app/models/base.py`, `app/core/database.py`, `alembic/env.py` wired to async engine) — _Depends on:_ —
+- [x] `D2` ORM models: `User`, `DoctorProfile`, `Patient` (columns verbatim from SPEC §3) — _Depends on:_ `D1`
+- [x] `D3` Alembic initial migration — auto-generate from `D2` models, review, commit migration file — _Depends on:_ `D2`
 
 ### Backend
 
-- [ ] `B1` FastAPI app skeleton — `app/main.py` router mounts, CORS config, `/health` endpoint, lifespan DB init — _Depends on:_ `D1`
-- [ ] `B2` Core security utilities — `app/core/security.py`: bcrypt hash/verify (rounds ≥ 12), JWT access-token create/decode (15 min TTL), refresh-token create/decode (7 days), `TokenPair` response schema — _Depends on:_ —
-- [ ] `B3` Auth FastAPI dependencies — `app/api/deps.py`: `get_current_user`, `require_doctor`, `require_patient` (raises 401/403) — _Depends on:_ `B2`, `D2`
-- [ ] `B4` Auth router — `app/api/v1/auth.py`: `POST /register` (doctor only), `POST /login`, `POST /refresh`, `POST /patient-login` (temp creds or email+pass), `PATCH /me/password` — _Depends on:_ `B2`, `B3`, `D2`
-- [ ] `B5` Pydantic request/response schemas — `app/schemas/auth.py`: `RegisterRequest`, `LoginRequest`, `TokenPair`, `UserOut`, `DoctorProfileOut` — _Depends on:_ `D2`
-- [ ] `B6` App config — `app/core/config.py`: `Settings` (pydantic-settings); reads `DATABASE_URL`, `JWT_SECRET_KEY`, `JWT_ALGORITHM`, `ACCESS_TOKEN_EXPIRE_MINUTES`, `REFRESH_TOKEN_EXPIRE_DAYS`, `BCRYPT_ROUNDS` — _Depends on:_ —
-- [ ] `B7` Backend unit tests — `tests/test_auth.py`: register, login, refresh, patient-login, wrong-password 401, duplicate-email 409 — _Depends on:_ `B4`, `B5`
+- [x] `B1` FastAPI app skeleton — `app/main.py` router mounts, CORS config, `/health` endpoint, lifespan DB init — _Depends on:_ `D1`
+- [x] `B2` Core security utilities — `app/core/security.py`: bcrypt hash/verify (rounds ≥ 12), JWT access-token create/decode (15 min TTL), refresh-token create/decode (7 days), `TokenPair` response schema — _Depends on:_ —
+- [x] `B3` Auth FastAPI dependencies — `app/api/deps.py`: `get_current_user`, `require_doctor`, `require_patient` (raises 401/403) — _Depends on:_ `B2`, `D2`
+- [x] `B4` Auth router — `app/api/v1/auth.py`: `POST /register` (doctor only), `POST /login`, `POST /refresh`, `POST /patient-login` (temp creds or email+pass), `PATCH /me/password` — _Depends on:_ `B2`, `B3`, `D2`
+- [x] `B5` Pydantic request/response schemas — `app/schemas/auth.py`: `RegisterRequest`, `LoginRequest`, `TokenPair`, `UserOut`, `DoctorProfileOut` — _Depends on:_ `D2`
+- [x] `B6` App config — `app/core/config.py`: `Settings` (pydantic-settings); reads `DATABASE_URL`, `JWT_SECRET_KEY`, `JWT_ALGORITHM`, `ACCESS_TOKEN_EXPIRE_MINUTES`, `REFRESH_TOKEN_EXPIRE_DAYS`, `BCRYPT_ROUNDS` — _Depends on:_ —
+- [x] `B7` Backend unit tests — `tests/test_auth.py`: register, login, refresh, patient-login, wrong-password 401, duplicate-email 409 — _Depends on:_ `B4`, `B5`
 
 ### Frontend
 
-- [ ] `F1` React Router v7 shell — `frontend/app/root.tsx` root layout, `frontend/app/routes.ts` route tree; public route `/login`; protected doctor layout `/doctor/*`; protected patient layout `/` (index + nested); auth guard redirects to `/login` if unauthenticated — _Depends on:_ —
-- [ ] `F2` Design system CSS tokens — `frontend/app/styles/tokens.css`: all custom properties from SPEC §5.4 (colors, typography, spacing, radius, shadows, layout, component-state tokens); imported in `root.tsx` — _Depends on:_ —
-- [ ] `F3` Layout components — `frontend/app/components/layout/Sidebar.tsx` (180 px, role-aware nav items, Doctor/Patient view toggle at bottom), `frontend/app/components/layout/TopBar.tsx` (breadcrumb, bell icon, user avatar); styled with tokens — _Depends on:_ `F2`
-- [ ] `F4` Login page — `frontend/app/routes/login.tsx` + `frontend/app/components/auth/LoginForm.tsx`; two input fields (identifier / password), primary teal submit button, calls `POST /api/v1/auth/login` or `/auth/patient-login`, stores tokens, redirects by role — _Depends on:_ `F2`, `F3`
-- [ ] `F5` Auth state — `frontend/app/lib/auth.ts`: in-memory auth store (or React context); `setTokens`, `logout`, `currentUser`; Axios/fetch interceptor for `Authorization: Bearer` header + auto-refresh on 401 — _Depends on:_ `F1`
+- [x] `F1` React Router v7 shell — `frontend/app/root.tsx` root layout, `frontend/app/routes.ts` route tree; public route `/login`; protected doctor layout `/doctor/*`; protected patient layout `/` (index + nested); auth guard redirects to `/login` if unauthenticated — _Depends on:_ —
+- [x] `F2` Design system CSS tokens — `frontend/app/styles/tokens.css`: all custom properties from SPEC §5.4 (colors, typography, spacing, radius, shadows, layout, component-state tokens); imported in `root.tsx` — _Depends on:_ —
+- [x] `F3` Layout components — `frontend/app/components/layout/Sidebar.tsx` (180 px, role-aware nav items, Doctor/Patient view toggle at bottom), `frontend/app/components/layout/TopBar.tsx` (breadcrumb, bell icon, user avatar); styled with tokens — _Depends on:_ `F2`
+- [x] `F4` Login page — `frontend/app/routes/login.tsx` + `frontend/app/components/auth/LoginForm.tsx`; two input fields (identifier / password), primary teal submit button, calls `POST /api/v1/auth/login` or `/auth/patient-login`, stores tokens, redirects by role — _Depends on:_ `F2`, `F3`
+- [x] `F5` Auth state — `frontend/app/lib/auth.ts`: in-memory auth store (or React context); `setTokens`, `logout`, `currentUser`; Axios/fetch interceptor for `Authorization: Bearer` header + auto-refresh on 401 — _Depends on:_ `F1`
 
 ### Infra
 
-- [ ] `I1` Docker Compose & env — verify `docker-compose.yml` has `postgres`, `backend`, `frontend`, `nginx` services; `docker-compose.override.yml` for dev hot-reload; `.env.example` lists all Phase 01 env vars — _Depends on:_ —
+- [x] `I1` Docker Compose & env — verify `docker-compose.yml` has `postgres`, `backend`, `frontend`, `nginx` services; `docker-compose.override.yml` for dev hot-reload; `.env.example` lists all Phase 01 env vars — _Depends on:_ —
 
 ---
 

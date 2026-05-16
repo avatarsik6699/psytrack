@@ -23,7 +23,7 @@ def upgrade() -> None:
     op.execute("CREATE EXTENSION IF NOT EXISTS pgcrypto")
     op.execute("CREATE EXTENSION IF NOT EXISTS citext")
 
-    user_role = postgresql.ENUM("user", "admin", name="user_role", create_type=False)
+    user_role = postgresql.ENUM("doctor", "patient", name="user_role", create_type=False)
     user_role.create(op.get_bind(), checkfirst=True)
 
     op.create_table(
@@ -34,9 +34,9 @@ def upgrade() -> None:
             nullable=False,
             server_default=sa.text("gen_random_uuid()"),
         ),
-        sa.Column("email", postgresql.CITEXT(), nullable=False),
+        sa.Column("email", postgresql.CITEXT(), nullable=True),
         sa.Column("hashed_password", sa.String(length=100), nullable=False),
-        sa.Column("role", user_role, nullable=False, server_default="user"),
+        sa.Column[postgresql.ENUM]("role", user_role, nullable=False, server_default="doctor"),
         sa.Column("consent_152fz", sa.Boolean(), nullable=False, server_default=sa.text("false")),
         sa.Column("consent_at", sa.DateTime(timezone=True), nullable=True),
         sa.Column("is_active", sa.Boolean(), nullable=False, server_default=sa.text("true")),
@@ -59,6 +59,7 @@ def upgrade() -> None:
 
     # Password: changeme123 (bcrypt rounds=12)
     admin_hash = "$2b$12$JUH0ENl95Y26jqTeiVPWi.PpsvrCT.ema92b.rd/.bXedDhfsi5mu"
+    admin_email = "admin@example.com"
     op.execute(
         sa.text(
             """
@@ -67,13 +68,13 @@ def upgrade() -> None:
                 consent_152fz, consent_at, is_active
             )
             VALUES (
-                gen_random_uuid(), :email, :pw, 'admin',
+                gen_random_uuid(), :email, :pw, 'doctor',
                 true, now(), true
             )
             ON CONFLICT (email) DO NOTHING
             """
         ).bindparams(
-            email="admin@example.com",
+            email=admin_email,
             pw=admin_hash,
         )
     )

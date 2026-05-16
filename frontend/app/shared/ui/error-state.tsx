@@ -28,7 +28,9 @@ export function ErrorState({
 		<section className='card space-y-4' role='alert' aria-live='assertive'>
 			<h1 className='text-2xl font-semibold tracking-tight'>{title}</h1>
 			<p className='text-sm text-muted-foreground'>{error.message}</p>
-			{error.requestId ? <p className='text-xs text-muted-foreground'>{t('requestId', { id: error.requestId })}</p> : null}
+			{error.requestId ? (
+				<p className='text-xs text-muted-foreground'>{t('requestId', { id: error.requestId })}</p>
+			) : null}
 			{error.technicalDetails ? (
 				<pre className='overflow-auto rounded-md border p-3 text-xs'>{error.technicalDetails}</pre>
 			) : null}
