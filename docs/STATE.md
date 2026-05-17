@@ -16,7 +16,7 @@
 | Phase    | Status     | Tag    | Gate | Impl By | Notes |
 |----------|------------|--------|------|---------|-------|
 | PHASE_01 | ✅ done    | v0.01.0 | ✅ | 🤝 hybrid | Foundation & Auth |
-| PHASE_02 | ⏳ pending | v0.02.0 | ⬜ | —         | Patient Management |
+| PHASE_02 | ✅ done    | v0.02.0 | ✅ | 🤝 hybrid | Patient Management |
 
 <!-- Add new rows here via /phase-init N -->
 

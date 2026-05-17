@@ -6,6 +6,44 @@
 
 ---
 
+## 2026-05-17 — Phase 02 complete
+
+**Type**: phase-completion
+**Author**: AI (context-update)
+**Triggered by**: PHASE_02 gate passed and committed
+
+### Changes
+- ORM models: `Diagnosis`, `MedicationReference`, `PatientMedication`
+- Alembic migration `0003_diagnoses_medications`
+- Patient CRUD module: list, create (with temp credential generation), get, update, archive
+- Patient repository scoped to `doctor_id`; service generates random 8-char alphanumeric temp credentials
+- Diagnoses module: add and update diagnoses per patient
+- Medications reference module: searchable paginated reference list with ≥5 seed entries
+- Doctor medication assignment: assign medications to patients with dose/unit/frequency/dates
+- All new routers wired into `app/api/v1/router.py`
+- Backend tests: patient CRUD, 403 isolation, diagnoses, medications
+- Doctor patient roster page (`/doctor`) with `PatientCard` grid and sort controls
+- Add patient modal with temp credentials copy-to-clipboard panel
+- Patient detail shell with edit mode and archive confirmation
+- Diagnoses section (inline add/edit) inside patient detail
+- Medication assignment section with typeahead search inside patient detail
+- API service layer: `patients.ts`, `diagnoses.ts`, `medications.ts` typed wrappers
+- Routes wired: `/doctor` and `/doctor/patients/:id`; Sidebar updated with doctor nav links
+
+### Affected Phases
+- None (additive change)
+
+### Contract Updates
+- DB tables added: `diagnoses`, `medications_reference`, `patient_medications`; Alembic head: `0003_diagnoses_medications`
+- Endpoints added: GET/POST /doctor/patients, GET/PATCH /doctor/patients/{id}, POST /doctor/patients/{id}/archive, POST/PATCH /doctor/patients/{id}/diagnoses[/{did}], POST/PATCH /doctor/patients/{id}/medications[/{mid}], GET /ref/medications
+- TypeScript types added: `PatientCreate`, `PatientOut`, `PatientCreatedOut`, `DiagnosisOut`, `MedicationReferenceOut`, `PatientMedicationOut`
+- No new env vars
+
+### Notes
+Patient CRUD is fully scoped to the owning doctor — cross-doctor access returns 403. Temp credentials (login + password) are generated once on patient creation and never stored in plaintext. Color logic for PatientCard indicator is deferred to Phase 06; all cards render gray for now.
+
+---
+
 ## 2026-05-16 — Phase 01 complete
 
 **Type**: phase-completion
