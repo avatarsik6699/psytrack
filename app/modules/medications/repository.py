@@ -54,3 +54,19 @@ class PatientMedicationRepository:
             .options(selectinload(PatientMedication.medication))
         )
         return list(result)
+
+    async def list_active_by_patient(self, patient_id: UUID) -> list[PatientMedication]:
+        from datetime import date
+
+        result = await self._session.scalars(
+            select(PatientMedication)
+            .where(
+                PatientMedication.patient_id == patient_id,
+                (PatientMedication.ended_at.is_(None)) | (PatientMedication.ended_at > date.today()),
+            )
+            .options(selectinload(PatientMedication.medication))
+        )
+        return list(result)
+
+    async def update(self, pm: PatientMedication) -> None:
+        await self._session.flush()

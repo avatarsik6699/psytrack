@@ -5,7 +5,7 @@
   },
 
   "captured_at": "2026-05-17",
-  "phase_completed": "03",
+  "phase_completed": "04",
   "phase_in_progress": null,
 
   "stack": {
@@ -106,7 +106,13 @@
     { "phase": "03", "method": "POST",   "path": "/api/v1/patient/tests/{patient_scale_id}/submit",       "auth": "patient", "response": "TestCompletionOut" },
     { "phase": "03", "method": "GET",    "path": "/api/v1/patient/history",                               "auth": "patient", "response": "{items:TestCompletionOut[], total:int}" },
     { "phase": "03", "method": "GET",    "path": "/api/v1/patient/scales",                                "auth": "patient", "response": "PatientScaleOut[] (with embedded scale)" },
-    { "phase": "03", "method": "GET",    "path": "/api/v1/patient/scales/{patient_scale_id}",             "auth": "patient", "response": "PatientScaleOut (with embedded scale)" }
+    { "phase": "03", "method": "GET",    "path": "/api/v1/patient/scales/{patient_scale_id}",             "auth": "patient", "response": "PatientScaleOut (with embedded scale)" },
+    { "phase": "04", "method": "GET",    "path": "/api/v1/patient/medications",                             "auth": "patient", "response": "PatientMedicationOut[]" },
+    { "phase": "04", "method": "PATCH",  "path": "/api/v1/patient/medications/{id}/log",                   "auth": "patient", "response": "EventLogOut" },
+    { "phase": "04", "method": "POST",   "path": "/api/v1/patient/medications",                             "auth": "patient", "response": "PatientMedicationOut" },
+    { "phase": "04", "method": "PATCH",  "path": "/api/v1/patient/medications/{id}",                       "auth": "patient", "response": "PatientMedicationOut" },
+    { "phase": "04", "method": "DELETE", "path": "/api/v1/patient/medications/{id}",                       "auth": "patient", "response": "{ok:true}" },
+    { "phase": "04", "method": "GET",    "path": "/api/v1/doctor/patients/{id}/charts/medications",        "auth": "doctor",  "response": "MedicationChartSeries[]" }
   ],
 
   "db_schema": {
@@ -135,5 +141,5 @@
 
   "db_seeds": {},
 
-  "notes": "Phase 03 complete. Added scales, clinical_rules, patient_scales, test_completions, and event_log tables; scale reference endpoints; doctor scale-assignment and delete (409 guard); patient assessment submit, history, and assigned-scales endpoints; assessment wizard, history route, and doctor patient-detail scale list frontend."
+  "notes": "Phase 04 complete. Added patient-facing medication endpoints (list, log dose, add, edit, stop) and doctor medication chart endpoint; new event types dose_taken, dose_missed, drug_started, dose_changed, drug_stopped written to event_log via emit() helper; MedicationChart Recharts component integrated into doctor patient detail; patient home page extended with medication section."
 }

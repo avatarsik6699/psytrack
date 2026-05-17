@@ -18,6 +18,7 @@
 | PHASE_01 | ✅ done    | v0.01.0 | ✅ | 🤝 hybrid | Foundation & Auth |
 | PHASE_02 | ✅ done    | v0.02.0 | ✅ | 🤝 hybrid | Patient Management |
 | PHASE_03 | ✅ done    | v0.03.0 | ✅ | 🤝 hybrid | Scale & Assessment Engine |
+| PHASE_04 | ✅ done    | v0.04.0 | ✅ | 🤝 hybrid | Medication Tracking |
 
 <!-- Add new rows here via /phase-init N -->
 

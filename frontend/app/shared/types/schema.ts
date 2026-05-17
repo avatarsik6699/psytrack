@@ -281,6 +281,76 @@ export interface paths {
         patch: operations["update_patient_medication_api_v1_doctor_patients__patient_id__medications__medication_id__patch"];
         trace?: never;
     };
+    "/api/v1/doctor/patients/{patient_id}/charts/medications": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Get Medication Chart */
+        get: operations["get_medication_chart_api_v1_doctor_patients__patient_id__charts_medications_get"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/patient/medications": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** List My Medications */
+        get: operations["list_my_medications_api_v1_patient_medications_get"];
+        put?: never;
+        /** Add My Medication */
+        post: operations["add_my_medication_api_v1_patient_medications_post"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/patient/medications/{medication_id}/log": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        /** Log Dose */
+        patch: operations["log_dose_api_v1_patient_medications__medication_id__log_patch"];
+        trace?: never;
+    };
+    "/api/v1/patient/medications/{medication_id}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post?: never;
+        /** Stop My Medication */
+        delete: operations["stop_my_medication_api_v1_patient_medications__medication_id__delete"];
+        options?: never;
+        head?: never;
+        /** Edit My Medication */
+        patch: operations["edit_my_medication_api_v1_patient_medications__medication_id__patch"];
+        trace?: never;
+    };
     "/api/v1/ref/scales": {
         parameters: {
             query?: never;
@@ -484,6 +554,37 @@ export interface components {
             /** Notes */
             notes?: string | null;
         };
+        /** EventLogOut */
+        EventLogOut: {
+            /**
+             * Id
+             * Format: uuid
+             */
+            id: string;
+            /**
+             * Patient Id
+             * Format: uuid
+             */
+            patient_id: string;
+            /** Event Type */
+            event_type: string;
+            /** Payload */
+            payload: {
+                [key: string]: unknown;
+            } | null;
+            /**
+             * Occurred At
+             * Format: date-time
+             */
+            occurred_at: string;
+            /**
+             * Created At
+             * Format: date-time
+             */
+            created_at: string;
+            /** Created By */
+            created_by: string | null;
+        };
         /** HTTPValidationError */
         HTTPValidationError: {
             /** Detail */
@@ -498,6 +599,38 @@ export interface components {
             email: string;
             /** Password */
             password: string;
+        };
+        /** MedicationChartPoint */
+        MedicationChartPoint: {
+            /** Date */
+            date: string;
+            /** Dose Mg */
+            dose_mg: string | null;
+        };
+        /** MedicationChartSeries */
+        MedicationChartSeries: {
+            /** Inn */
+            inn: string;
+            /**
+             * Medication Id
+             * Format: uuid
+             */
+            medication_id: string;
+            /** Points */
+            points: components["schemas"]["MedicationChartPoint"][];
+        };
+        /** MedicationLogIn */
+        MedicationLogIn: {
+            /**
+             * Status
+             * @enum {string}
+             */
+            status: "taken" | "missed";
+            /**
+             * Occurred At
+             * Format: date-time
+             */
+            occurred_at: string;
         };
         /** MedicationReferenceOut */
         MedicationReferenceOut: {
@@ -1519,6 +1652,193 @@ export interface operations {
             header?: never;
             path: {
                 patient_id: string;
+                medication_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["PatientMedicationUpdate"];
+            };
+        };
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["PatientMedicationOut"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    get_medication_chart_api_v1_doctor_patients__patient_id__charts_medications_get: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                patient_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["MedicationChartSeries"][];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    list_my_medications_api_v1_patient_medications_get: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["PatientMedicationOut"][];
+                };
+            };
+        };
+    };
+    add_my_medication_api_v1_patient_medications_post: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["PatientMedicationCreate"];
+            };
+        };
+        responses: {
+            /** @description Successful Response */
+            201: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["PatientMedicationOut"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    log_dose_api_v1_patient_medications__medication_id__log_patch: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                medication_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["MedicationLogIn"];
+            };
+        };
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["EventLogOut"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    stop_my_medication_api_v1_patient_medications__medication_id__delete: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                medication_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        [key: string]: unknown;
+                    };
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    edit_my_medication_api_v1_patient_medications__medication_id__patch: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
                 medication_id: string;
             };
             cookie?: never;

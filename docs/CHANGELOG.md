@@ -6,6 +6,36 @@
 
 ---
 
+## 2026-05-17 — Phase 04 complete
+
+**Type**: phase-completion
+**Author**: AI (context-update)
+**Triggered by**: PHASE_04 gate passed and committed
+
+### Changes
+- Patient-facing medication endpoints: list own medications, log dose (taken/missed), add new medication, edit dose/dates, stop medication (soft-delete via `ended_at`)
+- Doctor chart endpoint: GET /doctor/patients/{id}/charts/medications returning dose series per INN
+- `emit()` helper added to `app/modules/events/repository.py` — used by all patient medication mutations
+- New Pydantic schema: `EventLogOut` in `app/modules/events/schemas.py`
+- New medication schemas: `MedicationLogIn`, `MedicationChartPoint`, `MedicationChartSeries`, `MedicationChartOut`
+- New event types written to `event_log`: `dose_taken`, `dose_missed`, `drug_started`, `dose_changed`, `drug_stopped`
+- Frontend: `MedicationChart` Recharts component (one line per INN, x=date, y=dose_mg) in doctor patient detail; patient home page extended with medication list and log actions
+- Test suite: `tests/test_medication_tracking.py` covering all new patient and chart endpoints
+
+### Affected Phases
+- None (additive change)
+
+### Contract Updates
+- Endpoints added: GET/POST/PATCH/DELETE /api/v1/patient/medications[/{id}], PATCH /api/v1/patient/medications/{id}/log, GET /api/v1/doctor/patients/{id}/charts/medications
+- TypeScript types added: `MedicationLogIn`, `EventLogOut`, `MedicationChartPoint`, `MedicationChartSeries`, `MedicationChartOut`
+- No new DB tables (patient_medications from Phase 02, event_log from Phase 03); Alembic head unchanged: `0005_event_log`
+- No new env vars
+
+### Notes
+All patient medication writes are ownership-gated — PATCH/DELETE return 403 if the medication belongs to another patient. `ended_at = now()` is used for soft-delete rather than hard deletion to preserve audit history. The `emit()` helper encapsulates all `event_log` inserts so mutations stay consistent.
+
+---
+
 ## 2026-05-17 — Phase 03 complete
 
 **Type**: phase-completion

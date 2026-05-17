@@ -1,6 +1,6 @@
 from datetime import date, datetime
 from decimal import Decimal
-from typing import Literal
+from typing import Any, Literal
 from uuid import UUID
 
 from pydantic import BaseModel, ConfigDict
@@ -54,3 +54,31 @@ class PatientMedicationOut(BaseModel):
     dose_precision: str | None
     created_by_role: str | None
     created_at: datetime
+
+
+class MedicationLogIn(BaseModel):
+    status: Literal["taken", "missed"]
+    occurred_at: datetime
+
+
+class EventLogOut(BaseModel):
+    model_config = ConfigDict(from_attributes=True)
+
+    id: UUID
+    patient_id: UUID
+    event_type: str
+    payload: dict[str, Any] | None
+    occurred_at: datetime
+    created_at: datetime
+    created_by: UUID | None
+
+
+class MedicationChartPoint(BaseModel):
+    date: str
+    dose_mg: Decimal | None
+
+
+class MedicationChartSeries(BaseModel):
+    inn: str
+    medication_id: UUID
+    points: list[MedicationChartPoint]

@@ -8,6 +8,7 @@ import { useDeleteScaleMutation, usePatientScales } from '@shared/api/scales';
 import { AssignTestModal } from '@/components/doctor/AssignTestModal';
 import { DiagnosisList } from '@/components/doctor/DiagnosisList';
 import { MedicationAssignForm } from '@/components/doctor/MedicationAssignForm';
+import { MedicationChart } from '@/components/doctor/MedicationChart';
 import { PatientHeader } from '@/components/doctor/PatientHeader';
 
 export default function PatientDetailRoute() {
@@ -88,6 +89,7 @@ export default function PatientDetailRoute() {
 						onCancel={() => setAddingMed(false)}
 					/>
 				)}
+				<MedicationChart patientId={id!} />
 			</section>
 
 			<section className='bg-white rounded-lg border border-border p-4'>
