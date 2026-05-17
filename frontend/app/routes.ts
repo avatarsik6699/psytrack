@@ -8,6 +8,7 @@ export default [
 		index('./routes/_index.tsx'),
 		route('history', './routes/history.tsx'),
 		route('profile', './routes/profile.tsx'),
+		route('assessment/:patientScaleId', './routes/assessment.$patientScaleId.tsx'),
 	]),
 	// Doctor-protected routes
 	layout('./layouts/doctor-layout.tsx', [

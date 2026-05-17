@@ -281,6 +281,143 @@ export interface paths {
         patch: operations["update_patient_medication_api_v1_doctor_patients__patient_id__medications__medication_id__patch"];
         trace?: never;
     };
+    "/api/v1/ref/scales": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** List Scales */
+        get: operations["list_scales_api_v1_ref_scales_get"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/ref/scales/{scale_id}/questions": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Get Scale Questions */
+        get: operations["get_scale_questions_api_v1_ref_scales__scale_id__questions_get"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/doctor/patients/{patient_id}/scales": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** List Patient Scales */
+        get: operations["list_patient_scales_api_v1_doctor_patients__patient_id__scales_get"];
+        put?: never;
+        /** Assign Scale */
+        post: operations["assign_scale_api_v1_doctor_patients__patient_id__scales_post"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/doctor/patients/{patient_id}/scales/{patient_scale_id}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post?: never;
+        /** Remove Scale */
+        delete: operations["remove_scale_api_v1_doctor_patients__patient_id__scales__patient_scale_id__delete"];
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/patient/tests/{patient_scale_id}/submit": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Submit Test */
+        post: operations["submit_test_api_v1_patient_tests__patient_scale_id__submit_post"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/patient/history": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Get History */
+        get: operations["get_history_api_v1_patient_history_get"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/patient/scales": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** List My Scales */
+        get: operations["list_my_scales_api_v1_patient_scales_get"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/patient/scales/{patient_scale_id}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Get Patient Scale */
+        get: operations["get_patient_scale_api_v1_patient_scales__patient_scale_id__get"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
 }
 export type webhooks = Record<string, never>;
 export interface components {
@@ -541,6 +678,57 @@ export interface components {
              */
             created_at: string;
         };
+        /** PatientScaleCreate */
+        PatientScaleCreate: {
+            /**
+             * Scale Id
+             * Format: uuid
+             */
+            scale_id: string;
+            /**
+             * Diagnosis Id
+             * Format: uuid
+             */
+            diagnosis_id: string;
+            /** Frequency Days */
+            frequency_days: number;
+        };
+        /** PatientScaleOut */
+        PatientScaleOut: {
+            /**
+             * Id
+             * Format: uuid
+             */
+            id: string;
+            /**
+             * Patient Id
+             * Format: uuid
+             */
+            patient_id: string;
+            /**
+             * Diagnosis Id
+             * Format: uuid
+             */
+            diagnosis_id: string;
+            /**
+             * Scale Id
+             * Format: uuid
+             */
+            scale_id: string;
+            /** Frequency Days */
+            frequency_days: number;
+            /**
+             * Assigned By
+             * Format: uuid
+             */
+            assigned_by: string;
+            /**
+             * Created At
+             * Format: date-time
+             */
+            created_at: string;
+            scale?: components["schemas"]["ScaleOut"] | null;
+        };
         /** PatientTempLoginRequest */
         PatientTempLoginRequest: {
             /** Temp Login */
@@ -580,6 +768,87 @@ export interface components {
              * @constant
              */
             consent_152fz: true;
+        };
+        /** ScaleOut */
+        ScaleOut: {
+            /**
+             * Id
+             * Format: uuid
+             */
+            id: string;
+            /** Code */
+            code: string;
+            /** Name */
+            name: string;
+            /** Score Min */
+            score_min: number;
+            /** Score Max */
+            score_max: number;
+            /** Improvement Direction */
+            improvement_direction: string | null;
+        };
+        /** ScaleQuestion */
+        ScaleQuestion: {
+            /** Id */
+            id: number;
+            /** Text */
+            text: string;
+            /** Options */
+            options: {
+                [key: string]: unknown;
+            }[];
+        };
+        /** TestCompletionOut */
+        TestCompletionOut: {
+            /**
+             * Id
+             * Format: uuid
+             */
+            id: string;
+            /**
+             * Patient Id
+             * Format: uuid
+             */
+            patient_id: string;
+            /**
+             * Patient Scale Id
+             * Format: uuid
+             */
+            patient_scale_id: string;
+            /**
+             * Scale Id
+             * Format: uuid
+             */
+            scale_id: string;
+            /** Score */
+            score: number;
+            /** Baseline */
+            baseline: boolean;
+            /**
+             * Completed At
+             * Format: date-time
+             */
+            completed_at: string;
+            scale?: components["schemas"]["ScaleOut"] | null;
+        };
+        /** TestCompletionPage */
+        TestCompletionPage: {
+            /** Items */
+            items: components["schemas"]["TestCompletionOut"][];
+            /** Total */
+            total: number;
+        };
+        /** TestSubmitIn */
+        TestSubmitIn: {
+            /** Answers */
+            answers: {
+                [key: string]: unknown;
+            }[];
+            /**
+             * Baseline
+             * @default false
+             */
+            baseline: boolean;
         };
         /** TokenPair */
         TokenPair: {
@@ -1267,6 +1536,275 @@ export interface operations {
                 };
                 content: {
                     "application/json": components["schemas"]["PatientMedicationOut"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    list_scales_api_v1_ref_scales_get: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ScaleOut"][];
+                };
+            };
+        };
+    };
+    get_scale_questions_api_v1_ref_scales__scale_id__questions_get: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                scale_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ScaleQuestion"][];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    list_patient_scales_api_v1_doctor_patients__patient_id__scales_get: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                patient_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["PatientScaleOut"][];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    assign_scale_api_v1_doctor_patients__patient_id__scales_post: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                patient_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["PatientScaleCreate"];
+            };
+        };
+        responses: {
+            /** @description Successful Response */
+            201: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["PatientScaleOut"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    remove_scale_api_v1_doctor_patients__patient_id__scales__patient_scale_id__delete: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                patient_id: string;
+                patient_scale_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        [key: string]: unknown;
+                    };
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    submit_test_api_v1_patient_tests__patient_scale_id__submit_post: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                patient_scale_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["TestSubmitIn"];
+            };
+        };
+        responses: {
+            /** @description Successful Response */
+            201: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["TestCompletionOut"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    get_history_api_v1_patient_history_get: {
+        parameters: {
+            query?: {
+                limit?: number;
+                offset?: number;
+            };
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["TestCompletionPage"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    list_my_scales_api_v1_patient_scales_get: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["PatientScaleOut"][];
+                };
+            };
+        };
+    };
+    get_patient_scale_api_v1_patient_scales__patient_scale_id__get: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                patient_scale_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["PatientScaleOut"];
                 };
             };
             /** @description Validation Error */

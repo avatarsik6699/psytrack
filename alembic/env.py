@@ -6,8 +6,10 @@ from sqlalchemy.ext.asyncio import create_async_engine
 
 import app.modules.diagnoses  # noqa: F401
 import app.modules.doctors  # noqa: F401
+import app.modules.events  # noqa: F401
 import app.modules.medications  # noqa: F401
 import app.modules.patients  # noqa: F401
+import app.modules.scales  # noqa: F401
 import app.modules.users  # noqa: F401
 from alembic import context
 from app.db.base import Base

@@ -35,3 +35,6 @@ class PatientRepository:
         return await self._session.scalar(
             select(Patient).where(Patient.id == patient_id, Patient.doctor_id == doctor_id)
         )
+
+    async def get_by_user_id(self, user_id: UUID) -> Patient | None:
+        return await self._session.scalar(select(Patient).where(Patient.user_id == user_id))
