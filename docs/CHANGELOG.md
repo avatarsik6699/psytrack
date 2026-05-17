@@ -6,6 +6,36 @@
 
 ---
 
+## 2026-05-17 — Phase 03 complete
+
+**Type**: phase-completion
+**Author**: AI (context-update)
+**Triggered by**: PHASE_03 gate passed and committed
+
+### Changes
+- ORM models: `Scale`, `ClinicalRule`, `PatientScale`, `TestCompletion`, `EventLog`
+- Alembic migrations `0004_scales_patient_scales` and `0005_event_log`
+- Seeder `app/seeders/scales.py`: PHQ-9 (9 Qs), GAD-7 (7 Qs), YMRS (11 items) with `clinical_rules` rows
+- Reference endpoints: GET /ref/scales, GET /ref/scales/{id}/questions
+- Doctor endpoints: GET/POST /doctor/patients/{id}/scales, DELETE /doctor/patients/{id}/scales/{sid} (409 guard when completions exist)
+- Patient endpoints: POST /patient/tests/{patient_scale_id}/submit (score derivation + event_log emission), GET /patient/history (paginated), GET /patient/scales, GET /patient/scales/{patient_scale_id}
+- `event_log` table: append-only; `test_completed` event emitted on each submission
+- Frontend: `AssignTestModal` component in doctor patient detail; `/assessment/:patientScaleId` multi-step wizard; `/history` route populated; patient home page replaced with assigned-assessments list; `frontend/app/shared/api/scales.ts` API client
+
+### Affected Phases
+- None (additive change)
+
+### Contract Updates
+- DB tables added: `scales`, `clinical_rules`, `patient_scales`, `test_completions`, `event_log`; Alembic head: `0005_event_log`
+- Endpoints added: GET/POST/DELETE /doctor/patients/{id}/scales[/{sid}], GET /ref/scales[/{id}/questions], POST /patient/tests/{id}/submit, GET /patient/history, GET /patient/scales[/{id}]
+- TypeScript types added: `ScaleQuestion`, `ScaleOut`, `PatientScaleOut`, `TestSubmitIn`, `TestCompletionOut`
+- No new env vars
+
+### Notes
+DELETE /doctor/patients/{id}/scales/{sid} returns 409 when `test_completions` exist for that `patient_scale_id`, preventing accidental cascade-deletion of clinical history. `questions_json` was added as a NOT NULL JSONB column on `scales` to serve the questions endpoint — a spec gap resolved in this phase. `event_log` is minimal (append-only) and will be extended with full timeline features in Phase 06.
+
+---
+
 ## 2026-05-17 — Phase 02 complete
 
 **Type**: phase-completion

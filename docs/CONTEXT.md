@@ -5,7 +5,7 @@
   },
 
   "captured_at": "2026-05-17",
-  "phase_completed": "02",
+  "phase_completed": "03",
   "phase_in_progress": null,
 
   "stack": {
@@ -48,6 +48,36 @@
       "name": "PatientMedication",
       "module": "app/modules/medications/models.py",
       "fields": ["id:UUID", "patient_id:UUID FK patients", "medication_id:UUID FK medications_reference", "dose_mg:NUMERIC", "unit:TEXT", "frequency:TEXT", "started_at:DATE", "ended_at:DATE", "dose_precision:TEXT('exact'|'approx'|'range')", "created_by_role:TEXT('doctor'|'patient')", "created_at:TIMESTAMPTZ"]
+    },
+    {
+      "phase": "03",
+      "name": "Scale",
+      "module": "app/modules/scales/models.py",
+      "fields": ["id:UUID", "code:TEXT UNIQUE", "name:TEXT", "score_min:INT", "score_max:INT", "improvement_direction:TEXT('lower'|'higher')", "domains_json:JSONB", "questions_json:JSONB"]
+    },
+    {
+      "phase": "03",
+      "name": "ClinicalRule",
+      "module": "app/modules/scales/models.py",
+      "fields": ["id:UUID", "diagnosis_icd:TEXT", "scale_id:UUID FK scales", "control_point_days:INT", "response_threshold_pct:INT", "response_threshold_abs:INT"]
+    },
+    {
+      "phase": "03",
+      "name": "PatientScale",
+      "module": "app/modules/scales/models.py",
+      "fields": ["id:UUID", "patient_id:UUID FK patients", "diagnosis_id:UUID FK diagnoses", "scale_id:UUID FK scales", "frequency_days:INT", "assigned_by:UUID FK doctor_profiles", "created_at:TIMESTAMPTZ"]
+    },
+    {
+      "phase": "03",
+      "name": "TestCompletion",
+      "module": "app/modules/scales/models.py",
+      "fields": ["id:UUID", "patient_id:UUID FK patients", "patient_scale_id:UUID FK patient_scales", "scale_id:UUID FK scales", "score:INT", "answers_json:JSONB", "baseline:BOOL DEFAULT false", "completed_at:TIMESTAMPTZ"]
+    },
+    {
+      "phase": "03",
+      "name": "EventLog",
+      "module": "app/modules/events/models.py",
+      "fields": ["id:UUID", "patient_id:UUID FK patients", "event_type:TEXT", "payload:JSONB", "occurred_at:TIMESTAMPTZ", "created_at:TIMESTAMPTZ", "created_by:UUID FK users"]
     }
   ],
 
@@ -67,13 +97,22 @@
     { "phase": "02", "method": "PATCH", "path": "/api/v1/doctor/patients/{id}/diagnoses/{did}",         "auth": "doctor",  "response": "DiagnosisOut" },
     { "phase": "02", "method": "POST",  "path": "/api/v1/doctor/patients/{id}/medications",             "auth": "doctor",  "response": "PatientMedicationOut" },
     { "phase": "02", "method": "PATCH", "path": "/api/v1/doctor/patients/{id}/medications/{mid}",       "auth": "doctor",  "response": "PatientMedicationOut" },
-    { "phase": "02", "method": "GET",   "path": "/api/v1/ref/medications",                              "auth": "bearer",  "response": "MedicationReferenceOut[] (paginated; ?q=)" }
+    { "phase": "02", "method": "GET",   "path": "/api/v1/ref/medications",                              "auth": "bearer",  "response": "MedicationReferenceOut[] (paginated; ?q=)" },
+    { "phase": "03", "method": "GET",    "path": "/api/v1/ref/scales",                                    "auth": "bearer",  "response": "ScaleOut[]" },
+    { "phase": "03", "method": "GET",    "path": "/api/v1/ref/scales/{id}/questions",                     "auth": "bearer",  "response": "ScaleQuestion[]" },
+    { "phase": "03", "method": "GET",    "path": "/api/v1/doctor/patients/{id}/scales",                   "auth": "doctor",  "response": "PatientScaleOut[] (with embedded scale)" },
+    { "phase": "03", "method": "POST",   "path": "/api/v1/doctor/patients/{id}/scales",                   "auth": "doctor",  "response": "PatientScaleOut" },
+    { "phase": "03", "method": "DELETE", "path": "/api/v1/doctor/patients/{id}/scales/{sid}",             "auth": "doctor",  "response": "{ok:true} · 409 if completions exist" },
+    { "phase": "03", "method": "POST",   "path": "/api/v1/patient/tests/{patient_scale_id}/submit",       "auth": "patient", "response": "TestCompletionOut" },
+    { "phase": "03", "method": "GET",    "path": "/api/v1/patient/history",                               "auth": "patient", "response": "{items:TestCompletionOut[], total:int}" },
+    { "phase": "03", "method": "GET",    "path": "/api/v1/patient/scales",                                "auth": "patient", "response": "PatientScaleOut[] (with embedded scale)" },
+    { "phase": "03", "method": "GET",    "path": "/api/v1/patient/scales/{patient_scale_id}",             "auth": "patient", "response": "PatientScaleOut (with embedded scale)" }
   ],
 
   "db_schema": {
-    "tables": ["users", "doctor_profiles", "patients", "diagnoses", "medications_reference", "patient_medications"],
+    "tables": ["users", "doctor_profiles", "patients", "diagnoses", "medications_reference", "patient_medications", "scales", "clinical_rules", "patient_scales", "test_completions", "event_log"],
     "source": "alembic/versions/",
-    "current_head": "0003_diagnoses_medications"
+    "current_head": "0005_event_log"
   },
 
   "ui_pages_active": [
@@ -96,5 +135,5 @@
 
   "db_seeds": {},
 
-  "notes": "Phase 02 complete. Added diagnoses, medications_reference, and patient_medications tables; full patient CRUD + archive endpoints; diagnoses and medication assignment endpoints; ref/medications search; doctor roster and patient detail frontend routes."
+  "notes": "Phase 03 complete. Added scales, clinical_rules, patient_scales, test_completions, and event_log tables; scale reference endpoints; doctor scale-assignment and delete (409 guard); patient assessment submit, history, and assigned-scales endpoints; assessment wizard, history route, and doctor patient-detail scale list frontend."
 }
