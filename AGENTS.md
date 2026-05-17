@@ -21,6 +21,26 @@ Before writing code, running commands, or reasoning about project layout, read *
 
 If a stack convention is missing from `STACK.md`, do not invent it — ask the user, then update `STACK.md` so the answer is durable.
 
+## Frontend Type Conventions
+
+All frontend TypeScript types that mirror API contracts (request bodies, response shapes) **must** come from `frontend/app/shared/types/schema.ts`. This file is auto-generated from the backend's OpenAPI spec — it is the single source of truth for API shapes.
+
+**Rules:**
+
+1. **Never hand-write interfaces** for data the API returns or accepts. Use `components['schemas']['TypeName']` from `schema.ts` instead.
+2. **Regenerate after every API change.** Whenever a backend endpoint, schema field, or response type is added, removed, or renamed, immediately run:
+   ```bash
+   cd frontend && pnpm generate:api
+   ```
+   This fetches `http://localhost:8000/openapi.json` and overwrites `schema.ts`.
+3. **Use `*Create` / `*Update` schemas for mutation inputs**, not `Partial<*Out>`. The backend exposes dedicated input schemas (e.g. `PatientCreate`, `DiagnosisUpdate`) — prefer these over structural derivations from output types.
+4. **`schema.ts` is not hand-edited.** Treat it like a compiled artefact. Any manual edit will be overwritten on the next `generate:api` run.
+5. **`generate:api` is a gate check.** The gate will fail type-check if `schema.ts` is stale and a component uses a type that no longer matches the backend.
+
+Forgetting to run `generate:api` after an API change is the #1 source of "works locally but type-checks fail" failures. See `docs/KNOWN_GOTCHAS.md` for the symptoms and fix.
+
+---
+
 ## Library Documentation Lookup
 
 Before writing or reviewing code that uses any external library, framework, SDK, CLI tool, or cloud service, consult up-to-date documentation in this preference order:

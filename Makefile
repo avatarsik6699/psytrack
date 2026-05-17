@@ -1,4 +1,4 @@
-.PHONY: dev install migrate lint test deploy deploy-logs deploy-ps
+.PHONY: dev install migrate seed migrate-seed lint test deploy deploy-logs deploy-ps
 
 dev:
 	uv run uvicorn app.main:app --reload --host 0.0.0.0 --port 8000
@@ -8,6 +8,11 @@ install:
 
 migrate:
 	uv run alembic upgrade head
+
+seed:
+	uv run python scripts/seed.py
+
+migrate-seed: migrate seed
 
 lint:
 	uv run ruff check . && uv run ruff format --check .

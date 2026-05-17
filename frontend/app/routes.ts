@@ -10,5 +10,8 @@ export default [
 		route('profile', './routes/profile.tsx'),
 	]),
 	// Doctor-protected routes
-	layout('./layouts/doctor-layout.tsx', [route('doctor', './routes/doctor/_index.tsx')]),
+	layout('./layouts/doctor-layout.tsx', [
+		route('doctor', './routes/doctor/_index.tsx'),
+		route('doctor/patients/:id', './routes/doctor/patients.$id.tsx'),
+	]),
 ];

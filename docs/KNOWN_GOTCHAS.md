@@ -46,6 +46,32 @@
 - **Fix**: start Docker Desktop on Windows and ensure the WSL2 backend integration is enabled for this distro (Docker Desktop → Settings → Resources → WSL Integration).
 - **Prevention**: keep Docker Desktop running before opening a terminal session in WSL2.
 
+### Empty `medications_reference` — medication typeahead returns nothing
+
+- **Symptoms**: `GET /api/v1/ref/medications` returns `[]`; the medication assignment form shows no results regardless of what the user types.
+- **Root cause**: the `medications_reference` table was created by the migration but never seeded. This can happen when running the backend outside Docker (via `make dev`) without running the seed step first, or when the Docker image was built before `scripts/` was added to the `COPY` instruction.
+- **Fix**:
+  ```bash
+  make seed           # seed all reference tables
+  # or, if you want just medications:
+  uv run python scripts/seed.py --seeder medications_reference
+  ```
+- **Prevention**: in Docker (`docker compose up`), seeding runs automatically via `entrypoint.sh` — no manual step. When running without Docker, use `make migrate-seed` instead of `make migrate`. See `STACK.md § Initial setup`.
+
+---
+
+### Stale `schema.ts` — type errors after an API change
+
+- **Symptoms**: `pnpm typecheck` (or the IDE) reports errors like "Property X does not exist on type Y", or a field that exists in the backend is `undefined` on the frontend. No obvious code change caused it.
+- **Root cause**: a backend schema was added, renamed, or modified but `pnpm generate:api` was not run to regenerate `frontend/app/shared/types/schema.ts`.
+- **Fix**:
+  ```bash
+  # Ensure the backend is running, then:
+  cd frontend && pnpm generate:api
+  ```
+  Then recheck with `pnpm typecheck`.
+- **Prevention**: `pnpm generate:api` is a named gate check in `STACK.md` — run it before every type-check step. See `AGENTS.md § Frontend Type Conventions` for the full rule set.
+
 <!--
 ### [Title — short, punchy, searchable]
 

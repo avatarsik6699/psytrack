@@ -29,7 +29,9 @@ os.environ.setdefault("DATABASE_URL", TEST_DATABASE_URL)
 os.environ.setdefault("SECRET_KEY", "test-secret-key-for-ci-only")
 os.environ.setdefault("REFRESH_TOKEN_EXPIRE_DAYS", "14")
 
+import app.modules.diagnoses  # noqa: F401
 import app.modules.doctors  # noqa: F401
+import app.modules.medications  # noqa: F401
 import app.modules.patients  # noqa: F401
 from app.db.base import Base  # noqa
 from app.db.session import get_db  # noqa: E402

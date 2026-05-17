@@ -1,3 +1,5 @@
+from uuid import UUID
+
 from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
 
@@ -17,3 +19,19 @@ class PatientRepository:
         self._session.add(patient)
         await self._session.flush()
         return patient
+
+    async def list_by_doctor(self, doctor_id: UUID) -> list[Patient]:
+        result = await self._session.scalars(
+            select(Patient)
+            .where(Patient.doctor_id == doctor_id, Patient.archived_at.is_(None))
+            .order_by(Patient.full_name)
+        )
+        return list(result)
+
+    async def get_by_id(self, patient_id: UUID) -> Patient | None:
+        return await self._session.scalar(select(Patient).where(Patient.id == patient_id))
+
+    async def get_by_doctor_and_id(self, doctor_id: UUID, patient_id: UUID) -> Patient | None:
+        return await self._session.scalar(
+            select(Patient).where(Patient.id == patient_id, Patient.doctor_id == doctor_id)
+        )
