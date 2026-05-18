@@ -5,7 +5,7 @@
   },
 
   "captured_at": "2026-05-18",
-  "phase_completed": "05",
+  "phase_completed": "06",
   "phase_in_progress": null,
 
   "stack": {
@@ -96,6 +96,12 @@
       "name": "SeMonitoringRule",
       "module": "app/modules/side_effects/models.py",
       "fields": ["id:UUID", "patient_id:UUID FK patients", "se_id:UUID FK se_dictionary", "frequency_days:INT", "assigned_by:UUID FK doctor_profiles", "created_at:TIMESTAMPTZ"]
+    },
+    {
+      "phase": "06",
+      "name": "Task",
+      "module": "app/modules/tasks/models.py",
+      "fields": ["id:UUID", "patient_id:UUID FK patients CASCADE", "task_type:TEXT('test'|'medication_log'|'se_report')", "reference_id:UUID nullable", "due_at:TIMESTAMPTZ", "status:TEXT('pending'|'done'|'missed'|'snoozed') DEFAULT 'pending'", "created_at:TIMESTAMPTZ", "updated_at:TIMESTAMPTZ nullable"]
     }
   ],
 
@@ -138,13 +144,15 @@
     { "phase": "05", "method": "DELETE", "path": "/api/v1/patient/side-effects/{id}",                       "auth": "patient", "response": "{ ok: true } (soft-delete; original se_reported_start event preserved)" },
     { "phase": "05", "method": "POST",   "path": "/api/v1/doctor/patients/{id}/se-rules",                   "auth": "doctor",  "response": "SeMonitoringRuleOut" },
     { "phase": "05", "method": "DELETE", "path": "/api/v1/doctor/patients/{id}/se-rules/{rid}",             "auth": "doctor",  "response": "{ ok: true }" },
-    { "phase": "05", "method": "GET",    "path": "/api/v1/doctor/patients/{id}/charts/side-effects",        "auth": "doctor",  "response": "SeSeverityDataPoint[]" }
+    { "phase": "05", "method": "GET",    "path": "/api/v1/doctor/patients/{id}/charts/side-effects",        "auth": "doctor",  "response": "SeSeverityDataPoint[]" },
+    { "phase": "06", "method": "GET",   "path": "/api/v1/doctor/patients/{id}/events",                      "auth": "doctor",  "response": "EventTimelinePage { items: EventLogOut[], total: int, page: int, size: int } (?page=1&size=20)" },
+    { "phase": "06", "method": "POST",  "path": "/api/v1/system/tasks/generate",                            "auth": "internal (X-Internal-Key header)", "response": "{ generated: int }" }
   ],
 
   "db_schema": {
-    "tables": ["users", "doctor_profiles", "patients", "diagnoses", "medications_reference", "patient_medications", "scales", "clinical_rules", "patient_scales", "test_completions", "event_log", "se_dictionary", "patient_side_effects", "se_monitoring_rules"],
+    "tables": ["users", "doctor_profiles", "patients", "diagnoses", "medications_reference", "patient_medications", "scales", "clinical_rules", "patient_scales", "test_completions", "event_log", "se_dictionary", "patient_side_effects", "se_monitoring_rules", "tasks"],
     "source": "alembic/versions/",
-    "current_head": "0006_side_effects"
+    "current_head": "0008_tasks_constraints"
   },
 
   "ui_pages_active": [
@@ -167,5 +175,5 @@
 
   "db_seeds": {},
 
-  "notes": "Phase 05 complete. Added full side-effect subsystem: UKU catalogue seeded into se_dictionary (bilingual name_ru/name_en), patient SE reporting (add/edit/delete with immutable event trail via se_reported_start, se_severity_updated, se_resolved, se_correction events), doctor SE monitoring-rule management (POST/DELETE se-rules), SE severity-timeline chart endpoint, and frontend components SideEffectsList, SideEffectForm, SEMonitoringModal, SEChart."
+  "notes": "Phase 06 complete. Added event timeline endpoint (GET /doctor/patients/{id}/events, paginated), color computation service (card_color: red|yellow|green|gray on PatientOut, roster sorted red→yellow→green→gray), tasks table + Task ORM model, APScheduler daily cron calling POST /system/tasks/generate (internal key-guarded), frontend EventTimeline component in doctor patient detail, and PatientCard left-border color strip wired to card_color."
 }

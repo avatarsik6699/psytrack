@@ -6,6 +6,38 @@
 
 ---
 
+## 2026-05-18 — Phase 06 complete
+
+**Type**: phase-completion
+**Author**: AI (context-update)
+**Triggered by**: PHASE_06 gate passed and committed
+
+### Changes
+- `tasks` table added (Alembic migrations `0007_tasks` + `0008_tasks_constraints`): stores generated task rows (`pending`/`done`/`missed`/`snoozed`) for missed medications, test reminders, and SE monitoring reports
+- `Task` ORM model + `TaskOut` Pydantic schema in `app/modules/tasks/`
+- Color computation service (`app/modules/patients/color_service.py`): pure function implementing §3.2 SE-priority rules; produces `card_color: "red" | "yellow" | "green" | "gray"`
+- `GET /api/v1/doctor/patients` extended: `PatientOut` now includes `card_color` field; response sorted red → yellow → green → gray
+- `GET /api/v1/doctor/patients/{id}/events`: paginated event timeline with `EventTimelinePage` response (`items`, `total`, `page`, `size`)
+- `POST /api/v1/system/tasks/generate`: internal endpoint guarded by `X-Internal-Key` header; generates task rows for all active patients; returns `{ generated: int }`
+- APScheduler lifespan hook in FastAPI: calls task generation daily automatically
+- Frontend `EventTimeline` component rendered in doctor patient detail page (`/doctor/patients/:id`)
+- `PatientCard` left-border color strip wired to `card_color` API field
+
+### Affected Phases
+- None (additive change)
+
+### Contract Updates
+- DB tables added: `tasks`; Alembic head: `0008_tasks_constraints`
+- Endpoints added: `GET /api/v1/doctor/patients/{id}/events`, `POST /api/v1/system/tasks/generate`
+- Endpoint modified: `GET /api/v1/doctor/patients` — `PatientOut` extended with `card_color`; response sort order changed to red → yellow → green → gray
+- TypeScript types updated: `PatientOut` (new `card_color` field); new generated types `TaskOut`, `EventTimelinePage`
+- No new env vars (`INTERNAL_KEY` uses default `CHANGE_ME_INTERNAL_KEY` from config; should be overridden in production)
+
+### Notes
+Color logic follows SPEC §3.2: `red` = active SE with severity ≥ 3, or missed medication in last 48 h, or overdue test; `yellow` = active SE severity 1–2, or medication missed in last 7 days; `green` = all checks nominal; `gray` = no data / patient newly added. The `event_log` table (created in Phase 03) is append-only — the timeline endpoint adds read-only pagination without touching the model. Task generation is idempotent per day: duplicate rows for the same `(patient_id, task_type, due_at::date)` are skipped.
+
+---
+
 ## 2026-05-18 — Phase 05 complete
 
 **Type**: phase-completion

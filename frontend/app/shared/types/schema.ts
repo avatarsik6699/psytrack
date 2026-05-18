@@ -610,6 +610,23 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/api/v1/system/tasks/generate": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Generate Tasks */
+        post: operations["generate_tasks_api_v1_system_tasks_generate_post"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
 }
 export type webhooks = Record<string, never>;
 export interface components {
@@ -829,6 +846,12 @@ export interface components {
              * Format: date-time
              */
             created_at: string;
+            /**
+             * Card Color
+             * @default gray
+             * @enum {string}
+             */
+            card_color: "red" | "yellow" | "green" | "gray";
             /** Temp Login */
             temp_login: string;
             /** Temp Password */
@@ -945,7 +968,8 @@ export interface components {
             created_at: string;
             /**
              * Card Color
-             * @default "gray"
+             * @default gray
+             * @enum {string}
              */
             card_color: "red" | "yellow" | "green" | "gray";
         };
@@ -2736,6 +2760,39 @@ export interface operations {
                 };
                 content: {
                     "application/json": components["schemas"]["EventTimelinePage"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    generate_tasks_api_v1_system_tasks_generate_post: {
+        parameters: {
+            query?: never;
+            header?: {
+                "x-internal-key"?: string | null;
+            };
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        [key: string]: number;
+                    };
                 };
             };
             /** @description Validation Error */
