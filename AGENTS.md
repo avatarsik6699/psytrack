@@ -58,6 +58,29 @@ Forgetting to run `generate:api` after an API change is the #1 source of "works 
 
 ---
 
+## Datetime Conventions (Backend)
+
+Incorrect datetime handling causes `asyncpg.exceptions.DataError` at startup — often inside seeders — with the message "can't subtract offset-naive and offset-aware datetimes". These rules are **mandatory**:
+
+1. **Always use `datetime.now(UTC)`** — never `datetime.now()`. Import: `from datetime import UTC, datetime`.
+2. **Always annotate ORM timestamp columns with `DateTime(timezone=True)`:**
+   ```python
+   # Required for every Mapped[datetime] column
+   col: Mapped[datetime] = mapped_column(DateTime(timezone=True), nullable=False)
+   ```
+   Omitting the type annotation forces asyncpg to use TIMESTAMP (no-tz) encoding, which crashes on timezone-aware Python values even when the actual DB column is `TIMESTAMPTZ`.
+3. **Always use `sa.DateTime(timezone=True)` in Alembic migrations** for timestamp columns.
+4. **Normalise datetimes read from aiosqlite (test DB)** before any arithmetic — SQLite ignores timezone info and returns naive datetimes from `TIMESTAMPTZ` columns:
+   ```python
+   if dt.tzinfo is None:
+       dt = dt.replace(tzinfo=UTC)
+   ```
+
+Full detail and table of correct vs. wrong patterns: `docs/STACK.md § Datetime Conventions`.  
+Symptoms, root cause, and fix: `docs/KNOWN_GOTCHAS.md § asyncpg DataError`.
+
+---
+
 ## Library Documentation Lookup
 
 Before writing or reviewing code that uses any external library, framework, SDK, CLI tool, or cloud service, consult up-to-date documentation in this preference order:

@@ -21,6 +21,8 @@ class Settings(BaseSettings):
     LOG_LEVEL: str = "INFO"
     API_BASE_URL: str = "http://localhost:8000"
 
+    INTERNAL_KEY: str = "CHANGE_ME_INTERNAL_KEY"
+
     @field_validator("CORS_ORIGINS", mode="before")
     @classmethod
     def parse_cors(cls, v: str | list[str]) -> list[str]:

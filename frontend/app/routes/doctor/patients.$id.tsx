@@ -7,6 +7,7 @@ import { useDeleteScaleMutation, usePatientScales } from '@shared/api/scales';
 
 import { AssignTestModal } from '@/components/doctor/AssignTestModal';
 import { DiagnosisList } from '@/components/doctor/DiagnosisList';
+import { EventTimeline } from '@/components/doctor/EventTimeline';
 import { MedicationAssignForm } from '@/components/doctor/MedicationAssignForm';
 import { MedicationChart } from '@/components/doctor/MedicationChart';
 import { PatientHeader } from '@/components/doctor/PatientHeader';
@@ -147,6 +148,11 @@ export default function PatientDetailRoute() {
 					</button>
 				</div>
 				<SEChart patientId={id!} />
+			</section>
+
+			<section className='bg-white rounded-lg border border-border p-4'>
+				<h2 className='font-semibold text-sm mb-3'>Event Timeline</h2>
+				<EventTimeline patientId={id!} />
 			</section>
 
 			{showSeMonitoring && (

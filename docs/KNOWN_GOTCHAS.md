@@ -72,6 +72,29 @@
   Then recheck with `pnpm typecheck`.
 - **Prevention**: `pnpm generate:api` is a named gate check in `STACK.md` — run it before every type-check step. See `AGENTS.md § Frontend Type Conventions` for the full rule set.
 
+### asyncpg `DataError`: "can't subtract offset-naive and offset-aware datetimes"
+
+- **Symptoms**: `docker compose up` crashes on startup (usually during seeding) with:
+  ```
+  sqlalchemy.exc.DBAPIError: ... asyncpg.exceptions.DataError: invalid input for query argument $N:
+  datetime.datetime(...) (can't subtract offset-naive and offset-aware datetimes)
+  ```
+- **Root cause**: two independent causes that often appear together:
+  1. A `Mapped[datetime]` column in an ORM model is declared **without** `DateTime(timezone=True)`. SQLAlchemy tells asyncpg to use OID 1114 (`TIMESTAMP`) for that parameter. asyncpg's encoder then computes `aware_dt − naive_epoch`, which raises `TypeError` when the Python value is timezone-aware. The actual DB column may already be `TIMESTAMPTZ` — the bug is the **missing type annotation in the model**.
+  2. `datetime.now()` (no timezone argument) produces a naive datetime. Inserting it into a `TIMESTAMPTZ` column fails because asyncpg rejects naive datetimes for `TIMESTAMPTZ`.
+- **Fix**:
+  1. Add `DateTime(timezone=True)` to every `mapped_column` that stores a timestamp:
+     ```python
+     # Wrong
+     consent_at: Mapped[datetime | None] = mapped_column(nullable=True)
+     # Right
+     consent_at: Mapped[datetime | None] = mapped_column(DateTime(timezone=True), nullable=True)
+     ```
+  2. Replace every `datetime.now()` with `datetime.now(UTC)` (import `UTC` from `datetime`).
+- **Prevention**: see `docs/STACK.md § Datetime Conventions` — all rules are enforced there.
+
+---
+
 <!--
 ### [Title — short, punchy, searchable]
 

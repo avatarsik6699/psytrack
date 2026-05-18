@@ -1,4 +1,5 @@
 from app.seeders.base import BaseSeeder
+from app.seeders.demo_data import DemoDataSeeder
 from app.seeders.medications import MedicationReferenceSeeder
 from app.seeders.scales import ScalesSeeder
 from app.seeders.side_effects import SideEffectsSeeder
@@ -9,6 +10,7 @@ ALL_SEEDERS: list[type[BaseSeeder]] = [
     MedicationReferenceSeeder,
     ScalesSeeder,
     SideEffectsSeeder,
+    DemoDataSeeder,
 ]
 
 __all__ = ["ALL_SEEDERS", "BaseSeeder"]

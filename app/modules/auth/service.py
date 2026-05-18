@@ -1,4 +1,4 @@
-from datetime import datetime
+from datetime import UTC, datetime
 from uuid import UUID
 
 from app.modules.auth.constants import JWT_CLAIM_ROLE, JWT_CLAIM_SUBJECT, TOKEN_TYPE_REFRESH
@@ -40,7 +40,7 @@ class AuthService:
                 hashed_password=hash_password(password),
                 role=UserRole.doctor,
                 consent_152fz=True,
-                consent_at=datetime.now(),
+                consent_at=datetime.now(UTC),
                 is_active=True,
             )
         )

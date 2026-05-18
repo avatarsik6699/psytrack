@@ -2,6 +2,7 @@ from datetime import datetime, timezone
 from typing import Any
 from uuid import UUID
 
+from sqlalchemy import func, select
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.modules.events.models import EventLog
@@ -33,3 +34,20 @@ class EventLogRepository:
             created_by=created_by,
         )
         return await self.add(event)
+
+    async def paginate_by_patient(
+        self,
+        patient_id: UUID,
+        page: int,
+        size: int,
+    ) -> tuple[list[EventLog], int]:
+        stmt = select(EventLog).where(EventLog.patient_id == patient_id)
+
+        count_stmt = select(func.count()).select_from(stmt.subquery())
+        total: int = (await self._session.scalar(count_stmt)) or 0
+
+        offset = (page - 1) * size
+        rows = await self._session.scalars(
+            stmt.order_by(EventLog.occurred_at.desc()).offset(offset).limit(size)
+        )
+        return list(rows), total

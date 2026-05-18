@@ -15,3 +15,10 @@ class EventLogOut(BaseModel):
     occurred_at: datetime
     created_at: datetime
     created_by: UUID | None
+
+
+class EventTimelinePage(BaseModel):
+    items: list[EventLogOut]
+    total: int
+    page: int
+    size: int

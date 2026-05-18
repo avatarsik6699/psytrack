@@ -20,8 +20,7 @@ async def list_patients(
     patient_service: PatientService = Depends(get_patient_service),
 ) -> list[PatientOut]:
     profile = await doctor_service.get_for_user(current_user.id)
-    patients = await patient_service.list_by_doctor(profile.id)
-    return [PatientOut.model_validate(p) for p in patients]
+    return await patient_service.list_with_colors(profile.id)
 
 
 @router.post("", response_model=PatientCreatedOut, status_code=status.HTTP_201_CREATED)

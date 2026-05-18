@@ -1,4 +1,5 @@
 from datetime import date, datetime
+from typing import Literal
 from uuid import UUID
 
 from pydantic import BaseModel, ConfigDict
@@ -31,6 +32,7 @@ class PatientOut(BaseModel):
     onboarding_complete: bool
     archived_at: datetime | None
     created_at: datetime
+    card_color: Literal["red", "yellow", "green", "gray"] = "gray"
 
 
 class PatientCreatedOut(PatientOut):

@@ -1,14 +1,17 @@
 import secrets
 import string
-from datetime import datetime, timezone
+from datetime import UTC, datetime
 from uuid import UUID
 
+from app.modules.patients.color_service import CardColor, compute_card_color
 from app.modules.patients.exceptions import PatientNotFound
 from app.modules.patients.models import Patient
 from app.modules.patients.repository import PatientRepository
-from app.modules.patients.schemas import PatientCreate, PatientUpdate
+from app.modules.patients.schemas import PatientCreate, PatientOut, PatientUpdate
 from app.modules.users.models import User, UserRole
 from app.modules.users.service import UserService
+
+_COLOR_ORDER: dict[CardColor, int] = {"red": 0, "yellow": 1, "green": 2, "gray": 3}
 
 
 def _generate_temp_credentials() -> tuple[str, str]:
@@ -52,6 +55,18 @@ class PatientService:
     async def list_by_doctor(self, doctor_id: UUID) -> list[Patient]:
         return await self._repository.list_by_doctor(doctor_id)
 
+    async def list_with_colors(self, doctor_id: UUID) -> list[PatientOut]:
+        patients = await self._repository.list_by_doctor(doctor_id)
+        result: list[PatientOut] = []
+        for patient in patients:
+            color_inputs = await self._repository.get_color_inputs(patient.id)
+            color = compute_card_color(color_inputs)
+            data = PatientOut.model_validate(patient).model_dump()
+            data["card_color"] = color
+            result.append(PatientOut.model_validate(data))
+        result.sort(key=lambda p: _COLOR_ORDER[p.card_color])
+        return result
+
     async def get_for_doctor(self, patient_id: UUID, doctor_id: UUID) -> Patient:
         patient = await self._repository.get_by_doctor_and_id(doctor_id, patient_id)
         if patient is None:
@@ -65,6 +80,6 @@ class PatientService:
         return patient
 
     async def archive(self, patient: Patient) -> Patient:
-        patient.archived_at = datetime.now(timezone.utc)
+        patient.archived_at = datetime.now(UTC)
         await self._repository._session.flush()
         return patient

@@ -168,3 +168,25 @@ make install   # uv sync --dev
 | Do not hand-edit `schema.ts` | It is a generated artefact; edits will be overwritten on the next `generate:api` run |
 
 The `generate:api` script lives at `frontend/scripts/generate-api.js` and calls `openapi-typescript` against `http://localhost:8000/openapi.json`.
+
+---
+
+## Datetime Conventions
+
+All timestamp handling in the backend must follow these rules without exception. Violations cause `asyncpg.exceptions.DataError` at runtime (see `KNOWN_GOTCHAS.md`).
+
+| Rule | Correct | Wrong |
+|------|---------|-------|
+| Current time | `datetime.now(UTC)` | `datetime.now()` |
+| UTC constant import | `from datetime import UTC, datetime` | `from datetime import datetime` then `timezone.utc` inline |
+| ORM column type | `mapped_column(DateTime(timezone=True), ...)` | `mapped_column(nullable=True)` (type omitted) |
+| Alembic migration column | `sa.DateTime(timezone=True)` | `sa.DateTime()` |
+| Comparing DB-read datetimes | Always check `if dt.tzinfo is None: dt = dt.replace(tzinfo=UTC)` before arithmetic | Assume the returned datetime is always aware |
+
+**Why it matters — the asyncpg trap:** SQLAlchemy infers the ORM column type and passes it as a type hint to asyncpg's binary protocol. If a `Mapped[datetime]` column omits `DateTime(timezone=True)`, asyncpg receives OID 1114 (`TIMESTAMP`) and encodes the Python value via `aware_dt − naive_epoch` → `TypeError`. This crashes the entire app even when the actual PostgreSQL column is `TIMESTAMPTZ`. The model annotation must match the DB column.
+
+**aiosqlite (test DB):** SQLite returns naive datetimes from `DateTime(timezone=True)` columns. Always normalise before arithmetic:
+```python
+if last_completion.tzinfo is None:
+    last_completion = last_completion.replace(tzinfo=UTC)
+```

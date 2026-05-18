@@ -593,6 +593,23 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/api/v1/doctor/patients/{patient_id}/events": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** List Patient Events */
+        get: operations["list_patient_events_api_v1_doctor_patients__patient_id__events_get"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
 }
 export type webhooks = Record<string, never>;
 export interface components {
@@ -689,6 +706,17 @@ export interface components {
             created_at: string;
             /** Created By */
             created_by: string | null;
+        };
+        /** EventTimelinePage */
+        EventTimelinePage: {
+            /** Items */
+            items: components["schemas"]["EventLogOut"][];
+            /** Total */
+            total: number;
+            /** Page */
+            page: number;
+            /** Size */
+            size: number;
         };
         /** HTTPValidationError */
         HTTPValidationError: {
@@ -915,6 +943,11 @@ export interface components {
              * Format: date-time
              */
             created_at: string;
+            /**
+             * Card Color
+             * @default "gray"
+             */
+            card_color: "red" | "yellow" | "green" | "gray";
         };
         /** PatientScaleCreate */
         PatientScaleCreate: {
@@ -2669,6 +2702,40 @@ export interface operations {
                 };
                 content: {
                     "application/json": components["schemas"]["SeSeverityDataPoint"][];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    list_patient_events_api_v1_doctor_patients__patient_id__events_get: {
+        parameters: {
+            query?: {
+                page?: number;
+                size?: number;
+            };
+            header?: never;
+            path: {
+                patient_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["EventTimelinePage"];
                 };
             };
             /** @description Validation Error */

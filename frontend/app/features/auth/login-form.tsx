@@ -4,10 +4,16 @@ import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router';
 
 import { useLoginMutation, useMe, usePatientLoginMutation } from '@shared/api/auth';
+import { runtime } from '@shared/config/runtime';
 
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
+
+const DEV_CREDENTIALS = {
+	doctor: { label: 'email', login: 'demo@docassist.dev', password: 'Demo1234!' },
+	patient: { label: 'login', login: 'demo.p1', password: 'Patient1!' },
+} as const;
 
 export function LoginForm() {
 	const { t: tCommon } = useTranslation('common');
@@ -24,6 +30,16 @@ export function LoginForm() {
 
 	const isPending = loginMutation.isPending || patientLoginMutation.isPending;
 	const isError = loginMutation.isError || patientLoginMutation.isError;
+
+	function fillDevCredentials() {
+		const creds = DEV_CREDENTIALS[mode];
+		if (mode === 'doctor') {
+			setEmail(creds.login);
+		} else {
+			setTempLogin(creds.login);
+		}
+		setPassword(creds.password);
+	}
 
 	const onSubmit = async (event: FormEvent<HTMLFormElement>): Promise<void> => {
 		event.preventDefault();
@@ -55,6 +71,29 @@ export function LoginForm() {
 					Patient
 				</button>
 			</div>
+
+			{runtime.isDev ? (
+				<div className='grid gap-1.5 rounded border border-dashed border-amber-300 bg-amber-50 px-3 py-2 text-xs dark:border-amber-700 dark:bg-amber-950/30'>
+					<div className='flex items-center justify-between'>
+						<span className='font-semibold text-amber-700 dark:text-amber-400'>Dev credentials</span>
+						<button
+							type='button'
+							onClick={fillDevCredentials}
+							className='rounded bg-amber-200 px-2 py-0.5 text-amber-800 hover:bg-amber-300 dark:bg-amber-800 dark:text-amber-100 dark:hover:bg-amber-700'
+						>
+							Fill
+						</button>
+					</div>
+					<div className='text-muted-foreground'>
+						<span className='font-medium'>{DEV_CREDENTIALS[mode].label}:</span>{' '}
+						<span className='select-all font-mono'>{DEV_CREDENTIALS[mode].login}</span>
+					</div>
+					<div className='text-muted-foreground'>
+						<span className='font-medium'>password:</span>{' '}
+						<span className='select-all font-mono'>{DEV_CREDENTIALS[mode].password}</span>
+					</div>
+				</div>
+			) : null}
 
 			{mode === 'doctor' ? (
 				<div className='grid gap-1.5'>
