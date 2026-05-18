@@ -16,6 +16,12 @@ from app.modules.scales.api import (
     patient_tests_router,
     ref_scales_router,
 )
+from app.modules.side_effects.api import (
+    doctor_se_chart_router,
+    doctor_se_rules_router,
+    patient_se_router,
+    ref_se_router,
+)
 
 api_v1_router = APIRouter(prefix=API_V1_PREFIX)
 api_v1_router.include_router(health_router)
@@ -31,3 +37,7 @@ api_v1_router.include_router(doctor_scales_router)
 api_v1_router.include_router(patient_tests_router)
 api_v1_router.include_router(patient_history_router)
 api_v1_router.include_router(patient_scales_router)
+api_v1_router.include_router(ref_se_router)
+api_v1_router.include_router(patient_se_router)
+api_v1_router.include_router(doctor_se_rules_router)
+api_v1_router.include_router(doctor_se_chart_router)

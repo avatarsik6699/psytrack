@@ -1,5 +1,8 @@
 .PHONY: dev install migrate seed migrate-seed lint test deploy deploy-logs deploy-ps
 
+# WARNING: Running uvicorn directly on the host is discouraged.
+# Use `docker compose up` instead to avoid port conflicts and code-version desync.
+# This target is kept only for emergency debugging when Docker is unavailable.
 dev:
 	uv run uvicorn app.main:app --reload --host 0.0.0.0 --port 8000
 

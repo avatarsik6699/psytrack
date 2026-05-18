@@ -6,6 +6,35 @@
 
 ---
 
+## 2026-05-18 — Phase 05 complete
+
+**Type**: phase-completion
+**Author**: AI (context-update)
+**Triggered by**: PHASE_05 gate passed and committed
+
+### Changes
+- UKU side-effect catalogue seeded into `se_dictionary` (bilingual `name_ru`/`name_en`, `body_system` grouping)
+- Patient SE reporting: GET/POST/PATCH/DELETE `/patient/side-effects` with soft-delete and immutable event trail
+- New event types written to `event_log`: `se_reported_start`, `se_severity_updated`, `se_resolved`, `se_correction`, `monitoring_rule_changed`
+- Doctor SE monitoring rules: POST/DELETE `/doctor/patients/{id}/se-rules`
+- Doctor SE chart: GET `/doctor/patients/{id}/charts/side-effects` — severity time-series
+- Frontend: `SideEffectsList`, `SideEffectForm` (patient), `SEMonitoringModal`, `SEChart` (Recharts, doctor patient-detail page)
+- Backend module `app/modules/side_effects/` with models, schemas, repository, service, dependencies, exceptions, API
+
+### Affected Phases
+- None (additive change)
+
+### Contract Updates
+- DB tables added: `se_dictionary`, `patient_side_effects`, `se_monitoring_rules`; Alembic head: `0006_side_effects`
+- Endpoints added: GET /ref/se-dictionary, GET/POST/PATCH/DELETE /patient/side-effects[/{id}], POST/DELETE /doctor/patients/{id}/se-rules[/{rid}], GET /doctor/patients/{id}/charts/side-effects
+- TypeScript types added: `SeDictionaryOut`, `PatientSideEffectOut`, `SeMonitoringRuleOut`, `SeSeverityDataPoint`
+- No new env vars
+
+### Notes
+Patient SE DELETE is soft-delete only — the original `se_reported_start` event is preserved in `event_log` for clinical audit trail. `date_precision` field supports five granularities (`exact`, `lt_24h`, `month`, `year`, `range`) to accommodate retrospective self-reporting. SE monitoring rules are doctor-assigned per patient and link to specific `se_dictionary` entries for structured follow-up tracking.
+
+---
+
 ## 2026-05-17 — Phase 04 complete
 
 **Type**: phase-completion

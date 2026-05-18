@@ -33,6 +33,7 @@ import app.modules.diagnoses  # noqa: F401
 import app.modules.doctors  # noqa: F401
 import app.modules.medications  # noqa: F401
 import app.modules.patients  # noqa: F401
+import app.modules.side_effects  # noqa: F401
 from app.db.base import Base  # noqa
 from app.db.session import get_db  # noqa: E402
 from app.main import app  # noqa: E402

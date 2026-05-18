@@ -15,6 +15,23 @@ must follow when working on this project. Anything specific to this project's te
 6. **Context Sync**: After each phase completes, run the `context-update` workflow to refresh `docs/CONTEXT.md`, `docs/STATE.md`, and `docs/CHANGELOG.md`.
 7. **Output Discipline**: First the plan → wait for architect `✅` → code → tests → commit. Do not skip steps.
 
+## Docker Enforcement
+
+All services (backend, frontend, database) run exclusively through Docker Compose. Starting processes directly on the host is forbidden.
+
+**Forbidden:**
+- `uv run uvicorn ...` / `make dev` — spawns a host uvicorn that conflicts with the Docker container
+- `pnpm dev` outside Docker — ditto for the frontend
+- any direct database process (`postgres`, `pg_ctl`)
+
+**Required:**
+```bash
+docker compose up --build        # start the full stack
+docker compose restart backend   # pick up backend code changes
+```
+
+Running host processes alongside Docker causes: port conflicts, multiple instances serving different code versions, and stale OpenAPI schemas (the `generate:api` command hits whichever process grabbed the port, not necessarily the one with current code).
+
 ## Stack Conventions
 
 Before writing code, running commands, or reasoning about project layout, read **[docs/STACK.md](docs/STACK.md)**. It is the single source of truth for this project's concrete technologies, directory structure, setup commands, test tooling, and per-module style guides. When a user question depends on stack specifics (test commands, file locations, migration tool, e2e framework), consult `STACK.md` first.

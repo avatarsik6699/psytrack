@@ -488,6 +488,111 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/api/v1/ref/se-dictionary": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** List Se Dictionary */
+        get: operations["list_se_dictionary_api_v1_ref_se_dictionary_get"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/patient/side-effects": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** List My Side Effects */
+        get: operations["list_my_side_effects_api_v1_patient_side_effects_get"];
+        put?: never;
+        /** Report Side Effect */
+        post: operations["report_side_effect_api_v1_patient_side_effects_post"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/patient/side-effects/{se_record_id}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post?: never;
+        /** Delete Side Effect */
+        delete: operations["delete_side_effect_api_v1_patient_side_effects__se_record_id__delete"];
+        options?: never;
+        head?: never;
+        /** Update Side Effect */
+        patch: operations["update_side_effect_api_v1_patient_side_effects__se_record_id__patch"];
+        trace?: never;
+    };
+    "/api/v1/doctor/patients/{patient_id}/se-rules": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** List Se Rules */
+        get: operations["list_se_rules_api_v1_doctor_patients__patient_id__se_rules_get"];
+        put?: never;
+        /** Add Se Rule */
+        post: operations["add_se_rule_api_v1_doctor_patients__patient_id__se_rules_post"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/doctor/patients/{patient_id}/se-rules/{rule_id}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post?: never;
+        /** Remove Se Rule */
+        delete: operations["remove_se_rule_api_v1_doctor_patients__patient_id__se_rules__rule_id__delete"];
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/doctor/patients/{patient_id}/charts/side-effects": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Get Se Chart */
+        get: operations["get_se_chart_api_v1_doctor_patients__patient_id__charts_side_effects_get"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
 }
 export type webhooks = Record<string, never>;
 export interface components {
@@ -862,6 +967,81 @@ export interface components {
             created_at: string;
             scale?: components["schemas"]["ScaleOut"] | null;
         };
+        /** PatientSideEffectIn */
+        PatientSideEffectIn: {
+            /**
+             * Se Id
+             * Format: uuid
+             */
+            se_id: string;
+            /** Severity */
+            severity?: number | null;
+            /** Started At */
+            started_at?: string | null;
+            /** Ended At */
+            ended_at?: string | null;
+            /** Date Precision */
+            date_precision?: ("exact" | "lt_24h" | "month" | "year" | "range") | null;
+            /** Duration Label */
+            duration_label?: string | null;
+            /** Notes */
+            notes?: string | null;
+        };
+        /** PatientSideEffectOut */
+        PatientSideEffectOut: {
+            /**
+             * Id
+             * Format: uuid
+             */
+            id: string;
+            /**
+             * Patient Id
+             * Format: uuid
+             */
+            patient_id: string;
+            /**
+             * Se Id
+             * Format: uuid
+             */
+            se_id: string;
+            se: components["schemas"]["SeDictionaryOut"];
+            /** Severity */
+            severity: number | null;
+            /** Started At */
+            started_at: string | null;
+            /** Ended At */
+            ended_at: string | null;
+            /** Date Precision */
+            date_precision: string | null;
+            /** Duration Label */
+            duration_label: string | null;
+            /** Resolved */
+            resolved: boolean;
+            /** Notes */
+            notes: string | null;
+            /**
+             * Created At
+             * Format: date-time
+             */
+            created_at: string;
+        };
+        /** PatientSideEffectUpdate */
+        PatientSideEffectUpdate: {
+            /** Severity */
+            severity?: number | null;
+            /** Started At */
+            started_at?: string | null;
+            /** Ended At */
+            ended_at?: string | null;
+            /** Date Precision */
+            date_precision?: ("exact" | "lt_24h" | "month" | "year" | "range") | null;
+            /** Duration Label */
+            duration_label?: string | null;
+            /** Resolved */
+            resolved?: boolean | null;
+            /** Notes */
+            notes?: string | null;
+        };
         /** PatientTempLoginRequest */
         PatientTempLoginRequest: {
             /** Temp Login */
@@ -930,6 +1110,82 @@ export interface components {
             options: {
                 [key: string]: unknown;
             }[];
+        };
+        /** SeDictionaryOut */
+        SeDictionaryOut: {
+            /**
+             * Id
+             * Format: uuid
+             */
+            id: string;
+            /** Uku Code */
+            uku_code: string;
+            /** Name Ru */
+            name_ru: string;
+            /** Name En */
+            name_en: string;
+            /** Body System */
+            body_system: string | null;
+            /** Severity Min */
+            severity_min: number;
+            /** Severity Max */
+            severity_max: number;
+        };
+        /** SeDictionaryPage */
+        SeDictionaryPage: {
+            /** Items */
+            items: components["schemas"]["SeDictionaryOut"][];
+            /** Total */
+            total: number;
+        };
+        /** SeMonitoringRuleIn */
+        SeMonitoringRuleIn: {
+            /**
+             * Se Id
+             * Format: uuid
+             */
+            se_id: string;
+            /** Frequency Days */
+            frequency_days?: number | null;
+        };
+        /** SeMonitoringRuleOut */
+        SeMonitoringRuleOut: {
+            /**
+             * Id
+             * Format: uuid
+             */
+            id: string;
+            /**
+             * Patient Id
+             * Format: uuid
+             */
+            patient_id: string;
+            /**
+             * Se Id
+             * Format: uuid
+             */
+            se_id: string;
+            se: components["schemas"]["SeDictionaryOut"];
+            /** Frequency Days */
+            frequency_days: number | null;
+            /** Assigned By */
+            assigned_by: string | null;
+            /**
+             * Created At
+             * Format: date-time
+             */
+            created_at: string;
+        };
+        /** SeSeverityDataPoint */
+        SeSeverityDataPoint: {
+            /** Date */
+            date: string;
+            /** Se Id */
+            se_id: string;
+            /** Se Name */
+            se_name: string;
+            /** Severity */
+            severity: number;
         };
         /** TestCompletionOut */
         TestCompletionOut: {
@@ -2125,6 +2381,294 @@ export interface operations {
                 };
                 content: {
                     "application/json": components["schemas"]["PatientScaleOut"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    list_se_dictionary_api_v1_ref_se_dictionary_get: {
+        parameters: {
+            query?: {
+                q?: string | null;
+                body_system?: string | null;
+                page?: number;
+                size?: number;
+            };
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["SeDictionaryPage"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    list_my_side_effects_api_v1_patient_side_effects_get: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["PatientSideEffectOut"][];
+                };
+            };
+        };
+    };
+    report_side_effect_api_v1_patient_side_effects_post: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["PatientSideEffectIn"];
+            };
+        };
+        responses: {
+            /** @description Successful Response */
+            201: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["PatientSideEffectOut"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    delete_side_effect_api_v1_patient_side_effects__se_record_id__delete: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                se_record_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        [key: string]: unknown;
+                    };
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    update_side_effect_api_v1_patient_side_effects__se_record_id__patch: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                se_record_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["PatientSideEffectUpdate"];
+            };
+        };
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["PatientSideEffectOut"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    list_se_rules_api_v1_doctor_patients__patient_id__se_rules_get: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                patient_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["SeMonitoringRuleOut"][];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    add_se_rule_api_v1_doctor_patients__patient_id__se_rules_post: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                patient_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["SeMonitoringRuleIn"];
+            };
+        };
+        responses: {
+            /** @description Successful Response */
+            201: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["SeMonitoringRuleOut"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    remove_se_rule_api_v1_doctor_patients__patient_id__se_rules__rule_id__delete: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                patient_id: string;
+                rule_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        [key: string]: unknown;
+                    };
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    get_se_chart_api_v1_doctor_patients__patient_id__charts_side_effects_get: {
+        parameters: {
+            query?: {
+                locale?: string;
+            };
+            header?: never;
+            path: {
+                patient_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["SeSeverityDataPoint"][];
                 };
             };
             /** @description Validation Error */

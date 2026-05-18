@@ -6,6 +6,7 @@ export default [
 	// Patient-protected routes
 	layout('./layouts/patient-layout.tsx', [
 		index('./routes/_index.tsx'),
+		route('dashboard', './routes/dashboard.tsx'),
 		route('history', './routes/history.tsx'),
 		route('profile', './routes/profile.tsx'),
 		route('assessment/:patientScaleId', './routes/assessment.$patientScaleId.tsx'),

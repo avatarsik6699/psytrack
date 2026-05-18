@@ -21,6 +21,25 @@ This file only adds Claude-specific items.
 
 Skill wrappers live in `.claude/skills/` and are intentionally thin — they just point at the playbooks in `docs/playbooks/`.
 
+## Docker Enforcement
+
+**Never run services directly on the host.** This is a hard rule with no exceptions.
+
+Forbidden commands (do not suggest, do not run):
+- `uv run uvicorn ...` / `make dev`
+- `pnpm dev` (frontend dev server outside Docker)
+- any direct `postgres` / `pg_ctl` invocation
+
+Always use Docker Compose instead:
+```bash
+docker compose up --build   # start everything
+docker compose restart backend   # restart one service after code changes
+```
+
+If the user asks to "run the server", "start the backend", or similar — point to `docker compose up`.
+
+**Rationale:** Running processes both inside and outside Docker causes port conflicts, code-version desync (old process serves new code's routes), and stale OpenAPI schemas. This was the root cause of a production incident where GET /se-rules returned 405 because a non-reload uvicorn grabbed port 8000 from the reload instance.
+
 ## MCP
 
 `Context7` is wired in `.mcp.json` at the project root (Claude Code) and in `plugins/sdd-workflow/.mcp.json` (Codex). Per `AGENTS.md § Library Documentation Lookup`, prefer the MCP server when available; fall back to the `ctx7` CLI otherwise.

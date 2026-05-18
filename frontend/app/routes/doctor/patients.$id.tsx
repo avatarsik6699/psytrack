@@ -10,6 +10,8 @@ import { DiagnosisList } from '@/components/doctor/DiagnosisList';
 import { MedicationAssignForm } from '@/components/doctor/MedicationAssignForm';
 import { MedicationChart } from '@/components/doctor/MedicationChart';
 import { PatientHeader } from '@/components/doctor/PatientHeader';
+import { SEChart } from '@/components/doctor/SEChart';
+import { SEMonitoringModal } from '@/components/doctor/SEMonitoringModal';
 
 export default function PatientDetailRoute() {
 	const { id } = useParams<{ id: string }>();
@@ -17,6 +19,7 @@ export default function PatientDetailRoute() {
 	const navigate = useNavigate();
 	const [addingMed, setAddingMed] = useState(false);
 	const [showAssignTest, setShowAssignTest] = useState(false);
+	const [showSeMonitoring, setShowSeMonitoring] = useState(false);
 	const archiveMutation = useArchivePatientMutation(id!);
 	const { data: meds = [] } = usePatientMedications(id!);
 	const { data: assignedScales = [], isLoading: loadingScales } = usePatientScales(id!);
@@ -132,6 +135,23 @@ export default function PatientDetailRoute() {
 					/>
 				)}
 			</section>
+
+			<section className='bg-white rounded-lg border border-border p-4'>
+				<div className='flex justify-between items-center mb-3'>
+					<h2 className='font-semibold text-sm'>Побочные эффекты</h2>
+					<button
+						className='text-xs text-primary hover:underline'
+						onClick={() => setShowSeMonitoring(true)}
+					>
+						Правила мониторинга
+					</button>
+				</div>
+				<SEChart patientId={id!} />
+			</section>
+
+			{showSeMonitoring && (
+				<SEMonitoringModal patientId={id!} onClose={() => setShowSeMonitoring(false)} />
+			)}
 		</div>
 	);
 }

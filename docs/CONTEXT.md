@@ -4,8 +4,8 @@
     "update_rule": "Append contracts after each phase via /context-update. Never remove existing entries."
   },
 
-  "captured_at": "2026-05-17",
-  "phase_completed": "04",
+  "captured_at": "2026-05-18",
+  "phase_completed": "05",
   "phase_in_progress": null,
 
   "stack": {
@@ -78,6 +78,24 @@
       "name": "EventLog",
       "module": "app/modules/events/models.py",
       "fields": ["id:UUID", "patient_id:UUID FK patients", "event_type:TEXT", "payload:JSONB", "occurred_at:TIMESTAMPTZ", "created_at:TIMESTAMPTZ", "created_by:UUID FK users"]
+    },
+    {
+      "phase": "05",
+      "name": "SeDictionary",
+      "module": "app/modules/side_effects/models.py",
+      "fields": ["id:UUID", "uku_code:TEXT UNIQUE", "name_ru:TEXT", "name_en:TEXT", "body_system:TEXT", "severity_min:INT DEFAULT 0", "severity_max:INT DEFAULT 4"]
+    },
+    {
+      "phase": "05",
+      "name": "PatientSideEffect",
+      "module": "app/modules/side_effects/models.py",
+      "fields": ["id:UUID", "patient_id:UUID FK patients", "se_id:UUID FK se_dictionary", "severity:INT CHECK(0..4)", "started_at:TIMESTAMPTZ", "ended_at:TIMESTAMPTZ", "date_precision:TEXT('exact'|'lt_24h'|'month'|'year'|'range')", "duration_label:TEXT", "resolved:BOOL DEFAULT false", "notes:TEXT", "created_at:TIMESTAMPTZ"]
+    },
+    {
+      "phase": "05",
+      "name": "SeMonitoringRule",
+      "module": "app/modules/side_effects/models.py",
+      "fields": ["id:UUID", "patient_id:UUID FK patients", "se_id:UUID FK se_dictionary", "frequency_days:INT", "assigned_by:UUID FK doctor_profiles", "created_at:TIMESTAMPTZ"]
     }
   ],
 
@@ -112,13 +130,21 @@
     { "phase": "04", "method": "POST",   "path": "/api/v1/patient/medications",                             "auth": "patient", "response": "PatientMedicationOut" },
     { "phase": "04", "method": "PATCH",  "path": "/api/v1/patient/medications/{id}",                       "auth": "patient", "response": "PatientMedicationOut" },
     { "phase": "04", "method": "DELETE", "path": "/api/v1/patient/medications/{id}",                       "auth": "patient", "response": "{ok:true}" },
-    { "phase": "04", "method": "GET",    "path": "/api/v1/doctor/patients/{id}/charts/medications",        "auth": "doctor",  "response": "MedicationChartSeries[]" }
+    { "phase": "04", "method": "GET",    "path": "/api/v1/doctor/patients/{id}/charts/medications",        "auth": "doctor",  "response": "MedicationChartSeries[]" },
+    { "phase": "05", "method": "GET",    "path": "/api/v1/ref/se-dictionary",                               "auth": "bearer",  "response": "{ items: SeDictionaryOut[], total: int } (?q=, ?body_system=, ?page=, ?size=)" },
+    { "phase": "05", "method": "GET",    "path": "/api/v1/patient/side-effects",                            "auth": "patient", "response": "PatientSideEffectOut[]" },
+    { "phase": "05", "method": "POST",   "path": "/api/v1/patient/side-effects",                            "auth": "patient", "response": "PatientSideEffectOut" },
+    { "phase": "05", "method": "PATCH",  "path": "/api/v1/patient/side-effects/{id}",                       "auth": "patient", "response": "PatientSideEffectOut (emits se_correction | se_severity_updated | se_resolved)" },
+    { "phase": "05", "method": "DELETE", "path": "/api/v1/patient/side-effects/{id}",                       "auth": "patient", "response": "{ ok: true } (soft-delete; original se_reported_start event preserved)" },
+    { "phase": "05", "method": "POST",   "path": "/api/v1/doctor/patients/{id}/se-rules",                   "auth": "doctor",  "response": "SeMonitoringRuleOut" },
+    { "phase": "05", "method": "DELETE", "path": "/api/v1/doctor/patients/{id}/se-rules/{rid}",             "auth": "doctor",  "response": "{ ok: true }" },
+    { "phase": "05", "method": "GET",    "path": "/api/v1/doctor/patients/{id}/charts/side-effects",        "auth": "doctor",  "response": "SeSeverityDataPoint[]" }
   ],
 
   "db_schema": {
-    "tables": ["users", "doctor_profiles", "patients", "diagnoses", "medications_reference", "patient_medications", "scales", "clinical_rules", "patient_scales", "test_completions", "event_log"],
+    "tables": ["users", "doctor_profiles", "patients", "diagnoses", "medications_reference", "patient_medications", "scales", "clinical_rules", "patient_scales", "test_completions", "event_log", "se_dictionary", "patient_side_effects", "se_monitoring_rules"],
     "source": "alembic/versions/",
-    "current_head": "0005_event_log"
+    "current_head": "0006_side_effects"
   },
 
   "ui_pages_active": [
@@ -141,5 +167,5 @@
 
   "db_seeds": {},
 
-  "notes": "Phase 04 complete. Added patient-facing medication endpoints (list, log dose, add, edit, stop) and doctor medication chart endpoint; new event types dose_taken, dose_missed, drug_started, dose_changed, drug_stopped written to event_log via emit() helper; MedicationChart Recharts component integrated into doctor patient detail; patient home page extended with medication section."
+  "notes": "Phase 05 complete. Added full side-effect subsystem: UKU catalogue seeded into se_dictionary (bilingual name_ru/name_en), patient SE reporting (add/edit/delete with immutable event trail via se_reported_start, se_severity_updated, se_resolved, se_correction events), doctor SE monitoring-rule management (POST/DELETE se-rules), SE severity-timeline chart endpoint, and frontend components SideEffectsList, SideEffectForm, SEMonitoringModal, SEChart."
 }

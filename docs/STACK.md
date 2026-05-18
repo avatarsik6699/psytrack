@@ -46,12 +46,9 @@ docker compose up --build
 # No manual step needed.
 ```
 
-### Running backend without Docker (local dev with `make dev`)
-
-```bash
-make migrate-seed   # apply migrations + seed reference data against the local DB
-make dev
-```
+> **Docker is mandatory.** Never start services (uvicorn, pnpm dev, PostgreSQL) directly on the host.
+> Running local processes alongside Docker leads to port conflicts, desync between code versions,
+> and stale OpenAPI schemas. All dev work goes through `docker compose up`.
 
 ---
 
@@ -66,7 +63,7 @@ STACK.md` for those.
 |------------|---------|-----------------------|
 | Infrastructure / bootstrap | `uv sync --dev` | Requires uv installed |
 | Migrations | `uv run alembic upgrade head` | Requires DB to be running (docker compose up) |
-| Reference data seed | `make seed` | Only needed when running backend **without Docker** (`make dev`). In Docker, seeding runs automatically via `entrypoint.sh`. |
+| Reference data seed | n/a | Seeding runs automatically via `entrypoint.sh` inside the Docker backend container. |
 | Backend / unit tests | `uv run pytest` | Uses aiosqlite in-memory; no Docker needed |
 | **Schema sync** | `cd frontend && pnpm generate:api` | Backend must be running on :8000; regenerates `schema.ts` from live OpenAPI spec — **run after every API change** |
 | Frontend prep | `cd frontend && pnpm install && pnpm build` | Requires Node >= 22 and pnpm |
@@ -74,7 +71,7 @@ STACK.md` for those.
 | Frontend unit tests | `cd frontend && pnpm test` | Vitest |
 | E2E lint / determinism | `cd frontend && pnpm test:e2e:lint` | Checks for anti-flake patterns |
 | E2E | `cd frontend && pnpm test:e2e` | Playwright; requires running app stack |
-| Smoke | `make dev` | Starts uvicorn on :8000; verify manually |
+| Smoke | `docker compose up` | Full stack on :8000 / :3000; verify manually. Do NOT use `make dev`. |
 
 ---
 

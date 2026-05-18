@@ -1,4 +1,4 @@
-import { Calendar, Clock, Home, Settings, User, Users } from 'lucide-react';
+import { Activity, Calendar, Clock, Home, Settings, User, Users } from 'lucide-react';
 import { NavLink } from 'react-router';
 
 import { useLogoutMutation } from '@shared/api/auth';
@@ -11,6 +11,7 @@ interface SidebarProps {
 
 const patientNav = [
 	{ to: '/', icon: Home, label: 'Home' },
+	{ to: '/dashboard', icon: Activity, label: 'Dashboard' },
 	{ to: '/history', icon: Clock, label: 'History' },
 	{ to: '/profile', icon: User, label: 'Profile' },
 ];
