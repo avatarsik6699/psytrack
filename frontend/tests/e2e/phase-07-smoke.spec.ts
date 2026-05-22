@@ -78,7 +78,7 @@ test.describe('Phase 07 — Charts & Doctor Detail', () => {
 		const patient = await apiPost<{ id: string }>(
 			'/api/v1/doctor/patients',
 			{ full_name: 'E2E P07 Patient' },
-			tokens.access_token,
+			tokens.access_token
 		);
 		patientId = patient.id;
 	});
@@ -88,7 +88,7 @@ test.describe('Phase 07 — Charts & Doctor Detail', () => {
 			({ key, version, data }) => {
 				window.localStorage.setItem(key, JSON.stringify({ version, data }));
 			},
-			{ key: LS_AUTH_KEY, version: LS_VERSION, data: tokens },
+			{ key: LS_AUTH_KEY, version: LS_VERSION, data: tokens }
 		);
 	});
 
@@ -97,10 +97,7 @@ test.describe('Phase 07 — Charts & Doctor Detail', () => {
 	// -------------------------------------------------------------------------
 
 	test('GET /charts/scores returns empty array for new patient', async () => {
-		const data = await apiGet<unknown[]>(
-			`/api/v1/doctor/patients/${patientId}/charts/scores`,
-			tokens.access_token,
-		);
+		const data = await apiGet<unknown[]>(`/api/v1/doctor/patients/${patientId}/charts/scores`, tokens.access_token);
 		expect(Array.isArray(data)).toBe(true);
 	});
 
@@ -112,15 +109,12 @@ test.describe('Phase 07 — Charts & Doctor Detail', () => {
 		const created = await apiPost<{ id: string; is_completed: boolean; description: string }>(
 			`/api/v1/doctor/patients/${patientId}/goals`,
 			{ description: 'E2E therapy goal' },
-			tokens.access_token,
+			tokens.access_token
 		);
 		expect(created.description).toBe('E2E therapy goal');
 		expect(created.is_completed).toBe(false);
 
-		const list = await apiGet<unknown[]>(
-			`/api/v1/doctor/patients/${patientId}/goals`,
-			tokens.access_token,
-		);
+		const list = await apiGet<unknown[]>(`/api/v1/doctor/patients/${patientId}/goals`, tokens.access_token);
 		expect(list.length).toBeGreaterThan(0);
 	});
 
@@ -135,19 +129,21 @@ test.describe('Phase 07 — Charts & Doctor Detail', () => {
 
 	test('patient detail page shows ScoreChart section', async ({ page }) => {
 		await page.goto(`/doctor/patients/${patientId}`);
+		await page.locator('[data-slot="tabs-trigger"]', { hasText: 'Динамика' }).first().click();
 		// ScoreChart renders "No score data." when empty
 		await expect(page.getByText(/No score data\./i)).toBeVisible({ timeout: 8000 });
 	});
 
 	test('TherapyGoals section renders with Add goal button', async ({ page }) => {
 		await page.goto(`/doctor/patients/${patientId}`);
-		await expect(page.getByRole('heading', { name: 'Therapy Goals' })).toBeVisible({ timeout: 8000 });
+		await expect(page.getByRole('heading', { name: 'Цели терапии' })).toBeVisible({ timeout: 8000 });
 		await expect(page.getByText(/Add goal/i)).toBeVisible();
 	});
 
 	test('AssignTestModal opens when + Assign Test is clicked', async ({ page }) => {
 		await page.goto(`/doctor/patients/${patientId}`);
-		await page.getByRole('button', { name: /Assign Test/i }).click();
+		await page.locator('[data-slot="tabs-trigger"]', { hasText: 'Динамика' }).first().click();
+		await page.getByRole('button', { name: /Назначить тест/i }).click();
 		// The modal renders an inline form; assert the visible "Scale *" label is shown
 		await expect(page.getByText('Scale *')).toBeVisible();
 	});
@@ -157,10 +153,7 @@ test.describe('Phase 07 — Charts & Doctor Detail', () => {
 	// -------------------------------------------------------------------------
 
 	test('GET /doctor/patients/:id returns adherence_percent and latest_scores', async () => {
-		const patient = await apiGet<Record<string, unknown>>(
-			`/api/v1/doctor/patients/${patientId}`,
-			tokens.access_token,
-		);
+		const patient = await apiGet<Record<string, unknown>>(`/api/v1/doctor/patients/${patientId}`, tokens.access_token);
 		expect('adherence_percent' in patient).toBe(true);
 		expect('latest_scores' in patient).toBe(true);
 		expect('active_medications_summary' in patient).toBe(true);

@@ -34,8 +34,7 @@ export function useMySideEffects() {
 export function useReportSideEffectMutation() {
 	const queryClient = useQueryClient();
 	return useMutation({
-		mutationFn: (data: PatientSideEffectIn) =>
-			api.post('/api/v1/patient/side-effects', { body: data }),
+		mutationFn: (data: PatientSideEffectIn) => api.post('/api/v1/patient/side-effects', { body: data }),
 		onSuccess: () => {
 			queryClient.invalidateQueries({ queryKey: seQueryKeys.mySideEffects() });
 		},

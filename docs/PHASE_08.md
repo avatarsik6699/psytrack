@@ -7,7 +7,7 @@
 | Field | Value |
 |-------|-------|
 | Phase | `08` |
-| Title | Patient Portal Polish |
+| Title | Full Frontend Refactoring — Design Alignment & Code Conventions |
 | Status | `⏳ in-progress` |
 | Tag | `v0.08.0` |
 | Depends on | PHASE_07 gate passing |
@@ -16,7 +16,15 @@
 
 ## Phase Goal
 
-Phase 08 completes the patient-facing portal. It delivers four dedicated patient pages (home dashboard, tests list, medications daily log, side effects) plus a 4-step "Add Side Effect" wizard, a test completion success screen, and dynamic sidebar badge counts. The backend adds the missing `GET /patient/tasks` and `GET /patient/me` endpoints, and the `PATCH /auth/me/email` auth endpoint. After this phase a patient can navigate the full portal, log medications, report side effects, and complete assigned tests within a coherent UI. Profile/account settings and activity history pages are included as SPEC-required deliverables (no design screenshot yet — implemented from SPEC §5.1 descriptions).
+Phase 08 was originally "Patient Portal Polish." It has been expanded to cover a **full frontend refactoring** of both portals (patient + doctor) based on the Architect Review Notes.
+
+**Original deliverables (all done):** four patient pages (home dashboard, tests list, medications log, side effects), a 4-step "Add Side Effect" wizard, test success screen, dynamic sidebar badge counts, and the backend endpoints `GET /patient/tasks`, `GET /patient/me`, `PATCH /auth/me/email`.
+
+**Expanded scope (this phase extension):**
+- **R8** — Remove template artifact components (app-top-bar.tsx).
+- **R9** — Apply `FRONTEND_CONVENTIONS.md` rules to doctor components, chart components, shared UI, layouts, and doctor routes (kebab-case filenames, `type` not `interface`, `React.FC<Props>`, `props.x` notation, no destructuring, `Fx` useEffect names).
+- **R10** — Design system completion: semantic color tokens for severity/status, missing shadcn components (badge, tabs, dialog, select, scroll-area, separator), mobile-first responsive sidebar, visual alignment of doctor portal pages to design screenshots.
+- **R11** — Complete R7: verify unit tests pass, expand E2E coverage to doctor routes and assessment wizard flow.
 
 ---
 
@@ -132,6 +140,12 @@ Implemented from SPEC §5.1: `EmailBindForm`, `PasswordChangeForm`, `Notificatio
 - [x] `FT1` `frontend/tests/e2e/phase-08-smoke.spec.ts` — smoke: home stat cards render (or empty state), tests page shows scale list, medications page shows log buttons, SE page shows add button, profile form renders; min one `test()` per new route — _Depends on:_ `F1`, `F2`, `F3`, `F4`, `F8`
 - [x] `FT2` Unit tests for `activityLabel(eventType)` utility and SE wizard step-validation logic — mark `n/a` and check off if no new pure-logic utilities — _Depends on:_ —
 
+### Phase 08 Extension — Full Frontend Refactoring
+- [x] `R8` Remove `app-top-bar.tsx` template artifact — delete file; update `root.tsx`; move `LanguageSwitcher` + `ThemeToggle` into sidebar footer — _Depends on:_ —
+- [x] `R9` Apply `FRONTEND_CONVENTIONS.md` to all doctor components, chart components, shared UI, layouts, and doctor routes — kebab-case filenames, `type` not `interface`, `React.FC<Props>`, `props.x` notation, no prop destructuring, `Fx` useEffect names — _Depends on:_ —
+- [x] `R10` Design system completion — add semantic severity/status color tokens to `app.css`; install shadcn `badge`, `tabs`, `dialog`, `select`, `scroll-area`, `separator`; mobile-first responsive sidebar; visual alignment of doctor portal to design screenshots in `docs/assets/` — _Depends on:_ `R9`
+- [x] `R11` Complete R7 — verify unit tests pass; expand E2E spec to cover doctor routes (`/doctor`, `/doctor/patients/:id` tab navigation) and assessment wizard completion flow — _Depends on:_ `R9`, `R10`
+
 ---
 
 ## Files
@@ -193,8 +207,6 @@ frontend/tests/e2e/phase-08-smoke.spec.ts
 - Any existing Alembic migration files
 - `app/modules/events/models.py` (append-only)
 - `app/modules/therapy_goals/` (Phase 07; not in scope)
-- `frontend/app/components/doctor/` (doctor UI)
-- `frontend/app/routes/doctor/` (doctor routes)
 - `docs/SPEC.md`, `docs/CONTEXT.md`
 
 ---
@@ -274,14 +286,29 @@ curl -s http://localhost:8000/api/v1/patient/me \
 
 ## Architect Review Notes
 
-- [x] No architect review issues recorded
+- [x] **[R9 + R10]** Design system refactoring and component architecture rules for the WHOLE project (patient + doctor + shared). Conventions documented in `docs/FRONTEND_CONVENTIONS.md`. Implementation for patient routes was completed in R1 (see NOTES). Doctor components, chart components, shared UI, layouts, and doctor routes are refactored (R9); design tokens, missing shadcn components, mobile-first layout, and doctor portal visual alignment are complete (R10).
 
+- [x] **[R8]** Необходимо избавиться от старых компонентов, которые никак не относятся к нашему проекту напрямую, а являются артефактами из шаблона. Артефактом является компонент `app-top-bar.tsx`. Удалить файл, убрать из `root.tsx`, переместить `LanguageSwitcher` + `ThemeToggle` в sidebar footer.
+
+- [x] Надо добавить строгое ограничение на использование сырых апи для работы с window.localStorage и JSON,  import.meta.env. Вместо этого всегда нужно использовать утилиты safe-json.ts и safe-ls.ts и env/runtime из frontend/app/shared/config. Это предотвращает скрытые баги, рассинхронизацию и отсутствие версионирования, а также решает проблему со строгой типизацией.
+
+- [x]  Для работы с датами предлагаю завести утилиту в shared/lib/date.ts, где реализовать единую обертку поверх нативного Date, для унификации и декларативности работы с датами в рамках всего проекта. По возможности обобщай и выноси как пресеты, константы часто переиспользуемые действия с Date.
+
+- [x] В компонентах не должно быть множества useState, useEffect, useRef, useCallback, useMemo, вспомогательных функций и т.д., которые могут быть связаны друг с другом общим доменом/ответственностью, но по итогу размазаны по всему компоненту, от чего неочевидно и непредсказуемо, как они связаны между собой, какую задачу решают. Я предлагаю выносить их в кастомные хуки, где будет содержаться связка хуков, состояния, вспомогательных функций на основе домена и единой ответственности, которую они решают. Это позволит снизить когнитивную нагрузку и сложность восприятия кода. Если это локальные хуки, которые работают только в рамках модуля/компонента, то такие хуки должны располагаться рядом с модулем/компонентом в директории module-name|component-name/hooks/*.
+
+- [x] Для работы с search params не использовать примитивные и "грязные" подходы: const [searchQuery, setSearchQuery] = useState(''), searchQuery.trim() и т.д. Я хочу чтобы ты сделал наш кастомный хук useSearchParams поверх useSearchParams и других хуков из react-router. Необходимо добиться декларативности через методы (set,add,remove,has и т.д.), строгой типизации и валидации через zod при работе с search params в url. Детально изучи существующий код, исследуй документацию для react-router v7+, zod latest version и сделай продакшен реализацию кастомного хука для работы с search params. Жестко зафиксируй в документации, что мы используем только данный хук при работе с search params, не используем сырой хук useSearchParams из 'react-router'.
+
+- [x] Я бы хотел сделать единую точку входа и апи работы с роутингом, вместо множества отдельных хуков useParams, useNavigate и т.д. Должен быть единый хук useRouter, который инкапсулирует и обобщает всю работу с роутингом, представляя декларативный, строго типизированный апи для работы с роутингом. Должны быть обобщенные, типобезопасные методы + необходимые состояния. Жестко зафиксируй в документации, что мы используем только данный хук при работе с роутингом, не используем по отдельности хуки useParams, useNavigate и т.д.
+
+- [x] На данный момент у нас отсутствует полноценное покрытие e2e playwright тестами функционала frontend. Я бы хотел решить эту проблему и покрыть текущий функционал e2e тестами. При этом, не смотря на то, что мы зафиксировали правило, что со всеми сервисами работаем в рамках docker контейнеров, предлагаю запускать e2e тесты локально на текущем хосте, а не в рамках docker контейнера. Это компромисс, чтобы избежать проблем и доп. нагрузки на docker контейнеры. Я не планирую запускать e2e тесты где-либо ещё, кроме локального запуска на текущем хосте. Там, где e2e тесты ненужны, предлагаю писать unit тесты на базе текущего стека тестирование во frontend. Проведи исследование, определи какой функционал уже покрыт тестами, а какой ещё нет. Разработай план и реализуй его. Зафиксируй в документации то, что e2e и unit тесты являются необходимым этапом разработки и их обязательно нужно писать при разработке нового функционала.
+
+- [x] На данный момент часть файлов во frontend использует camel case, pascal case, kebab case. Я бы хотел свести нейминг всех файлов к kebab-case. Выполни рефакторинг. Зафиксируй это как обязательное правило в документации.
 ---
 
 ## Atomic Commit Message
 
 ```
-feat(phase-08): patient portal — home stats, tests, drugs, side-effect wizard
+feat(phase-08): full frontend refactoring — design alignment, conventions, doctor portal
 ```
 
 ---

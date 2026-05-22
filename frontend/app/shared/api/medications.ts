@@ -86,8 +86,7 @@ export function useLogDoseMutation(medicationId: string) {
 export function useAddMyMedicationMutation() {
 	const queryClient = useQueryClient();
 	return useMutation({
-		mutationFn: (data: PatientMedicationCreate) =>
-			api.post('/api/v1/patient/medications', { body: data }),
+		mutationFn: (data: PatientMedicationCreate) => api.post('/api/v1/patient/medications', { body: data }),
 		onSuccess: () => {
 			queryClient.invalidateQueries({ queryKey: medicationQueryKeys.myMeds() });
 		},

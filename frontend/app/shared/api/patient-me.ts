@@ -16,8 +16,7 @@ export function usePatientMe() {
 export function useUpdateEmailMutation() {
 	const queryClient = useQueryClient();
 	return useMutation({
-		mutationFn: (email: string) =>
-			api.patch('/api/v1/public/auth/me/email', { body: { email } }),
+		mutationFn: (email: string) => api.patch('/api/v1/public/auth/me/email', { body: { email } }),
 		onSuccess: () => {
 			queryClient.invalidateQueries({ queryKey: patientMeQueryKeys.me() });
 		},

@@ -5,7 +5,6 @@ import { Links, Meta, Outlet, Scripts, ScrollRestoration, useRouteError } from '
 import { appError } from '@shared/lib/app-error';
 import { AppProvider } from '@shared/lib/app-provider';
 import { globalErrorNotifier } from '@shared/lib/global-error-notifier';
-import { AppTopBar } from '@shared/ui/app-top-bar';
 import { ErrorState } from '@shared/ui/error-state';
 
 import './styles/app.css';
@@ -21,10 +20,7 @@ export default function App() {
 			</head>
 			<body>
 				<AppProvider>
-					<AppTopBar />
-					<div className='pt-20'>
-						<Outlet />
-					</div>
+					<Outlet />
 				</AppProvider>
 				<ScrollRestoration />
 				<Scripts />
@@ -52,7 +48,6 @@ export function ErrorBoundary() {
 			</head>
 			<body>
 				<AppProvider>
-					<AppTopBar />
 					<main className='shell'>
 						<ErrorState title={t('applicationError')} error={error} />
 					</main>

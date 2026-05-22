@@ -1,9 +1,9 @@
 import type { FormEvent } from 'react';
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { useNavigate } from 'react-router';
 
 import { useRegisterMutation } from '@shared/api/auth';
+import { useRouter } from '@shared/hooks/use-router';
 
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -12,7 +12,7 @@ import { Label } from '@/components/ui/label';
 export function RegisterForm() {
 	const { t } = useTranslation('common');
 	const { t: tErrors } = useTranslation('errors');
-	const navigate = useNavigate();
+	const router = useRouter();
 	const registerMutation = useRegisterMutation();
 	const [fullName, setFullName] = useState('');
 	const [email, setEmail] = useState('');
@@ -28,7 +28,7 @@ export function RegisterForm() {
 		}
 		setBlocked(false);
 		await registerMutation.mutateAsync({ email, password, full_name: fullName, consent_152fz: true });
-		navigate('/doctor', { replace: true });
+		router.navigate('/doctor', { replace: true });
 	};
 
 	return (

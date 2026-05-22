@@ -49,6 +49,38 @@
   --docassist-accent-hover:   oklch(0.62 0.15 264);
   --docassist-accent-subtle:  oklch(0.96 0.04 264);
   --docassist-sidebar-width:  180px;
+  --docassist-topbar-height:  48px;
+
+  /* Semantic status tokens */
+  --color-status-critical:    oklch(0.63 0.22 25);
+  --color-status-critical-bg: oklch(0.97 0.02 25);
+  --color-status-critical-fg: oklch(0.40 0.18 25);
+  --color-status-warning:     oklch(0.72 0.15 55);
+  --color-status-warning-bg:  oklch(0.97 0.04 55);
+  --color-status-warning-fg:  oklch(0.45 0.13 55);
+  --color-status-ok:          oklch(0.65 0.16 145);
+  --color-status-ok-bg:       oklch(0.96 0.04 145);
+  --color-status-ok-fg:       oklch(0.38 0.13 145);
+  --color-status-none:        oklch(0.65 0.00 0);
+  --color-status-none-bg:     oklch(0.95 0.00 0);
+  --color-status-none-fg:     oklch(0.45 0.00 0);
+
+  /* Severity scale (UKU 0–4) */
+  --color-severity-0:     oklch(0.65 0.16 145);
+  --color-severity-0-bg:  oklch(0.96 0.04 145);
+  --color-severity-0-fg:  oklch(0.38 0.13 145);
+  --color-severity-1:     oklch(0.72 0.15 55);
+  --color-severity-1-bg:  oklch(0.97 0.04 55);
+  --color-severity-1-fg:  oklch(0.45 0.13 55);
+  --color-severity-2:     oklch(0.68 0.17 42);
+  --color-severity-2-bg:  oklch(0.97 0.05 42);
+  --color-severity-2-fg:  oklch(0.44 0.14 42);
+  --color-severity-3:     oklch(0.63 0.22 25);
+  --color-severity-3-bg:  oklch(0.97 0.02 25);
+  --color-severity-3-fg:  oklch(0.40 0.18 25);
+  --color-severity-4:     oklch(0.45 0.24 15);
+  --color-severity-4-bg:  oklch(0.95 0.03 15);
+  --color-severity-4-fg:  oklch(0.30 0.20 15);
 
   /* Override shadcn semantic vars to teal brand */
   --primary:            var(--docassist-primary);
@@ -142,6 +174,37 @@
   --color-docassist-accent:         var(--docassist-accent);
   --color-docassist-accent-hover:   var(--docassist-accent-hover);
   --color-docassist-accent-subtle:  var(--docassist-accent-subtle);
+
+  /* Status semantic utilities */
+  --color-status-critical:    var(--color-status-critical);
+  --color-status-critical-bg: var(--color-status-critical-bg);
+  --color-status-critical-fg: var(--color-status-critical-fg);
+  --color-status-warning:     var(--color-status-warning);
+  --color-status-warning-bg:  var(--color-status-warning-bg);
+  --color-status-warning-fg:  var(--color-status-warning-fg);
+  --color-status-ok:          var(--color-status-ok);
+  --color-status-ok-bg:       var(--color-status-ok-bg);
+  --color-status-ok-fg:       var(--color-status-ok-fg);
+  --color-status-none:        var(--color-status-none);
+  --color-status-none-bg:     var(--color-status-none-bg);
+  --color-status-none-fg:     var(--color-status-none-fg);
+
+  /* Severity utilities */
+  --color-severity-0:     var(--color-severity-0);
+  --color-severity-0-bg:  var(--color-severity-0-bg);
+  --color-severity-0-fg:  var(--color-severity-0-fg);
+  --color-severity-1:     var(--color-severity-1);
+  --color-severity-1-bg:  var(--color-severity-1-bg);
+  --color-severity-1-fg:  var(--color-severity-1-fg);
+  --color-severity-2:     var(--color-severity-2);
+  --color-severity-2-bg:  var(--color-severity-2-bg);
+  --color-severity-2-fg:  var(--color-severity-2-fg);
+  --color-severity-3:     var(--color-severity-3);
+  --color-severity-3-bg:  var(--color-severity-3-bg);
+  --color-severity-3-fg:  var(--color-severity-3-fg);
+  --color-severity-4:     var(--color-severity-4);
+  --color-severity-4-bg:  var(--color-severity-4-bg);
+  --color-severity-4-fg:  var(--color-severity-4-fg);
 }
 
 @layer base {

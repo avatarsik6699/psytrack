@@ -4,3291 +4,3291 @@
  */
 
 export interface paths {
-    "/api/v1/health": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        /** Health */
-        get: operations["health_api_v1_health_get"];
-        put?: never;
-        post?: never;
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/api/v1/public/auth/login": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        get?: never;
-        put?: never;
-        /** Login */
-        post: operations["login_api_v1_public_auth_login_post"];
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/api/v1/public/auth/register": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        get?: never;
-        put?: never;
-        /** Register */
-        post: operations["register_api_v1_public_auth_register_post"];
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/api/v1/public/auth/refresh": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        get?: never;
-        put?: never;
-        /** Refresh */
-        post: operations["refresh_api_v1_public_auth_refresh_post"];
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/api/v1/public/auth/patient-login": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        get?: never;
-        put?: never;
-        /** Patient Login */
-        post: operations["patient_login_api_v1_public_auth_patient_login_post"];
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/api/v1/public/auth/me/email": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        get?: never;
-        put?: never;
-        post?: never;
-        delete?: never;
-        options?: never;
-        head?: never;
-        /** Update Email */
-        patch: operations["update_email_api_v1_public_auth_me_email_patch"];
-        trace?: never;
-    };
-    "/api/v1/public/auth/me/password": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        get?: never;
-        put?: never;
-        post?: never;
-        delete?: never;
-        options?: never;
-        head?: never;
-        /** Change Password */
-        patch: operations["change_password_api_v1_public_auth_me_password_patch"];
-        trace?: never;
-    };
-    "/api/v1/public/auth/me": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        /** Me */
-        get: operations["me_api_v1_public_auth_me_get"];
-        put?: never;
-        post?: never;
-        /** Delete Me */
-        delete: operations["delete_me_api_v1_public_auth_me_delete"];
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/api/v1/public/auth/logout": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        get?: never;
-        put?: never;
-        /** Logout */
-        post: operations["logout_api_v1_public_auth_logout_post"];
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/api/v1/doctor/patients": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        /** List Patients */
-        get: operations["list_patients_api_v1_doctor_patients_get"];
-        put?: never;
-        /** Create Patient */
-        post: operations["create_patient_api_v1_doctor_patients_post"];
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/api/v1/doctor/patients/{patient_id}": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        /** Get Patient */
-        get: operations["get_patient_api_v1_doctor_patients__patient_id__get"];
-        put?: never;
-        post?: never;
-        delete?: never;
-        options?: never;
-        head?: never;
-        /** Update Patient */
-        patch: operations["update_patient_api_v1_doctor_patients__patient_id__patch"];
-        trace?: never;
-    };
-    "/api/v1/doctor/patients/{patient_id}/archive": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        get?: never;
-        put?: never;
-        /** Archive Patient */
-        post: operations["archive_patient_api_v1_doctor_patients__patient_id__archive_post"];
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/api/v1/patient/me": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        /** Patient Me */
-        get: operations["patient_me_api_v1_patient_me_get"];
-        put?: never;
-        post?: never;
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/api/v1/doctor/patients/{patient_id}/diagnoses": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        /** List Diagnoses */
-        get: operations["list_diagnoses_api_v1_doctor_patients__patient_id__diagnoses_get"];
-        put?: never;
-        /** Create Diagnosis */
-        post: operations["create_diagnosis_api_v1_doctor_patients__patient_id__diagnoses_post"];
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/api/v1/doctor/patients/{patient_id}/diagnoses/{diagnosis_id}": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        get?: never;
-        put?: never;
-        post?: never;
-        delete?: never;
-        options?: never;
-        head?: never;
-        /** Update Diagnosis */
-        patch: operations["update_diagnosis_api_v1_doctor_patients__patient_id__diagnoses__diagnosis_id__patch"];
-        trace?: never;
-    };
-    "/api/v1/ref/medications": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        /** List Medications */
-        get: operations["list_medications_api_v1_ref_medications_get"];
-        put?: never;
-        post?: never;
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/api/v1/doctor/patients/{patient_id}/medications": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        /** List Patient Medications */
-        get: operations["list_patient_medications_api_v1_doctor_patients__patient_id__medications_get"];
-        put?: never;
-        /** Assign Medication */
-        post: operations["assign_medication_api_v1_doctor_patients__patient_id__medications_post"];
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/api/v1/doctor/patients/{patient_id}/medications/{medication_id}": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        get?: never;
-        put?: never;
-        post?: never;
-        delete?: never;
-        options?: never;
-        head?: never;
-        /** Update Patient Medication */
-        patch: operations["update_patient_medication_api_v1_doctor_patients__patient_id__medications__medication_id__patch"];
-        trace?: never;
-    };
-    "/api/v1/doctor/patients/{patient_id}/charts/medications": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        /** Get Medication Chart */
-        get: operations["get_medication_chart_api_v1_doctor_patients__patient_id__charts_medications_get"];
-        put?: never;
-        post?: never;
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/api/v1/patient/medications": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        /** List My Medications */
-        get: operations["list_my_medications_api_v1_patient_medications_get"];
-        put?: never;
-        /** Add My Medication */
-        post: operations["add_my_medication_api_v1_patient_medications_post"];
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/api/v1/patient/medications/{medication_id}/log": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        get?: never;
-        put?: never;
-        post?: never;
-        delete?: never;
-        options?: never;
-        head?: never;
-        /** Log Dose */
-        patch: operations["log_dose_api_v1_patient_medications__medication_id__log_patch"];
-        trace?: never;
-    };
-    "/api/v1/patient/medications/{medication_id}": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        get?: never;
-        put?: never;
-        post?: never;
-        /** Stop My Medication */
-        delete: operations["stop_my_medication_api_v1_patient_medications__medication_id__delete"];
-        options?: never;
-        head?: never;
-        /** Edit My Medication */
-        patch: operations["edit_my_medication_api_v1_patient_medications__medication_id__patch"];
-        trace?: never;
-    };
-    "/api/v1/ref/scales": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        /** List Scales */
-        get: operations["list_scales_api_v1_ref_scales_get"];
-        put?: never;
-        post?: never;
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/api/v1/ref/scales/{scale_id}/questions": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        /** Get Scale Questions */
-        get: operations["get_scale_questions_api_v1_ref_scales__scale_id__questions_get"];
-        put?: never;
-        post?: never;
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/api/v1/doctor/patients/{patient_id}/scales": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        /** List Patient Scales */
-        get: operations["list_patient_scales_api_v1_doctor_patients__patient_id__scales_get"];
-        put?: never;
-        /** Assign Scale */
-        post: operations["assign_scale_api_v1_doctor_patients__patient_id__scales_post"];
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/api/v1/doctor/patients/{patient_id}/scales/{patient_scale_id}": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        get?: never;
-        put?: never;
-        post?: never;
-        /** Remove Scale */
-        delete: operations["remove_scale_api_v1_doctor_patients__patient_id__scales__patient_scale_id__delete"];
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/api/v1/patient/tests/{patient_scale_id}/submit": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        get?: never;
-        put?: never;
-        /** Submit Test */
-        post: operations["submit_test_api_v1_patient_tests__patient_scale_id__submit_post"];
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/api/v1/patient/history": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        /** Get History */
-        get: operations["get_history_api_v1_patient_history_get"];
-        put?: never;
-        post?: never;
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/api/v1/patient/scales": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        /** List My Scales */
-        get: operations["list_my_scales_api_v1_patient_scales_get"];
-        put?: never;
-        post?: never;
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/api/v1/patient/scales/{patient_scale_id}": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        /** Get Patient Scale */
-        get: operations["get_patient_scale_api_v1_patient_scales__patient_scale_id__get"];
-        put?: never;
-        post?: never;
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/api/v1/ref/se-dictionary": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        /** List Se Dictionary */
-        get: operations["list_se_dictionary_api_v1_ref_se_dictionary_get"];
-        put?: never;
-        post?: never;
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/api/v1/patient/side-effects": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        /** List My Side Effects */
-        get: operations["list_my_side_effects_api_v1_patient_side_effects_get"];
-        put?: never;
-        /** Report Side Effect */
-        post: operations["report_side_effect_api_v1_patient_side_effects_post"];
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/api/v1/patient/side-effects/{se_record_id}": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        get?: never;
-        put?: never;
-        post?: never;
-        /** Delete Side Effect */
-        delete: operations["delete_side_effect_api_v1_patient_side_effects__se_record_id__delete"];
-        options?: never;
-        head?: never;
-        /** Update Side Effect */
-        patch: operations["update_side_effect_api_v1_patient_side_effects__se_record_id__patch"];
-        trace?: never;
-    };
-    "/api/v1/doctor/patients/{patient_id}/se-rules": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        /** List Se Rules */
-        get: operations["list_se_rules_api_v1_doctor_patients__patient_id__se_rules_get"];
-        put?: never;
-        /** Add Se Rule */
-        post: operations["add_se_rule_api_v1_doctor_patients__patient_id__se_rules_post"];
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/api/v1/doctor/patients/{patient_id}/se-rules/{rule_id}": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        get?: never;
-        put?: never;
-        post?: never;
-        /** Remove Se Rule */
-        delete: operations["remove_se_rule_api_v1_doctor_patients__patient_id__se_rules__rule_id__delete"];
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/api/v1/doctor/patients/{patient_id}/charts/side-effects": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        /** Get Se Chart */
-        get: operations["get_se_chart_api_v1_doctor_patients__patient_id__charts_side_effects_get"];
-        put?: never;
-        post?: never;
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/api/v1/doctor/patients/{patient_id}/events": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        /** List Patient Events */
-        get: operations["list_patient_events_api_v1_doctor_patients__patient_id__events_get"];
-        put?: never;
-        post?: never;
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/api/v1/system/tasks/generate": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        get?: never;
-        put?: never;
-        /** Generate Tasks */
-        post: operations["generate_tasks_api_v1_system_tasks_generate_post"];
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/api/v1/patient/tasks": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        /** List Patient Tasks */
-        get: operations["list_patient_tasks_api_v1_patient_tasks_get"];
-        put?: never;
-        post?: never;
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/api/v1/doctor/patients/{patient_id}/charts/scores": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        /** Get Score Chart */
-        get: operations["get_score_chart_api_v1_doctor_patients__patient_id__charts_scores_get"];
-        put?: never;
-        post?: never;
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/api/v1/doctor/patients/{patient_id}/goals": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        /** List Goals */
-        get: operations["list_goals_api_v1_doctor_patients__patient_id__goals_get"];
-        put?: never;
-        /** Create Goal */
-        post: operations["create_goal_api_v1_doctor_patients__patient_id__goals_post"];
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/api/v1/doctor/patients/{patient_id}/goals/{goal_id}": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        get?: never;
-        put?: never;
-        post?: never;
-        delete?: never;
-        options?: never;
-        head?: never;
-        /** Update Goal */
-        patch: operations["update_goal_api_v1_doctor_patients__patient_id__goals__goal_id__patch"];
-        trace?: never;
-    };
+	'/api/v1/health': {
+		parameters: {
+			query?: never;
+			header?: never;
+			path?: never;
+			cookie?: never;
+		};
+		/** Health */
+		get: operations['health_api_v1_health_get'];
+		put?: never;
+		post?: never;
+		delete?: never;
+		options?: never;
+		head?: never;
+		patch?: never;
+		trace?: never;
+	};
+	'/api/v1/public/auth/login': {
+		parameters: {
+			query?: never;
+			header?: never;
+			path?: never;
+			cookie?: never;
+		};
+		get?: never;
+		put?: never;
+		/** Login */
+		post: operations['login_api_v1_public_auth_login_post'];
+		delete?: never;
+		options?: never;
+		head?: never;
+		patch?: never;
+		trace?: never;
+	};
+	'/api/v1/public/auth/register': {
+		parameters: {
+			query?: never;
+			header?: never;
+			path?: never;
+			cookie?: never;
+		};
+		get?: never;
+		put?: never;
+		/** Register */
+		post: operations['register_api_v1_public_auth_register_post'];
+		delete?: never;
+		options?: never;
+		head?: never;
+		patch?: never;
+		trace?: never;
+	};
+	'/api/v1/public/auth/refresh': {
+		parameters: {
+			query?: never;
+			header?: never;
+			path?: never;
+			cookie?: never;
+		};
+		get?: never;
+		put?: never;
+		/** Refresh */
+		post: operations['refresh_api_v1_public_auth_refresh_post'];
+		delete?: never;
+		options?: never;
+		head?: never;
+		patch?: never;
+		trace?: never;
+	};
+	'/api/v1/public/auth/patient-login': {
+		parameters: {
+			query?: never;
+			header?: never;
+			path?: never;
+			cookie?: never;
+		};
+		get?: never;
+		put?: never;
+		/** Patient Login */
+		post: operations['patient_login_api_v1_public_auth_patient_login_post'];
+		delete?: never;
+		options?: never;
+		head?: never;
+		patch?: never;
+		trace?: never;
+	};
+	'/api/v1/public/auth/me/email': {
+		parameters: {
+			query?: never;
+			header?: never;
+			path?: never;
+			cookie?: never;
+		};
+		get?: never;
+		put?: never;
+		post?: never;
+		delete?: never;
+		options?: never;
+		head?: never;
+		/** Update Email */
+		patch: operations['update_email_api_v1_public_auth_me_email_patch'];
+		trace?: never;
+	};
+	'/api/v1/public/auth/me/password': {
+		parameters: {
+			query?: never;
+			header?: never;
+			path?: never;
+			cookie?: never;
+		};
+		get?: never;
+		put?: never;
+		post?: never;
+		delete?: never;
+		options?: never;
+		head?: never;
+		/** Change Password */
+		patch: operations['change_password_api_v1_public_auth_me_password_patch'];
+		trace?: never;
+	};
+	'/api/v1/public/auth/me': {
+		parameters: {
+			query?: never;
+			header?: never;
+			path?: never;
+			cookie?: never;
+		};
+		/** Me */
+		get: operations['me_api_v1_public_auth_me_get'];
+		put?: never;
+		post?: never;
+		/** Delete Me */
+		delete: operations['delete_me_api_v1_public_auth_me_delete'];
+		options?: never;
+		head?: never;
+		patch?: never;
+		trace?: never;
+	};
+	'/api/v1/public/auth/logout': {
+		parameters: {
+			query?: never;
+			header?: never;
+			path?: never;
+			cookie?: never;
+		};
+		get?: never;
+		put?: never;
+		/** Logout */
+		post: operations['logout_api_v1_public_auth_logout_post'];
+		delete?: never;
+		options?: never;
+		head?: never;
+		patch?: never;
+		trace?: never;
+	};
+	'/api/v1/doctor/patients': {
+		parameters: {
+			query?: never;
+			header?: never;
+			path?: never;
+			cookie?: never;
+		};
+		/** List Patients */
+		get: operations['list_patients_api_v1_doctor_patients_get'];
+		put?: never;
+		/** Create Patient */
+		post: operations['create_patient_api_v1_doctor_patients_post'];
+		delete?: never;
+		options?: never;
+		head?: never;
+		patch?: never;
+		trace?: never;
+	};
+	'/api/v1/doctor/patients/{patient_id}': {
+		parameters: {
+			query?: never;
+			header?: never;
+			path?: never;
+			cookie?: never;
+		};
+		/** Get Patient */
+		get: operations['get_patient_api_v1_doctor_patients__patient_id__get'];
+		put?: never;
+		post?: never;
+		delete?: never;
+		options?: never;
+		head?: never;
+		/** Update Patient */
+		patch: operations['update_patient_api_v1_doctor_patients__patient_id__patch'];
+		trace?: never;
+	};
+	'/api/v1/doctor/patients/{patient_id}/archive': {
+		parameters: {
+			query?: never;
+			header?: never;
+			path?: never;
+			cookie?: never;
+		};
+		get?: never;
+		put?: never;
+		/** Archive Patient */
+		post: operations['archive_patient_api_v1_doctor_patients__patient_id__archive_post'];
+		delete?: never;
+		options?: never;
+		head?: never;
+		patch?: never;
+		trace?: never;
+	};
+	'/api/v1/patient/me': {
+		parameters: {
+			query?: never;
+			header?: never;
+			path?: never;
+			cookie?: never;
+		};
+		/** Patient Me */
+		get: operations['patient_me_api_v1_patient_me_get'];
+		put?: never;
+		post?: never;
+		delete?: never;
+		options?: never;
+		head?: never;
+		patch?: never;
+		trace?: never;
+	};
+	'/api/v1/doctor/patients/{patient_id}/diagnoses': {
+		parameters: {
+			query?: never;
+			header?: never;
+			path?: never;
+			cookie?: never;
+		};
+		/** List Diagnoses */
+		get: operations['list_diagnoses_api_v1_doctor_patients__patient_id__diagnoses_get'];
+		put?: never;
+		/** Create Diagnosis */
+		post: operations['create_diagnosis_api_v1_doctor_patients__patient_id__diagnoses_post'];
+		delete?: never;
+		options?: never;
+		head?: never;
+		patch?: never;
+		trace?: never;
+	};
+	'/api/v1/doctor/patients/{patient_id}/diagnoses/{diagnosis_id}': {
+		parameters: {
+			query?: never;
+			header?: never;
+			path?: never;
+			cookie?: never;
+		};
+		get?: never;
+		put?: never;
+		post?: never;
+		delete?: never;
+		options?: never;
+		head?: never;
+		/** Update Diagnosis */
+		patch: operations['update_diagnosis_api_v1_doctor_patients__patient_id__diagnoses__diagnosis_id__patch'];
+		trace?: never;
+	};
+	'/api/v1/ref/medications': {
+		parameters: {
+			query?: never;
+			header?: never;
+			path?: never;
+			cookie?: never;
+		};
+		/** List Medications */
+		get: operations['list_medications_api_v1_ref_medications_get'];
+		put?: never;
+		post?: never;
+		delete?: never;
+		options?: never;
+		head?: never;
+		patch?: never;
+		trace?: never;
+	};
+	'/api/v1/doctor/patients/{patient_id}/medications': {
+		parameters: {
+			query?: never;
+			header?: never;
+			path?: never;
+			cookie?: never;
+		};
+		/** List Patient Medications */
+		get: operations['list_patient_medications_api_v1_doctor_patients__patient_id__medications_get'];
+		put?: never;
+		/** Assign Medication */
+		post: operations['assign_medication_api_v1_doctor_patients__patient_id__medications_post'];
+		delete?: never;
+		options?: never;
+		head?: never;
+		patch?: never;
+		trace?: never;
+	};
+	'/api/v1/doctor/patients/{patient_id}/medications/{medication_id}': {
+		parameters: {
+			query?: never;
+			header?: never;
+			path?: never;
+			cookie?: never;
+		};
+		get?: never;
+		put?: never;
+		post?: never;
+		delete?: never;
+		options?: never;
+		head?: never;
+		/** Update Patient Medication */
+		patch: operations['update_patient_medication_api_v1_doctor_patients__patient_id__medications__medication_id__patch'];
+		trace?: never;
+	};
+	'/api/v1/doctor/patients/{patient_id}/charts/medications': {
+		parameters: {
+			query?: never;
+			header?: never;
+			path?: never;
+			cookie?: never;
+		};
+		/** Get Medication Chart */
+		get: operations['get_medication_chart_api_v1_doctor_patients__patient_id__charts_medications_get'];
+		put?: never;
+		post?: never;
+		delete?: never;
+		options?: never;
+		head?: never;
+		patch?: never;
+		trace?: never;
+	};
+	'/api/v1/patient/medications': {
+		parameters: {
+			query?: never;
+			header?: never;
+			path?: never;
+			cookie?: never;
+		};
+		/** List My Medications */
+		get: operations['list_my_medications_api_v1_patient_medications_get'];
+		put?: never;
+		/** Add My Medication */
+		post: operations['add_my_medication_api_v1_patient_medications_post'];
+		delete?: never;
+		options?: never;
+		head?: never;
+		patch?: never;
+		trace?: never;
+	};
+	'/api/v1/patient/medications/{medication_id}/log': {
+		parameters: {
+			query?: never;
+			header?: never;
+			path?: never;
+			cookie?: never;
+		};
+		get?: never;
+		put?: never;
+		post?: never;
+		delete?: never;
+		options?: never;
+		head?: never;
+		/** Log Dose */
+		patch: operations['log_dose_api_v1_patient_medications__medication_id__log_patch'];
+		trace?: never;
+	};
+	'/api/v1/patient/medications/{medication_id}': {
+		parameters: {
+			query?: never;
+			header?: never;
+			path?: never;
+			cookie?: never;
+		};
+		get?: never;
+		put?: never;
+		post?: never;
+		/** Stop My Medication */
+		delete: operations['stop_my_medication_api_v1_patient_medications__medication_id__delete'];
+		options?: never;
+		head?: never;
+		/** Edit My Medication */
+		patch: operations['edit_my_medication_api_v1_patient_medications__medication_id__patch'];
+		trace?: never;
+	};
+	'/api/v1/ref/scales': {
+		parameters: {
+			query?: never;
+			header?: never;
+			path?: never;
+			cookie?: never;
+		};
+		/** List Scales */
+		get: operations['list_scales_api_v1_ref_scales_get'];
+		put?: never;
+		post?: never;
+		delete?: never;
+		options?: never;
+		head?: never;
+		patch?: never;
+		trace?: never;
+	};
+	'/api/v1/ref/scales/{scale_id}/questions': {
+		parameters: {
+			query?: never;
+			header?: never;
+			path?: never;
+			cookie?: never;
+		};
+		/** Get Scale Questions */
+		get: operations['get_scale_questions_api_v1_ref_scales__scale_id__questions_get'];
+		put?: never;
+		post?: never;
+		delete?: never;
+		options?: never;
+		head?: never;
+		patch?: never;
+		trace?: never;
+	};
+	'/api/v1/doctor/patients/{patient_id}/scales': {
+		parameters: {
+			query?: never;
+			header?: never;
+			path?: never;
+			cookie?: never;
+		};
+		/** List Patient Scales */
+		get: operations['list_patient_scales_api_v1_doctor_patients__patient_id__scales_get'];
+		put?: never;
+		/** Assign Scale */
+		post: operations['assign_scale_api_v1_doctor_patients__patient_id__scales_post'];
+		delete?: never;
+		options?: never;
+		head?: never;
+		patch?: never;
+		trace?: never;
+	};
+	'/api/v1/doctor/patients/{patient_id}/scales/{patient_scale_id}': {
+		parameters: {
+			query?: never;
+			header?: never;
+			path?: never;
+			cookie?: never;
+		};
+		get?: never;
+		put?: never;
+		post?: never;
+		/** Remove Scale */
+		delete: operations['remove_scale_api_v1_doctor_patients__patient_id__scales__patient_scale_id__delete'];
+		options?: never;
+		head?: never;
+		patch?: never;
+		trace?: never;
+	};
+	'/api/v1/patient/tests/{patient_scale_id}/submit': {
+		parameters: {
+			query?: never;
+			header?: never;
+			path?: never;
+			cookie?: never;
+		};
+		get?: never;
+		put?: never;
+		/** Submit Test */
+		post: operations['submit_test_api_v1_patient_tests__patient_scale_id__submit_post'];
+		delete?: never;
+		options?: never;
+		head?: never;
+		patch?: never;
+		trace?: never;
+	};
+	'/api/v1/patient/history': {
+		parameters: {
+			query?: never;
+			header?: never;
+			path?: never;
+			cookie?: never;
+		};
+		/** Get History */
+		get: operations['get_history_api_v1_patient_history_get'];
+		put?: never;
+		post?: never;
+		delete?: never;
+		options?: never;
+		head?: never;
+		patch?: never;
+		trace?: never;
+	};
+	'/api/v1/patient/scales': {
+		parameters: {
+			query?: never;
+			header?: never;
+			path?: never;
+			cookie?: never;
+		};
+		/** List My Scales */
+		get: operations['list_my_scales_api_v1_patient_scales_get'];
+		put?: never;
+		post?: never;
+		delete?: never;
+		options?: never;
+		head?: never;
+		patch?: never;
+		trace?: never;
+	};
+	'/api/v1/patient/scales/{patient_scale_id}': {
+		parameters: {
+			query?: never;
+			header?: never;
+			path?: never;
+			cookie?: never;
+		};
+		/** Get Patient Scale */
+		get: operations['get_patient_scale_api_v1_patient_scales__patient_scale_id__get'];
+		put?: never;
+		post?: never;
+		delete?: never;
+		options?: never;
+		head?: never;
+		patch?: never;
+		trace?: never;
+	};
+	'/api/v1/ref/se-dictionary': {
+		parameters: {
+			query?: never;
+			header?: never;
+			path?: never;
+			cookie?: never;
+		};
+		/** List Se Dictionary */
+		get: operations['list_se_dictionary_api_v1_ref_se_dictionary_get'];
+		put?: never;
+		post?: never;
+		delete?: never;
+		options?: never;
+		head?: never;
+		patch?: never;
+		trace?: never;
+	};
+	'/api/v1/patient/side-effects': {
+		parameters: {
+			query?: never;
+			header?: never;
+			path?: never;
+			cookie?: never;
+		};
+		/** List My Side Effects */
+		get: operations['list_my_side_effects_api_v1_patient_side_effects_get'];
+		put?: never;
+		/** Report Side Effect */
+		post: operations['report_side_effect_api_v1_patient_side_effects_post'];
+		delete?: never;
+		options?: never;
+		head?: never;
+		patch?: never;
+		trace?: never;
+	};
+	'/api/v1/patient/side-effects/{se_record_id}': {
+		parameters: {
+			query?: never;
+			header?: never;
+			path?: never;
+			cookie?: never;
+		};
+		get?: never;
+		put?: never;
+		post?: never;
+		/** Delete Side Effect */
+		delete: operations['delete_side_effect_api_v1_patient_side_effects__se_record_id__delete'];
+		options?: never;
+		head?: never;
+		/** Update Side Effect */
+		patch: operations['update_side_effect_api_v1_patient_side_effects__se_record_id__patch'];
+		trace?: never;
+	};
+	'/api/v1/doctor/patients/{patient_id}/se-rules': {
+		parameters: {
+			query?: never;
+			header?: never;
+			path?: never;
+			cookie?: never;
+		};
+		/** List Se Rules */
+		get: operations['list_se_rules_api_v1_doctor_patients__patient_id__se_rules_get'];
+		put?: never;
+		/** Add Se Rule */
+		post: operations['add_se_rule_api_v1_doctor_patients__patient_id__se_rules_post'];
+		delete?: never;
+		options?: never;
+		head?: never;
+		patch?: never;
+		trace?: never;
+	};
+	'/api/v1/doctor/patients/{patient_id}/se-rules/{rule_id}': {
+		parameters: {
+			query?: never;
+			header?: never;
+			path?: never;
+			cookie?: never;
+		};
+		get?: never;
+		put?: never;
+		post?: never;
+		/** Remove Se Rule */
+		delete: operations['remove_se_rule_api_v1_doctor_patients__patient_id__se_rules__rule_id__delete'];
+		options?: never;
+		head?: never;
+		patch?: never;
+		trace?: never;
+	};
+	'/api/v1/doctor/patients/{patient_id}/charts/side-effects': {
+		parameters: {
+			query?: never;
+			header?: never;
+			path?: never;
+			cookie?: never;
+		};
+		/** Get Se Chart */
+		get: operations['get_se_chart_api_v1_doctor_patients__patient_id__charts_side_effects_get'];
+		put?: never;
+		post?: never;
+		delete?: never;
+		options?: never;
+		head?: never;
+		patch?: never;
+		trace?: never;
+	};
+	'/api/v1/doctor/patients/{patient_id}/events': {
+		parameters: {
+			query?: never;
+			header?: never;
+			path?: never;
+			cookie?: never;
+		};
+		/** List Patient Events */
+		get: operations['list_patient_events_api_v1_doctor_patients__patient_id__events_get'];
+		put?: never;
+		post?: never;
+		delete?: never;
+		options?: never;
+		head?: never;
+		patch?: never;
+		trace?: never;
+	};
+	'/api/v1/system/tasks/generate': {
+		parameters: {
+			query?: never;
+			header?: never;
+			path?: never;
+			cookie?: never;
+		};
+		get?: never;
+		put?: never;
+		/** Generate Tasks */
+		post: operations['generate_tasks_api_v1_system_tasks_generate_post'];
+		delete?: never;
+		options?: never;
+		head?: never;
+		patch?: never;
+		trace?: never;
+	};
+	'/api/v1/patient/tasks': {
+		parameters: {
+			query?: never;
+			header?: never;
+			path?: never;
+			cookie?: never;
+		};
+		/** List Patient Tasks */
+		get: operations['list_patient_tasks_api_v1_patient_tasks_get'];
+		put?: never;
+		post?: never;
+		delete?: never;
+		options?: never;
+		head?: never;
+		patch?: never;
+		trace?: never;
+	};
+	'/api/v1/doctor/patients/{patient_id}/charts/scores': {
+		parameters: {
+			query?: never;
+			header?: never;
+			path?: never;
+			cookie?: never;
+		};
+		/** Get Score Chart */
+		get: operations['get_score_chart_api_v1_doctor_patients__patient_id__charts_scores_get'];
+		put?: never;
+		post?: never;
+		delete?: never;
+		options?: never;
+		head?: never;
+		patch?: never;
+		trace?: never;
+	};
+	'/api/v1/doctor/patients/{patient_id}/goals': {
+		parameters: {
+			query?: never;
+			header?: never;
+			path?: never;
+			cookie?: never;
+		};
+		/** List Goals */
+		get: operations['list_goals_api_v1_doctor_patients__patient_id__goals_get'];
+		put?: never;
+		/** Create Goal */
+		post: operations['create_goal_api_v1_doctor_patients__patient_id__goals_post'];
+		delete?: never;
+		options?: never;
+		head?: never;
+		patch?: never;
+		trace?: never;
+	};
+	'/api/v1/doctor/patients/{patient_id}/goals/{goal_id}': {
+		parameters: {
+			query?: never;
+			header?: never;
+			path?: never;
+			cookie?: never;
+		};
+		get?: never;
+		put?: never;
+		post?: never;
+		delete?: never;
+		options?: never;
+		head?: never;
+		/** Update Goal */
+		patch: operations['update_goal_api_v1_doctor_patients__patient_id__goals__goal_id__patch'];
+		trace?: never;
+	};
 }
 export type webhooks = Record<string, never>;
 export interface components {
-    schemas: {
-        /** AccountDeletionResponse */
-        AccountDeletionResponse: {
-            /** Deleted */
-            deleted: boolean;
-        };
-        /** DiagnosisCreate */
-        DiagnosisCreate: {
-            /** Icd Code */
-            icd_code: string;
-            /** Name */
-            name: string;
-            /**
-             * Is Primary
-             * @default false
-             */
-            is_primary: boolean;
-            /** Date Diagnosed */
-            date_diagnosed?: string | null;
-            /** Notes */
-            notes?: string | null;
-        };
-        /** DiagnosisOut */
-        DiagnosisOut: {
-            /**
-             * Id
-             * Format: uuid
-             */
-            id: string;
-            /**
-             * Patient Id
-             * Format: uuid
-             */
-            patient_id: string;
-            /** Icd Code */
-            icd_code: string;
-            /** Name */
-            name: string;
-            /** Is Primary */
-            is_primary: boolean;
-            /** Date Diagnosed */
-            date_diagnosed: string | null;
-            /** Notes */
-            notes: string | null;
-            /**
-             * Created At
-             * Format: date-time
-             */
-            created_at: string;
-        };
-        /** DiagnosisUpdate */
-        DiagnosisUpdate: {
-            /** Icd Code */
-            icd_code?: string | null;
-            /** Name */
-            name?: string | null;
-            /** Is Primary */
-            is_primary?: boolean | null;
-            /** Date Diagnosed */
-            date_diagnosed?: string | null;
-            /** Notes */
-            notes?: string | null;
-        };
-        /** EmailUpdateIn */
-        EmailUpdateIn: {
-            /**
-             * Email
-             * Format: email
-             */
-            email: string;
-        };
-        /** EventLogOut */
-        EventLogOut: {
-            /**
-             * Id
-             * Format: uuid
-             */
-            id: string;
-            /**
-             * Patient Id
-             * Format: uuid
-             */
-            patient_id: string;
-            /** Event Type */
-            event_type: string;
-            /** Payload */
-            payload: {
-                [key: string]: unknown;
-            } | null;
-            /**
-             * Occurred At
-             * Format: date-time
-             */
-            occurred_at: string;
-            /**
-             * Created At
-             * Format: date-time
-             */
-            created_at: string;
-            /** Created By */
-            created_by: string | null;
-        };
-        /** EventTimelinePage */
-        EventTimelinePage: {
-            /** Items */
-            items: components["schemas"]["EventLogOut"][];
-            /** Total */
-            total: number;
-            /** Page */
-            page: number;
-            /** Size */
-            size: number;
-        };
-        /** HTTPValidationError */
-        HTTPValidationError: {
-            /** Detail */
-            detail?: components["schemas"]["ValidationError"][];
-        };
-        /** LoginRequest */
-        LoginRequest: {
-            /**
-             * Email
-             * Format: email
-             */
-            email: string;
-            /** Password */
-            password: string;
-        };
-        /** MedSummary */
-        MedSummary: {
-            /** Inn */
-            inn: string;
-            /** Dose Mg */
-            dose_mg: number | null;
-            /** Unit */
-            unit: string | null;
-            /** Frequency */
-            frequency: string | null;
-        };
-        /** MedicationChartPoint */
-        MedicationChartPoint: {
-            /** Date */
-            date: string;
-            /** Dose Mg */
-            dose_mg: string | null;
-        };
-        /** MedicationChartSeries */
-        MedicationChartSeries: {
-            /** Inn */
-            inn: string;
-            /**
-             * Medication Id
-             * Format: uuid
-             */
-            medication_id: string;
-            /** Points */
-            points: components["schemas"]["MedicationChartPoint"][];
-        };
-        /** MedicationLogIn */
-        MedicationLogIn: {
-            /**
-             * Status
-             * @enum {string}
-             */
-            status: "taken" | "missed";
-            /**
-             * Occurred At
-             * Format: date-time
-             */
-            occurred_at: string;
-        };
-        /** MedicationReferenceOut */
-        MedicationReferenceOut: {
-            /**
-             * Id
-             * Format: uuid
-             */
-            id: string;
-            /** Inn */
-            inn: string;
-            /** Brand Names */
-            brand_names: string[];
-        };
-        /** PasswordChangeRequest */
-        PasswordChangeRequest: {
-            /** Current Password */
-            current_password: string;
-            /** New Password */
-            new_password: string;
-        };
-        /** PatientCreate */
-        PatientCreate: {
-            /** Full Name */
-            full_name: string;
-            /** Birth Date */
-            birth_date?: string | null;
-            /** Gender */
-            gender?: string | null;
-        };
-        /** PatientCreatedOut */
-        PatientCreatedOut: {
-            /**
-             * Id
-             * Format: uuid
-             */
-            id: string;
-            /**
-             * User Id
-             * Format: uuid
-             */
-            user_id: string;
-            /**
-             * Doctor Id
-             * Format: uuid
-             */
-            doctor_id: string;
-            /** Full Name */
-            full_name: string;
-            /** Birth Date */
-            birth_date: string | null;
-            /** Gender */
-            gender: string | null;
-            /** Email */
-            email: string | null;
-            /** Email Verified */
-            email_verified: boolean;
-            /** Onboarding Complete */
-            onboarding_complete: boolean;
-            /** Archived At */
-            archived_at: string | null;
-            /**
-             * Created At
-             * Format: date-time
-             */
-            created_at: string;
-            /**
-             * Card Color
-             * @default gray
-             * @enum {string}
-             */
-            card_color: "red" | "yellow" | "green" | "gray";
-            /** Adherence Percent */
-            adherence_percent?: number | null;
-            /**
-             * Latest Scores
-             * @default []
-             */
-            latest_scores: components["schemas"]["ScoreSnapshot"][];
-            /**
-             * Active Medications Summary
-             * @default []
-             */
-            active_medications_summary: components["schemas"]["MedSummary"][];
-            /** Temp Login */
-            temp_login: string;
-            /** Temp Password */
-            temp_password: string;
-        };
-        /** PatientMeOut */
-        PatientMeOut: {
-            /**
-             * Id
-             * Format: uuid
-             */
-            id: string;
-            /** Full Name */
-            full_name: string;
-            /** Email */
-            email: string | null;
-            /** Email Verified */
-            email_verified: boolean;
-            /** Onboarding Complete */
-            onboarding_complete: boolean;
-            /** Doctor Full Name */
-            doctor_full_name: string;
-            /** Doctor Specialty */
-            doctor_specialty: string | null;
-        };
-        /** PatientMedicationCreate */
-        PatientMedicationCreate: {
-            /**
-             * Medication Id
-             * Format: uuid
-             */
-            medication_id: string;
-            /** Dose Mg */
-            dose_mg?: number | string | null;
-            /** Unit */
-            unit?: string | null;
-            /** Frequency */
-            frequency?: string | null;
-            /** Started At */
-            started_at?: string | null;
-            /** Ended At */
-            ended_at?: string | null;
-            /** Dose Precision */
-            dose_precision?: ("exact" | "approx" | "range") | null;
-        };
-        /** PatientMedicationOut */
-        PatientMedicationOut: {
-            /**
-             * Id
-             * Format: uuid
-             */
-            id: string;
-            /**
-             * Patient Id
-             * Format: uuid
-             */
-            patient_id: string;
-            /**
-             * Medication Id
-             * Format: uuid
-             */
-            medication_id: string;
-            medication: components["schemas"]["MedicationReferenceOut"];
-            /** Dose Mg */
-            dose_mg: string | null;
-            /** Unit */
-            unit: string | null;
-            /** Frequency */
-            frequency: string | null;
-            /** Started At */
-            started_at: string | null;
-            /** Ended At */
-            ended_at: string | null;
-            /** Dose Precision */
-            dose_precision: string | null;
-            /** Created By Role */
-            created_by_role: string | null;
-            /**
-             * Created At
-             * Format: date-time
-             */
-            created_at: string;
-        };
-        /** PatientMedicationUpdate */
-        PatientMedicationUpdate: {
-            /** Dose Mg */
-            dose_mg?: number | string | null;
-            /** Unit */
-            unit?: string | null;
-            /** Frequency */
-            frequency?: string | null;
-            /** Started At */
-            started_at?: string | null;
-            /** Ended At */
-            ended_at?: string | null;
-            /** Dose Precision */
-            dose_precision?: ("exact" | "approx" | "range") | null;
-        };
-        /** PatientOut */
-        PatientOut: {
-            /**
-             * Id
-             * Format: uuid
-             */
-            id: string;
-            /**
-             * User Id
-             * Format: uuid
-             */
-            user_id: string;
-            /**
-             * Doctor Id
-             * Format: uuid
-             */
-            doctor_id: string;
-            /** Full Name */
-            full_name: string;
-            /** Birth Date */
-            birth_date: string | null;
-            /** Gender */
-            gender: string | null;
-            /** Email */
-            email: string | null;
-            /** Email Verified */
-            email_verified: boolean;
-            /** Onboarding Complete */
-            onboarding_complete: boolean;
-            /** Archived At */
-            archived_at: string | null;
-            /**
-             * Created At
-             * Format: date-time
-             */
-            created_at: string;
-            /**
-             * Card Color
-             * @default gray
-             * @enum {string}
-             */
-            card_color: "red" | "yellow" | "green" | "gray";
-            /** Adherence Percent */
-            adherence_percent?: number | null;
-            /**
-             * Latest Scores
-             * @default []
-             */
-            latest_scores: components["schemas"]["ScoreSnapshot"][];
-            /**
-             * Active Medications Summary
-             * @default []
-             */
-            active_medications_summary: components["schemas"]["MedSummary"][];
-        };
-        /** PatientScaleCreate */
-        PatientScaleCreate: {
-            /**
-             * Scale Id
-             * Format: uuid
-             */
-            scale_id: string;
-            /**
-             * Diagnosis Id
-             * Format: uuid
-             */
-            diagnosis_id: string;
-            /** Frequency Days */
-            frequency_days: number;
-        };
-        /** PatientScaleOut */
-        PatientScaleOut: {
-            /**
-             * Id
-             * Format: uuid
-             */
-            id: string;
-            /**
-             * Patient Id
-             * Format: uuid
-             */
-            patient_id: string;
-            /**
-             * Diagnosis Id
-             * Format: uuid
-             */
-            diagnosis_id: string;
-            /**
-             * Scale Id
-             * Format: uuid
-             */
-            scale_id: string;
-            /** Frequency Days */
-            frequency_days: number;
-            /**
-             * Assigned By
-             * Format: uuid
-             */
-            assigned_by: string;
-            /**
-             * Created At
-             * Format: date-time
-             */
-            created_at: string;
-            scale?: components["schemas"]["ScaleOut"] | null;
-        };
-        /** PatientSideEffectIn */
-        PatientSideEffectIn: {
-            /**
-             * Se Id
-             * Format: uuid
-             */
-            se_id: string;
-            /** Severity */
-            severity?: number | null;
-            /** Started At */
-            started_at?: string | null;
-            /** Ended At */
-            ended_at?: string | null;
-            /** Date Precision */
-            date_precision?: ("exact" | "lt_24h" | "month" | "year" | "range") | null;
-            /** Duration Label */
-            duration_label?: string | null;
-            /** Notes */
-            notes?: string | null;
-        };
-        /** PatientSideEffectOut */
-        PatientSideEffectOut: {
-            /**
-             * Id
-             * Format: uuid
-             */
-            id: string;
-            /**
-             * Patient Id
-             * Format: uuid
-             */
-            patient_id: string;
-            /**
-             * Se Id
-             * Format: uuid
-             */
-            se_id: string;
-            se: components["schemas"]["SeDictionaryOut"];
-            /** Severity */
-            severity: number | null;
-            /** Started At */
-            started_at: string | null;
-            /** Ended At */
-            ended_at: string | null;
-            /** Date Precision */
-            date_precision: string | null;
-            /** Duration Label */
-            duration_label: string | null;
-            /** Resolved */
-            resolved: boolean;
-            /** Notes */
-            notes: string | null;
-            /**
-             * Created At
-             * Format: date-time
-             */
-            created_at: string;
-        };
-        /** PatientSideEffectUpdate */
-        PatientSideEffectUpdate: {
-            /** Severity */
-            severity?: number | null;
-            /** Started At */
-            started_at?: string | null;
-            /** Ended At */
-            ended_at?: string | null;
-            /** Date Precision */
-            date_precision?: ("exact" | "lt_24h" | "month" | "year" | "range") | null;
-            /** Duration Label */
-            duration_label?: string | null;
-            /** Resolved */
-            resolved?: boolean | null;
-            /** Notes */
-            notes?: string | null;
-        };
-        /** PatientTempLoginRequest */
-        PatientTempLoginRequest: {
-            /** Temp Login */
-            temp_login: string;
-            /** Password */
-            password: string;
-        };
-        /** PatientUpdate */
-        PatientUpdate: {
-            /** Full Name */
-            full_name?: string | null;
-            /** Birth Date */
-            birth_date?: string | null;
-            /** Gender */
-            gender?: string | null;
-            /** Email */
-            email?: string | null;
-        };
-        /** RefreshRequest */
-        RefreshRequest: {
-            /** Refresh Token */
-            refresh_token: string;
-        };
-        /** RegisterRequest */
-        RegisterRequest: {
-            /**
-             * Email
-             * Format: email
-             */
-            email: string;
-            /** Password */
-            password: string;
-            /** Full Name */
-            full_name: string;
-            /**
-             * Consent 152Fz
-             * @constant
-             */
-            consent_152fz: true;
-        };
-        /** ScaleOut */
-        ScaleOut: {
-            /**
-             * Id
-             * Format: uuid
-             */
-            id: string;
-            /** Code */
-            code: string;
-            /** Name */
-            name: string;
-            /** Score Min */
-            score_min: number;
-            /** Score Max */
-            score_max: number;
-            /** Improvement Direction */
-            improvement_direction: string | null;
-        };
-        /** ScaleQuestion */
-        ScaleQuestion: {
-            /** Id */
-            id: number;
-            /** Text */
-            text: string;
-            /** Options */
-            options: {
-                [key: string]: unknown;
-            }[];
-        };
-        /** ScoreChartPoint */
-        ScoreChartPoint: {
-            /**
-             * Completed At
-             * Format: date-time
-             */
-            completed_at: string;
-            /** Score */
-            score: number;
-            /** Baseline */
-            baseline: boolean;
-        };
-        /** ScoreChartSeries */
-        ScoreChartSeries: {
-            /**
-             * Scale Id
-             * Format: uuid
-             */
-            scale_id: string;
-            /** Scale Code */
-            scale_code: string;
-            /** Scale Name */
-            scale_name: string;
-            /** Score Min */
-            score_min: number;
-            /** Score Max */
-            score_max: number;
-            /** Improvement Direction */
-            improvement_direction: string | null;
-            /** Points */
-            points: components["schemas"]["ScoreChartPoint"][];
-        };
-        /** ScoreSnapshot */
-        ScoreSnapshot: {
-            /** Scale Code */
-            scale_code: string;
-            /** Scale Name */
-            scale_name: string;
-            /** Score */
-            score: number;
-            /** Severity Label */
-            severity_label: string;
-        };
-        /** SeDictionaryOut */
-        SeDictionaryOut: {
-            /**
-             * Id
-             * Format: uuid
-             */
-            id: string;
-            /** Uku Code */
-            uku_code: string;
-            /** Name Ru */
-            name_ru: string;
-            /** Name En */
-            name_en: string;
-            /** Body System */
-            body_system: string | null;
-            /** Severity Min */
-            severity_min: number;
-            /** Severity Max */
-            severity_max: number;
-        };
-        /** SeDictionaryPage */
-        SeDictionaryPage: {
-            /** Items */
-            items: components["schemas"]["SeDictionaryOut"][];
-            /** Total */
-            total: number;
-        };
-        /** SeMonitoringRuleIn */
-        SeMonitoringRuleIn: {
-            /**
-             * Se Id
-             * Format: uuid
-             */
-            se_id: string;
-            /** Frequency Days */
-            frequency_days?: number | null;
-        };
-        /** SeMonitoringRuleOut */
-        SeMonitoringRuleOut: {
-            /**
-             * Id
-             * Format: uuid
-             */
-            id: string;
-            /**
-             * Patient Id
-             * Format: uuid
-             */
-            patient_id: string;
-            /**
-             * Se Id
-             * Format: uuid
-             */
-            se_id: string;
-            se: components["schemas"]["SeDictionaryOut"];
-            /** Frequency Days */
-            frequency_days: number | null;
-            /** Assigned By */
-            assigned_by: string | null;
-            /**
-             * Created At
-             * Format: date-time
-             */
-            created_at: string;
-        };
-        /** SeSeverityDataPoint */
-        SeSeverityDataPoint: {
-            /** Date */
-            date: string;
-            /** Se Id */
-            se_id: string;
-            /** Se Name */
-            se_name: string;
-            /** Severity */
-            severity: number;
-        };
-        /** TaskOut */
-        TaskOut: {
-            /**
-             * Id
-             * Format: uuid
-             */
-            id: string;
-            /**
-             * Patient Id
-             * Format: uuid
-             */
-            patient_id: string;
-            /** Task Type */
-            task_type: string;
-            /** Reference Id */
-            reference_id: string | null;
-            /**
-             * Due At
-             * Format: date-time
-             */
-            due_at: string;
-            /**
-             * Status
-             * @enum {string}
-             */
-            status: "pending" | "done" | "missed" | "snoozed";
-            /**
-             * Created At
-             * Format: date-time
-             */
-            created_at: string;
-            /** Updated At */
-            updated_at: string | null;
-        };
-        /** TestCompletionOut */
-        TestCompletionOut: {
-            /**
-             * Id
-             * Format: uuid
-             */
-            id: string;
-            /**
-             * Patient Id
-             * Format: uuid
-             */
-            patient_id: string;
-            /**
-             * Patient Scale Id
-             * Format: uuid
-             */
-            patient_scale_id: string;
-            /**
-             * Scale Id
-             * Format: uuid
-             */
-            scale_id: string;
-            /** Score */
-            score: number;
-            /** Baseline */
-            baseline: boolean;
-            /**
-             * Completed At
-             * Format: date-time
-             */
-            completed_at: string;
-            scale?: components["schemas"]["ScaleOut"] | null;
-        };
-        /** TestCompletionPage */
-        TestCompletionPage: {
-            /** Items */
-            items: components["schemas"]["TestCompletionOut"][];
-            /** Total */
-            total: number;
-        };
-        /** TestSubmitIn */
-        TestSubmitIn: {
-            /** Answers */
-            answers: {
-                [key: string]: unknown;
-            }[];
-            /**
-             * Baseline
-             * @default false
-             */
-            baseline: boolean;
-        };
-        /** TherapyGoalCreate */
-        TherapyGoalCreate: {
-            /** Description */
-            description: string;
-        };
-        /** TherapyGoalOut */
-        TherapyGoalOut: {
-            /**
-             * Id
-             * Format: uuid
-             */
-            id: string;
-            /**
-             * Patient Id
-             * Format: uuid
-             */
-            patient_id: string;
-            /** Description */
-            description: string;
-            /** Is Completed */
-            is_completed: boolean;
-            /**
-             * Created At
-             * Format: date-time
-             */
-            created_at: string;
-        };
-        /** TherapyGoalUpdate */
-        TherapyGoalUpdate: {
-            /** Description */
-            description?: string | null;
-            /** Is Completed */
-            is_completed?: boolean | null;
-        };
-        /** TokenPair */
-        TokenPair: {
-            /** Access Token */
-            access_token: string;
-            /** Refresh Token */
-            refresh_token: string;
-            /**
-             * Token Type
-             * @default bearer
-             */
-            token_type: string;
-        };
-        /** UserOut */
-        UserOut: {
-            /**
-             * Id
-             * Format: uuid
-             */
-            id: string;
-            /** Email */
-            email: string | null;
-            role: components["schemas"]["UserRole"];
-            /** Is Active */
-            is_active: boolean;
-            /** Consent 152Fz */
-            consent_152fz: boolean;
-            /**
-             * Created At
-             * Format: date-time
-             */
-            created_at: string;
-        };
-        /**
-         * UserRole
-         * @enum {string}
-         */
-        UserRole: "doctor" | "patient";
-        /** ValidationError */
-        ValidationError: {
-            /** Location */
-            loc: (string | number)[];
-            /** Message */
-            msg: string;
-            /** Error Type */
-            type: string;
-            /** Input */
-            input?: unknown;
-            /** Context */
-            ctx?: Record<string, never>;
-        };
-    };
-    responses: never;
-    parameters: never;
-    requestBodies: never;
-    headers: never;
-    pathItems: never;
+	schemas: {
+		/** AccountDeletionResponse */
+		AccountDeletionResponse: {
+			/** Deleted */
+			deleted: boolean;
+		};
+		/** DiagnosisCreate */
+		DiagnosisCreate: {
+			/** Icd Code */
+			icd_code: string;
+			/** Name */
+			name: string;
+			/**
+			 * Is Primary
+			 * @default false
+			 */
+			is_primary: boolean;
+			/** Date Diagnosed */
+			date_diagnosed?: string | null;
+			/** Notes */
+			notes?: string | null;
+		};
+		/** DiagnosisOut */
+		DiagnosisOut: {
+			/**
+			 * Id
+			 * Format: uuid
+			 */
+			id: string;
+			/**
+			 * Patient Id
+			 * Format: uuid
+			 */
+			patient_id: string;
+			/** Icd Code */
+			icd_code: string;
+			/** Name */
+			name: string;
+			/** Is Primary */
+			is_primary: boolean;
+			/** Date Diagnosed */
+			date_diagnosed: string | null;
+			/** Notes */
+			notes: string | null;
+			/**
+			 * Created At
+			 * Format: date-time
+			 */
+			created_at: string;
+		};
+		/** DiagnosisUpdate */
+		DiagnosisUpdate: {
+			/** Icd Code */
+			icd_code?: string | null;
+			/** Name */
+			name?: string | null;
+			/** Is Primary */
+			is_primary?: boolean | null;
+			/** Date Diagnosed */
+			date_diagnosed?: string | null;
+			/** Notes */
+			notes?: string | null;
+		};
+		/** EmailUpdateIn */
+		EmailUpdateIn: {
+			/**
+			 * Email
+			 * Format: email
+			 */
+			email: string;
+		};
+		/** EventLogOut */
+		EventLogOut: {
+			/**
+			 * Id
+			 * Format: uuid
+			 */
+			id: string;
+			/**
+			 * Patient Id
+			 * Format: uuid
+			 */
+			patient_id: string;
+			/** Event Type */
+			event_type: string;
+			/** Payload */
+			payload: {
+				[key: string]: unknown;
+			} | null;
+			/**
+			 * Occurred At
+			 * Format: date-time
+			 */
+			occurred_at: string;
+			/**
+			 * Created At
+			 * Format: date-time
+			 */
+			created_at: string;
+			/** Created By */
+			created_by: string | null;
+		};
+		/** EventTimelinePage */
+		EventTimelinePage: {
+			/** Items */
+			items: components['schemas']['EventLogOut'][];
+			/** Total */
+			total: number;
+			/** Page */
+			page: number;
+			/** Size */
+			size: number;
+		};
+		/** HTTPValidationError */
+		HTTPValidationError: {
+			/** Detail */
+			detail?: components['schemas']['ValidationError'][];
+		};
+		/** LoginRequest */
+		LoginRequest: {
+			/**
+			 * Email
+			 * Format: email
+			 */
+			email: string;
+			/** Password */
+			password: string;
+		};
+		/** MedSummary */
+		MedSummary: {
+			/** Inn */
+			inn: string;
+			/** Dose Mg */
+			dose_mg: number | null;
+			/** Unit */
+			unit: string | null;
+			/** Frequency */
+			frequency: string | null;
+		};
+		/** MedicationChartPoint */
+		MedicationChartPoint: {
+			/** Date */
+			date: string;
+			/** Dose Mg */
+			dose_mg: string | null;
+		};
+		/** MedicationChartSeries */
+		MedicationChartSeries: {
+			/** Inn */
+			inn: string;
+			/**
+			 * Medication Id
+			 * Format: uuid
+			 */
+			medication_id: string;
+			/** Points */
+			points: components['schemas']['MedicationChartPoint'][];
+		};
+		/** MedicationLogIn */
+		MedicationLogIn: {
+			/**
+			 * Status
+			 * @enum {string}
+			 */
+			status: 'taken' | 'missed';
+			/**
+			 * Occurred At
+			 * Format: date-time
+			 */
+			occurred_at: string;
+		};
+		/** MedicationReferenceOut */
+		MedicationReferenceOut: {
+			/**
+			 * Id
+			 * Format: uuid
+			 */
+			id: string;
+			/** Inn */
+			inn: string;
+			/** Brand Names */
+			brand_names: string[];
+		};
+		/** PasswordChangeRequest */
+		PasswordChangeRequest: {
+			/** Current Password */
+			current_password: string;
+			/** New Password */
+			new_password: string;
+		};
+		/** PatientCreate */
+		PatientCreate: {
+			/** Full Name */
+			full_name: string;
+			/** Birth Date */
+			birth_date?: string | null;
+			/** Gender */
+			gender?: string | null;
+		};
+		/** PatientCreatedOut */
+		PatientCreatedOut: {
+			/**
+			 * Id
+			 * Format: uuid
+			 */
+			id: string;
+			/**
+			 * User Id
+			 * Format: uuid
+			 */
+			user_id: string;
+			/**
+			 * Doctor Id
+			 * Format: uuid
+			 */
+			doctor_id: string;
+			/** Full Name */
+			full_name: string;
+			/** Birth Date */
+			birth_date: string | null;
+			/** Gender */
+			gender: string | null;
+			/** Email */
+			email: string | null;
+			/** Email Verified */
+			email_verified: boolean;
+			/** Onboarding Complete */
+			onboarding_complete: boolean;
+			/** Archived At */
+			archived_at: string | null;
+			/**
+			 * Created At
+			 * Format: date-time
+			 */
+			created_at: string;
+			/**
+			 * Card Color
+			 * @default gray
+			 * @enum {string}
+			 */
+			card_color: 'red' | 'yellow' | 'green' | 'gray';
+			/** Adherence Percent */
+			adherence_percent?: number | null;
+			/**
+			 * Latest Scores
+			 * @default []
+			 */
+			latest_scores: components['schemas']['ScoreSnapshot'][];
+			/**
+			 * Active Medications Summary
+			 * @default []
+			 */
+			active_medications_summary: components['schemas']['MedSummary'][];
+			/** Temp Login */
+			temp_login: string;
+			/** Temp Password */
+			temp_password: string;
+		};
+		/** PatientMeOut */
+		PatientMeOut: {
+			/**
+			 * Id
+			 * Format: uuid
+			 */
+			id: string;
+			/** Full Name */
+			full_name: string;
+			/** Email */
+			email: string | null;
+			/** Email Verified */
+			email_verified: boolean;
+			/** Onboarding Complete */
+			onboarding_complete: boolean;
+			/** Doctor Full Name */
+			doctor_full_name: string;
+			/** Doctor Specialty */
+			doctor_specialty: string | null;
+		};
+		/** PatientMedicationCreate */
+		PatientMedicationCreate: {
+			/**
+			 * Medication Id
+			 * Format: uuid
+			 */
+			medication_id: string;
+			/** Dose Mg */
+			dose_mg?: number | string | null;
+			/** Unit */
+			unit?: string | null;
+			/** Frequency */
+			frequency?: string | null;
+			/** Started At */
+			started_at?: string | null;
+			/** Ended At */
+			ended_at?: string | null;
+			/** Dose Precision */
+			dose_precision?: ('exact' | 'approx' | 'range') | null;
+		};
+		/** PatientMedicationOut */
+		PatientMedicationOut: {
+			/**
+			 * Id
+			 * Format: uuid
+			 */
+			id: string;
+			/**
+			 * Patient Id
+			 * Format: uuid
+			 */
+			patient_id: string;
+			/**
+			 * Medication Id
+			 * Format: uuid
+			 */
+			medication_id: string;
+			medication: components['schemas']['MedicationReferenceOut'];
+			/** Dose Mg */
+			dose_mg: string | null;
+			/** Unit */
+			unit: string | null;
+			/** Frequency */
+			frequency: string | null;
+			/** Started At */
+			started_at: string | null;
+			/** Ended At */
+			ended_at: string | null;
+			/** Dose Precision */
+			dose_precision: string | null;
+			/** Created By Role */
+			created_by_role: string | null;
+			/**
+			 * Created At
+			 * Format: date-time
+			 */
+			created_at: string;
+		};
+		/** PatientMedicationUpdate */
+		PatientMedicationUpdate: {
+			/** Dose Mg */
+			dose_mg?: number | string | null;
+			/** Unit */
+			unit?: string | null;
+			/** Frequency */
+			frequency?: string | null;
+			/** Started At */
+			started_at?: string | null;
+			/** Ended At */
+			ended_at?: string | null;
+			/** Dose Precision */
+			dose_precision?: ('exact' | 'approx' | 'range') | null;
+		};
+		/** PatientOut */
+		PatientOut: {
+			/**
+			 * Id
+			 * Format: uuid
+			 */
+			id: string;
+			/**
+			 * User Id
+			 * Format: uuid
+			 */
+			user_id: string;
+			/**
+			 * Doctor Id
+			 * Format: uuid
+			 */
+			doctor_id: string;
+			/** Full Name */
+			full_name: string;
+			/** Birth Date */
+			birth_date: string | null;
+			/** Gender */
+			gender: string | null;
+			/** Email */
+			email: string | null;
+			/** Email Verified */
+			email_verified: boolean;
+			/** Onboarding Complete */
+			onboarding_complete: boolean;
+			/** Archived At */
+			archived_at: string | null;
+			/**
+			 * Created At
+			 * Format: date-time
+			 */
+			created_at: string;
+			/**
+			 * Card Color
+			 * @default gray
+			 * @enum {string}
+			 */
+			card_color: 'red' | 'yellow' | 'green' | 'gray';
+			/** Adherence Percent */
+			adherence_percent?: number | null;
+			/**
+			 * Latest Scores
+			 * @default []
+			 */
+			latest_scores: components['schemas']['ScoreSnapshot'][];
+			/**
+			 * Active Medications Summary
+			 * @default []
+			 */
+			active_medications_summary: components['schemas']['MedSummary'][];
+		};
+		/** PatientScaleCreate */
+		PatientScaleCreate: {
+			/**
+			 * Scale Id
+			 * Format: uuid
+			 */
+			scale_id: string;
+			/**
+			 * Diagnosis Id
+			 * Format: uuid
+			 */
+			diagnosis_id: string;
+			/** Frequency Days */
+			frequency_days: number;
+		};
+		/** PatientScaleOut */
+		PatientScaleOut: {
+			/**
+			 * Id
+			 * Format: uuid
+			 */
+			id: string;
+			/**
+			 * Patient Id
+			 * Format: uuid
+			 */
+			patient_id: string;
+			/**
+			 * Diagnosis Id
+			 * Format: uuid
+			 */
+			diagnosis_id: string;
+			/**
+			 * Scale Id
+			 * Format: uuid
+			 */
+			scale_id: string;
+			/** Frequency Days */
+			frequency_days: number;
+			/**
+			 * Assigned By
+			 * Format: uuid
+			 */
+			assigned_by: string;
+			/**
+			 * Created At
+			 * Format: date-time
+			 */
+			created_at: string;
+			scale?: components['schemas']['ScaleOut'] | null;
+		};
+		/** PatientSideEffectIn */
+		PatientSideEffectIn: {
+			/**
+			 * Se Id
+			 * Format: uuid
+			 */
+			se_id: string;
+			/** Severity */
+			severity?: number | null;
+			/** Started At */
+			started_at?: string | null;
+			/** Ended At */
+			ended_at?: string | null;
+			/** Date Precision */
+			date_precision?: ('exact' | 'lt_24h' | 'month' | 'year' | 'range') | null;
+			/** Duration Label */
+			duration_label?: string | null;
+			/** Notes */
+			notes?: string | null;
+		};
+		/** PatientSideEffectOut */
+		PatientSideEffectOut: {
+			/**
+			 * Id
+			 * Format: uuid
+			 */
+			id: string;
+			/**
+			 * Patient Id
+			 * Format: uuid
+			 */
+			patient_id: string;
+			/**
+			 * Se Id
+			 * Format: uuid
+			 */
+			se_id: string;
+			se: components['schemas']['SeDictionaryOut'];
+			/** Severity */
+			severity: number | null;
+			/** Started At */
+			started_at: string | null;
+			/** Ended At */
+			ended_at: string | null;
+			/** Date Precision */
+			date_precision: string | null;
+			/** Duration Label */
+			duration_label: string | null;
+			/** Resolved */
+			resolved: boolean;
+			/** Notes */
+			notes: string | null;
+			/**
+			 * Created At
+			 * Format: date-time
+			 */
+			created_at: string;
+		};
+		/** PatientSideEffectUpdate */
+		PatientSideEffectUpdate: {
+			/** Severity */
+			severity?: number | null;
+			/** Started At */
+			started_at?: string | null;
+			/** Ended At */
+			ended_at?: string | null;
+			/** Date Precision */
+			date_precision?: ('exact' | 'lt_24h' | 'month' | 'year' | 'range') | null;
+			/** Duration Label */
+			duration_label?: string | null;
+			/** Resolved */
+			resolved?: boolean | null;
+			/** Notes */
+			notes?: string | null;
+		};
+		/** PatientTempLoginRequest */
+		PatientTempLoginRequest: {
+			/** Temp Login */
+			temp_login: string;
+			/** Password */
+			password: string;
+		};
+		/** PatientUpdate */
+		PatientUpdate: {
+			/** Full Name */
+			full_name?: string | null;
+			/** Birth Date */
+			birth_date?: string | null;
+			/** Gender */
+			gender?: string | null;
+			/** Email */
+			email?: string | null;
+		};
+		/** RefreshRequest */
+		RefreshRequest: {
+			/** Refresh Token */
+			refresh_token: string;
+		};
+		/** RegisterRequest */
+		RegisterRequest: {
+			/**
+			 * Email
+			 * Format: email
+			 */
+			email: string;
+			/** Password */
+			password: string;
+			/** Full Name */
+			full_name: string;
+			/**
+			 * Consent 152Fz
+			 * @constant
+			 */
+			consent_152fz: true;
+		};
+		/** ScaleOut */
+		ScaleOut: {
+			/**
+			 * Id
+			 * Format: uuid
+			 */
+			id: string;
+			/** Code */
+			code: string;
+			/** Name */
+			name: string;
+			/** Score Min */
+			score_min: number;
+			/** Score Max */
+			score_max: number;
+			/** Improvement Direction */
+			improvement_direction: string | null;
+		};
+		/** ScaleQuestion */
+		ScaleQuestion: {
+			/** Id */
+			id: number;
+			/** Text */
+			text: string;
+			/** Options */
+			options: {
+				[key: string]: unknown;
+			}[];
+		};
+		/** ScoreChartPoint */
+		ScoreChartPoint: {
+			/**
+			 * Completed At
+			 * Format: date-time
+			 */
+			completed_at: string;
+			/** Score */
+			score: number;
+			/** Baseline */
+			baseline: boolean;
+		};
+		/** ScoreChartSeries */
+		ScoreChartSeries: {
+			/**
+			 * Scale Id
+			 * Format: uuid
+			 */
+			scale_id: string;
+			/** Scale Code */
+			scale_code: string;
+			/** Scale Name */
+			scale_name: string;
+			/** Score Min */
+			score_min: number;
+			/** Score Max */
+			score_max: number;
+			/** Improvement Direction */
+			improvement_direction: string | null;
+			/** Points */
+			points: components['schemas']['ScoreChartPoint'][];
+		};
+		/** ScoreSnapshot */
+		ScoreSnapshot: {
+			/** Scale Code */
+			scale_code: string;
+			/** Scale Name */
+			scale_name: string;
+			/** Score */
+			score: number;
+			/** Severity Label */
+			severity_label: string;
+		};
+		/** SeDictionaryOut */
+		SeDictionaryOut: {
+			/**
+			 * Id
+			 * Format: uuid
+			 */
+			id: string;
+			/** Uku Code */
+			uku_code: string;
+			/** Name Ru */
+			name_ru: string;
+			/** Name En */
+			name_en: string;
+			/** Body System */
+			body_system: string | null;
+			/** Severity Min */
+			severity_min: number;
+			/** Severity Max */
+			severity_max: number;
+		};
+		/** SeDictionaryPage */
+		SeDictionaryPage: {
+			/** Items */
+			items: components['schemas']['SeDictionaryOut'][];
+			/** Total */
+			total: number;
+		};
+		/** SeMonitoringRuleIn */
+		SeMonitoringRuleIn: {
+			/**
+			 * Se Id
+			 * Format: uuid
+			 */
+			se_id: string;
+			/** Frequency Days */
+			frequency_days?: number | null;
+		};
+		/** SeMonitoringRuleOut */
+		SeMonitoringRuleOut: {
+			/**
+			 * Id
+			 * Format: uuid
+			 */
+			id: string;
+			/**
+			 * Patient Id
+			 * Format: uuid
+			 */
+			patient_id: string;
+			/**
+			 * Se Id
+			 * Format: uuid
+			 */
+			se_id: string;
+			se: components['schemas']['SeDictionaryOut'];
+			/** Frequency Days */
+			frequency_days: number | null;
+			/** Assigned By */
+			assigned_by: string | null;
+			/**
+			 * Created At
+			 * Format: date-time
+			 */
+			created_at: string;
+		};
+		/** SeSeverityDataPoint */
+		SeSeverityDataPoint: {
+			/** Date */
+			date: string;
+			/** Se Id */
+			se_id: string;
+			/** Se Name */
+			se_name: string;
+			/** Severity */
+			severity: number;
+		};
+		/** TaskOut */
+		TaskOut: {
+			/**
+			 * Id
+			 * Format: uuid
+			 */
+			id: string;
+			/**
+			 * Patient Id
+			 * Format: uuid
+			 */
+			patient_id: string;
+			/** Task Type */
+			task_type: string;
+			/** Reference Id */
+			reference_id: string | null;
+			/**
+			 * Due At
+			 * Format: date-time
+			 */
+			due_at: string;
+			/**
+			 * Status
+			 * @enum {string}
+			 */
+			status: 'pending' | 'done' | 'missed' | 'snoozed';
+			/**
+			 * Created At
+			 * Format: date-time
+			 */
+			created_at: string;
+			/** Updated At */
+			updated_at: string | null;
+		};
+		/** TestCompletionOut */
+		TestCompletionOut: {
+			/**
+			 * Id
+			 * Format: uuid
+			 */
+			id: string;
+			/**
+			 * Patient Id
+			 * Format: uuid
+			 */
+			patient_id: string;
+			/**
+			 * Patient Scale Id
+			 * Format: uuid
+			 */
+			patient_scale_id: string;
+			/**
+			 * Scale Id
+			 * Format: uuid
+			 */
+			scale_id: string;
+			/** Score */
+			score: number;
+			/** Baseline */
+			baseline: boolean;
+			/**
+			 * Completed At
+			 * Format: date-time
+			 */
+			completed_at: string;
+			scale?: components['schemas']['ScaleOut'] | null;
+		};
+		/** TestCompletionPage */
+		TestCompletionPage: {
+			/** Items */
+			items: components['schemas']['TestCompletionOut'][];
+			/** Total */
+			total: number;
+		};
+		/** TestSubmitIn */
+		TestSubmitIn: {
+			/** Answers */
+			answers: {
+				[key: string]: unknown;
+			}[];
+			/**
+			 * Baseline
+			 * @default false
+			 */
+			baseline: boolean;
+		};
+		/** TherapyGoalCreate */
+		TherapyGoalCreate: {
+			/** Description */
+			description: string;
+		};
+		/** TherapyGoalOut */
+		TherapyGoalOut: {
+			/**
+			 * Id
+			 * Format: uuid
+			 */
+			id: string;
+			/**
+			 * Patient Id
+			 * Format: uuid
+			 */
+			patient_id: string;
+			/** Description */
+			description: string;
+			/** Is Completed */
+			is_completed: boolean;
+			/**
+			 * Created At
+			 * Format: date-time
+			 */
+			created_at: string;
+		};
+		/** TherapyGoalUpdate */
+		TherapyGoalUpdate: {
+			/** Description */
+			description?: string | null;
+			/** Is Completed */
+			is_completed?: boolean | null;
+		};
+		/** TokenPair */
+		TokenPair: {
+			/** Access Token */
+			access_token: string;
+			/** Refresh Token */
+			refresh_token: string;
+			/**
+			 * Token Type
+			 * @default bearer
+			 */
+			token_type: string;
+		};
+		/** UserOut */
+		UserOut: {
+			/**
+			 * Id
+			 * Format: uuid
+			 */
+			id: string;
+			/** Email */
+			email: string | null;
+			role: components['schemas']['UserRole'];
+			/** Is Active */
+			is_active: boolean;
+			/** Consent 152Fz */
+			consent_152fz: boolean;
+			/**
+			 * Created At
+			 * Format: date-time
+			 */
+			created_at: string;
+		};
+		/**
+		 * UserRole
+		 * @enum {string}
+		 */
+		UserRole: 'doctor' | 'patient';
+		/** ValidationError */
+		ValidationError: {
+			/** Location */
+			loc: (string | number)[];
+			/** Message */
+			msg: string;
+			/** Error Type */
+			type: string;
+			/** Input */
+			input?: unknown;
+			/** Context */
+			ctx?: Record<string, never>;
+		};
+	};
+	responses: never;
+	parameters: never;
+	requestBodies: never;
+	headers: never;
+	pathItems: never;
 }
 export type $defs = Record<string, never>;
 export interface operations {
-    health_api_v1_health_get: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            /** @description Successful Response */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": {
-                        [key: string]: string;
-                    };
-                };
-            };
-        };
-    };
-    login_api_v1_public_auth_login_post: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        requestBody: {
-            content: {
-                "application/json": components["schemas"]["LoginRequest"];
-            };
-        };
-        responses: {
-            /** @description Successful Response */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["TokenPair"];
-                };
-            };
-            /** @description Validation Error */
-            422: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["HTTPValidationError"];
-                };
-            };
-        };
-    };
-    register_api_v1_public_auth_register_post: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        requestBody: {
-            content: {
-                "application/json": components["schemas"]["RegisterRequest"];
-            };
-        };
-        responses: {
-            /** @description Successful Response */
-            201: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["TokenPair"];
-                };
-            };
-            /** @description Validation Error */
-            422: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["HTTPValidationError"];
-                };
-            };
-        };
-    };
-    refresh_api_v1_public_auth_refresh_post: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        requestBody: {
-            content: {
-                "application/json": components["schemas"]["RefreshRequest"];
-            };
-        };
-        responses: {
-            /** @description Successful Response */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["TokenPair"];
-                };
-            };
-            /** @description Validation Error */
-            422: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["HTTPValidationError"];
-                };
-            };
-        };
-    };
-    patient_login_api_v1_public_auth_patient_login_post: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        requestBody: {
-            content: {
-                "application/json": components["schemas"]["PatientTempLoginRequest"];
-            };
-        };
-        responses: {
-            /** @description Successful Response */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["TokenPair"];
-                };
-            };
-            /** @description Validation Error */
-            422: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["HTTPValidationError"];
-                };
-            };
-        };
-    };
-    update_email_api_v1_public_auth_me_email_patch: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        requestBody: {
-            content: {
-                "application/json": components["schemas"]["EmailUpdateIn"];
-            };
-        };
-        responses: {
-            /** @description Successful Response */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": {
-                        [key: string]: boolean;
-                    };
-                };
-            };
-            /** @description Validation Error */
-            422: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["HTTPValidationError"];
-                };
-            };
-        };
-    };
-    change_password_api_v1_public_auth_me_password_patch: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        requestBody: {
-            content: {
-                "application/json": components["schemas"]["PasswordChangeRequest"];
-            };
-        };
-        responses: {
-            /** @description Successful Response */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": {
-                        [key: string]: boolean;
-                    };
-                };
-            };
-            /** @description Validation Error */
-            422: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["HTTPValidationError"];
-                };
-            };
-        };
-    };
-    me_api_v1_public_auth_me_get: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            /** @description Successful Response */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["UserOut"];
-                };
-            };
-        };
-    };
-    delete_me_api_v1_public_auth_me_delete: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            /** @description Successful Response */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["AccountDeletionResponse"];
-                };
-            };
-        };
-    };
-    logout_api_v1_public_auth_logout_post: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            /** @description Successful Response */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": {
-                        [key: string]: string;
-                    };
-                };
-            };
-        };
-    };
-    list_patients_api_v1_doctor_patients_get: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            /** @description Successful Response */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["PatientOut"][];
-                };
-            };
-        };
-    };
-    create_patient_api_v1_doctor_patients_post: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        requestBody: {
-            content: {
-                "application/json": components["schemas"]["PatientCreate"];
-            };
-        };
-        responses: {
-            /** @description Successful Response */
-            201: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["PatientCreatedOut"];
-                };
-            };
-            /** @description Validation Error */
-            422: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["HTTPValidationError"];
-                };
-            };
-        };
-    };
-    get_patient_api_v1_doctor_patients__patient_id__get: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path: {
-                patient_id: string;
-            };
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            /** @description Successful Response */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["PatientOut"];
-                };
-            };
-            /** @description Validation Error */
-            422: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["HTTPValidationError"];
-                };
-            };
-        };
-    };
-    update_patient_api_v1_doctor_patients__patient_id__patch: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path: {
-                patient_id: string;
-            };
-            cookie?: never;
-        };
-        requestBody: {
-            content: {
-                "application/json": components["schemas"]["PatientUpdate"];
-            };
-        };
-        responses: {
-            /** @description Successful Response */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["PatientOut"];
-                };
-            };
-            /** @description Validation Error */
-            422: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["HTTPValidationError"];
-                };
-            };
-        };
-    };
-    archive_patient_api_v1_doctor_patients__patient_id__archive_post: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path: {
-                patient_id: string;
-            };
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            /** @description Successful Response */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": {
-                        [key: string]: boolean;
-                    };
-                };
-            };
-            /** @description Validation Error */
-            422: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["HTTPValidationError"];
-                };
-            };
-        };
-    };
-    patient_me_api_v1_patient_me_get: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            /** @description Successful Response */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["PatientMeOut"];
-                };
-            };
-        };
-    };
-    list_diagnoses_api_v1_doctor_patients__patient_id__diagnoses_get: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path: {
-                patient_id: string;
-            };
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            /** @description Successful Response */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["DiagnosisOut"][];
-                };
-            };
-            /** @description Validation Error */
-            422: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["HTTPValidationError"];
-                };
-            };
-        };
-    };
-    create_diagnosis_api_v1_doctor_patients__patient_id__diagnoses_post: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path: {
-                patient_id: string;
-            };
-            cookie?: never;
-        };
-        requestBody: {
-            content: {
-                "application/json": components["schemas"]["DiagnosisCreate"];
-            };
-        };
-        responses: {
-            /** @description Successful Response */
-            201: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["DiagnosisOut"];
-                };
-            };
-            /** @description Validation Error */
-            422: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["HTTPValidationError"];
-                };
-            };
-        };
-    };
-    update_diagnosis_api_v1_doctor_patients__patient_id__diagnoses__diagnosis_id__patch: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path: {
-                patient_id: string;
-                diagnosis_id: string;
-            };
-            cookie?: never;
-        };
-        requestBody: {
-            content: {
-                "application/json": components["schemas"]["DiagnosisUpdate"];
-            };
-        };
-        responses: {
-            /** @description Successful Response */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["DiagnosisOut"];
-                };
-            };
-            /** @description Validation Error */
-            422: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["HTTPValidationError"];
-                };
-            };
-        };
-    };
-    list_medications_api_v1_ref_medications_get: {
-        parameters: {
-            query?: {
-                q?: string | null;
-                limit?: number;
-                offset?: number;
-            };
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            /** @description Successful Response */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["MedicationReferenceOut"][];
-                };
-            };
-            /** @description Validation Error */
-            422: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["HTTPValidationError"];
-                };
-            };
-        };
-    };
-    list_patient_medications_api_v1_doctor_patients__patient_id__medications_get: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path: {
-                patient_id: string;
-            };
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            /** @description Successful Response */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["PatientMedicationOut"][];
-                };
-            };
-            /** @description Validation Error */
-            422: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["HTTPValidationError"];
-                };
-            };
-        };
-    };
-    assign_medication_api_v1_doctor_patients__patient_id__medications_post: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path: {
-                patient_id: string;
-            };
-            cookie?: never;
-        };
-        requestBody: {
-            content: {
-                "application/json": components["schemas"]["PatientMedicationCreate"];
-            };
-        };
-        responses: {
-            /** @description Successful Response */
-            201: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["PatientMedicationOut"];
-                };
-            };
-            /** @description Validation Error */
-            422: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["HTTPValidationError"];
-                };
-            };
-        };
-    };
-    update_patient_medication_api_v1_doctor_patients__patient_id__medications__medication_id__patch: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path: {
-                patient_id: string;
-                medication_id: string;
-            };
-            cookie?: never;
-        };
-        requestBody: {
-            content: {
-                "application/json": components["schemas"]["PatientMedicationUpdate"];
-            };
-        };
-        responses: {
-            /** @description Successful Response */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["PatientMedicationOut"];
-                };
-            };
-            /** @description Validation Error */
-            422: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["HTTPValidationError"];
-                };
-            };
-        };
-    };
-    get_medication_chart_api_v1_doctor_patients__patient_id__charts_medications_get: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path: {
-                patient_id: string;
-            };
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            /** @description Successful Response */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["MedicationChartSeries"][];
-                };
-            };
-            /** @description Validation Error */
-            422: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["HTTPValidationError"];
-                };
-            };
-        };
-    };
-    list_my_medications_api_v1_patient_medications_get: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            /** @description Successful Response */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["PatientMedicationOut"][];
-                };
-            };
-        };
-    };
-    add_my_medication_api_v1_patient_medications_post: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        requestBody: {
-            content: {
-                "application/json": components["schemas"]["PatientMedicationCreate"];
-            };
-        };
-        responses: {
-            /** @description Successful Response */
-            201: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["PatientMedicationOut"];
-                };
-            };
-            /** @description Validation Error */
-            422: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["HTTPValidationError"];
-                };
-            };
-        };
-    };
-    log_dose_api_v1_patient_medications__medication_id__log_patch: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path: {
-                medication_id: string;
-            };
-            cookie?: never;
-        };
-        requestBody: {
-            content: {
-                "application/json": components["schemas"]["MedicationLogIn"];
-            };
-        };
-        responses: {
-            /** @description Successful Response */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["EventLogOut"];
-                };
-            };
-            /** @description Validation Error */
-            422: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["HTTPValidationError"];
-                };
-            };
-        };
-    };
-    stop_my_medication_api_v1_patient_medications__medication_id__delete: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path: {
-                medication_id: string;
-            };
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            /** @description Successful Response */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": {
-                        [key: string]: unknown;
-                    };
-                };
-            };
-            /** @description Validation Error */
-            422: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["HTTPValidationError"];
-                };
-            };
-        };
-    };
-    edit_my_medication_api_v1_patient_medications__medication_id__patch: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path: {
-                medication_id: string;
-            };
-            cookie?: never;
-        };
-        requestBody: {
-            content: {
-                "application/json": components["schemas"]["PatientMedicationUpdate"];
-            };
-        };
-        responses: {
-            /** @description Successful Response */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["PatientMedicationOut"];
-                };
-            };
-            /** @description Validation Error */
-            422: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["HTTPValidationError"];
-                };
-            };
-        };
-    };
-    list_scales_api_v1_ref_scales_get: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            /** @description Successful Response */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["ScaleOut"][];
-                };
-            };
-        };
-    };
-    get_scale_questions_api_v1_ref_scales__scale_id__questions_get: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path: {
-                scale_id: string;
-            };
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            /** @description Successful Response */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["ScaleQuestion"][];
-                };
-            };
-            /** @description Validation Error */
-            422: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["HTTPValidationError"];
-                };
-            };
-        };
-    };
-    list_patient_scales_api_v1_doctor_patients__patient_id__scales_get: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path: {
-                patient_id: string;
-            };
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            /** @description Successful Response */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["PatientScaleOut"][];
-                };
-            };
-            /** @description Validation Error */
-            422: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["HTTPValidationError"];
-                };
-            };
-        };
-    };
-    assign_scale_api_v1_doctor_patients__patient_id__scales_post: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path: {
-                patient_id: string;
-            };
-            cookie?: never;
-        };
-        requestBody: {
-            content: {
-                "application/json": components["schemas"]["PatientScaleCreate"];
-            };
-        };
-        responses: {
-            /** @description Successful Response */
-            201: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["PatientScaleOut"];
-                };
-            };
-            /** @description Validation Error */
-            422: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["HTTPValidationError"];
-                };
-            };
-        };
-    };
-    remove_scale_api_v1_doctor_patients__patient_id__scales__patient_scale_id__delete: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path: {
-                patient_id: string;
-                patient_scale_id: string;
-            };
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            /** @description Successful Response */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": {
-                        [key: string]: unknown;
-                    };
-                };
-            };
-            /** @description Validation Error */
-            422: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["HTTPValidationError"];
-                };
-            };
-        };
-    };
-    submit_test_api_v1_patient_tests__patient_scale_id__submit_post: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path: {
-                patient_scale_id: string;
-            };
-            cookie?: never;
-        };
-        requestBody: {
-            content: {
-                "application/json": components["schemas"]["TestSubmitIn"];
-            };
-        };
-        responses: {
-            /** @description Successful Response */
-            201: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["TestCompletionOut"];
-                };
-            };
-            /** @description Validation Error */
-            422: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["HTTPValidationError"];
-                };
-            };
-        };
-    };
-    get_history_api_v1_patient_history_get: {
-        parameters: {
-            query?: {
-                limit?: number;
-                offset?: number;
-            };
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            /** @description Successful Response */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["TestCompletionPage"];
-                };
-            };
-            /** @description Validation Error */
-            422: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["HTTPValidationError"];
-                };
-            };
-        };
-    };
-    list_my_scales_api_v1_patient_scales_get: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            /** @description Successful Response */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["PatientScaleOut"][];
-                };
-            };
-        };
-    };
-    get_patient_scale_api_v1_patient_scales__patient_scale_id__get: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path: {
-                patient_scale_id: string;
-            };
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            /** @description Successful Response */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["PatientScaleOut"];
-                };
-            };
-            /** @description Validation Error */
-            422: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["HTTPValidationError"];
-                };
-            };
-        };
-    };
-    list_se_dictionary_api_v1_ref_se_dictionary_get: {
-        parameters: {
-            query?: {
-                q?: string | null;
-                body_system?: string | null;
-                page?: number;
-                size?: number;
-            };
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            /** @description Successful Response */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["SeDictionaryPage"];
-                };
-            };
-            /** @description Validation Error */
-            422: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["HTTPValidationError"];
-                };
-            };
-        };
-    };
-    list_my_side_effects_api_v1_patient_side_effects_get: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            /** @description Successful Response */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["PatientSideEffectOut"][];
-                };
-            };
-        };
-    };
-    report_side_effect_api_v1_patient_side_effects_post: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        requestBody: {
-            content: {
-                "application/json": components["schemas"]["PatientSideEffectIn"];
-            };
-        };
-        responses: {
-            /** @description Successful Response */
-            201: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["PatientSideEffectOut"];
-                };
-            };
-            /** @description Validation Error */
-            422: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["HTTPValidationError"];
-                };
-            };
-        };
-    };
-    delete_side_effect_api_v1_patient_side_effects__se_record_id__delete: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path: {
-                se_record_id: string;
-            };
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            /** @description Successful Response */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": {
-                        [key: string]: unknown;
-                    };
-                };
-            };
-            /** @description Validation Error */
-            422: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["HTTPValidationError"];
-                };
-            };
-        };
-    };
-    update_side_effect_api_v1_patient_side_effects__se_record_id__patch: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path: {
-                se_record_id: string;
-            };
-            cookie?: never;
-        };
-        requestBody: {
-            content: {
-                "application/json": components["schemas"]["PatientSideEffectUpdate"];
-            };
-        };
-        responses: {
-            /** @description Successful Response */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["PatientSideEffectOut"];
-                };
-            };
-            /** @description Validation Error */
-            422: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["HTTPValidationError"];
-                };
-            };
-        };
-    };
-    list_se_rules_api_v1_doctor_patients__patient_id__se_rules_get: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path: {
-                patient_id: string;
-            };
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            /** @description Successful Response */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["SeMonitoringRuleOut"][];
-                };
-            };
-            /** @description Validation Error */
-            422: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["HTTPValidationError"];
-                };
-            };
-        };
-    };
-    add_se_rule_api_v1_doctor_patients__patient_id__se_rules_post: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path: {
-                patient_id: string;
-            };
-            cookie?: never;
-        };
-        requestBody: {
-            content: {
-                "application/json": components["schemas"]["SeMonitoringRuleIn"];
-            };
-        };
-        responses: {
-            /** @description Successful Response */
-            201: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["SeMonitoringRuleOut"];
-                };
-            };
-            /** @description Validation Error */
-            422: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["HTTPValidationError"];
-                };
-            };
-        };
-    };
-    remove_se_rule_api_v1_doctor_patients__patient_id__se_rules__rule_id__delete: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path: {
-                patient_id: string;
-                rule_id: string;
-            };
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            /** @description Successful Response */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": {
-                        [key: string]: unknown;
-                    };
-                };
-            };
-            /** @description Validation Error */
-            422: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["HTTPValidationError"];
-                };
-            };
-        };
-    };
-    get_se_chart_api_v1_doctor_patients__patient_id__charts_side_effects_get: {
-        parameters: {
-            query?: {
-                locale?: string;
-            };
-            header?: never;
-            path: {
-                patient_id: string;
-            };
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            /** @description Successful Response */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["SeSeverityDataPoint"][];
-                };
-            };
-            /** @description Validation Error */
-            422: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["HTTPValidationError"];
-                };
-            };
-        };
-    };
-    list_patient_events_api_v1_doctor_patients__patient_id__events_get: {
-        parameters: {
-            query?: {
-                page?: number;
-                size?: number;
-            };
-            header?: never;
-            path: {
-                patient_id: string;
-            };
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            /** @description Successful Response */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["EventTimelinePage"];
-                };
-            };
-            /** @description Validation Error */
-            422: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["HTTPValidationError"];
-                };
-            };
-        };
-    };
-    generate_tasks_api_v1_system_tasks_generate_post: {
-        parameters: {
-            query?: never;
-            header?: {
-                "x-internal-key"?: string | null;
-            };
-            path?: never;
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            /** @description Successful Response */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": {
-                        [key: string]: number;
-                    };
-                };
-            };
-            /** @description Validation Error */
-            422: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["HTTPValidationError"];
-                };
-            };
-        };
-    };
-    list_patient_tasks_api_v1_patient_tasks_get: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            /** @description Successful Response */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["TaskOut"][];
-                };
-            };
-        };
-    };
-    get_score_chart_api_v1_doctor_patients__patient_id__charts_scores_get: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path: {
-                patient_id: string;
-            };
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            /** @description Successful Response */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["ScoreChartSeries"][];
-                };
-            };
-            /** @description Validation Error */
-            422: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["HTTPValidationError"];
-                };
-            };
-        };
-    };
-    list_goals_api_v1_doctor_patients__patient_id__goals_get: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path: {
-                patient_id: string;
-            };
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            /** @description Successful Response */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["TherapyGoalOut"][];
-                };
-            };
-            /** @description Validation Error */
-            422: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["HTTPValidationError"];
-                };
-            };
-        };
-    };
-    create_goal_api_v1_doctor_patients__patient_id__goals_post: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path: {
-                patient_id: string;
-            };
-            cookie?: never;
-        };
-        requestBody: {
-            content: {
-                "application/json": components["schemas"]["TherapyGoalCreate"];
-            };
-        };
-        responses: {
-            /** @description Successful Response */
-            201: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["TherapyGoalOut"];
-                };
-            };
-            /** @description Validation Error */
-            422: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["HTTPValidationError"];
-                };
-            };
-        };
-    };
-    update_goal_api_v1_doctor_patients__patient_id__goals__goal_id__patch: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path: {
-                patient_id: string;
-                goal_id: string;
-            };
-            cookie?: never;
-        };
-        requestBody: {
-            content: {
-                "application/json": components["schemas"]["TherapyGoalUpdate"];
-            };
-        };
-        responses: {
-            /** @description Successful Response */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["TherapyGoalOut"];
-                };
-            };
-            /** @description Validation Error */
-            422: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["HTTPValidationError"];
-                };
-            };
-        };
-    };
+	health_api_v1_health_get: {
+		parameters: {
+			query?: never;
+			header?: never;
+			path?: never;
+			cookie?: never;
+		};
+		requestBody?: never;
+		responses: {
+			/** @description Successful Response */
+			200: {
+				headers: {
+					[name: string]: unknown;
+				};
+				content: {
+					'application/json': {
+						[key: string]: string;
+					};
+				};
+			};
+		};
+	};
+	login_api_v1_public_auth_login_post: {
+		parameters: {
+			query?: never;
+			header?: never;
+			path?: never;
+			cookie?: never;
+		};
+		requestBody: {
+			content: {
+				'application/json': components['schemas']['LoginRequest'];
+			};
+		};
+		responses: {
+			/** @description Successful Response */
+			200: {
+				headers: {
+					[name: string]: unknown;
+				};
+				content: {
+					'application/json': components['schemas']['TokenPair'];
+				};
+			};
+			/** @description Validation Error */
+			422: {
+				headers: {
+					[name: string]: unknown;
+				};
+				content: {
+					'application/json': components['schemas']['HTTPValidationError'];
+				};
+			};
+		};
+	};
+	register_api_v1_public_auth_register_post: {
+		parameters: {
+			query?: never;
+			header?: never;
+			path?: never;
+			cookie?: never;
+		};
+		requestBody: {
+			content: {
+				'application/json': components['schemas']['RegisterRequest'];
+			};
+		};
+		responses: {
+			/** @description Successful Response */
+			201: {
+				headers: {
+					[name: string]: unknown;
+				};
+				content: {
+					'application/json': components['schemas']['TokenPair'];
+				};
+			};
+			/** @description Validation Error */
+			422: {
+				headers: {
+					[name: string]: unknown;
+				};
+				content: {
+					'application/json': components['schemas']['HTTPValidationError'];
+				};
+			};
+		};
+	};
+	refresh_api_v1_public_auth_refresh_post: {
+		parameters: {
+			query?: never;
+			header?: never;
+			path?: never;
+			cookie?: never;
+		};
+		requestBody: {
+			content: {
+				'application/json': components['schemas']['RefreshRequest'];
+			};
+		};
+		responses: {
+			/** @description Successful Response */
+			200: {
+				headers: {
+					[name: string]: unknown;
+				};
+				content: {
+					'application/json': components['schemas']['TokenPair'];
+				};
+			};
+			/** @description Validation Error */
+			422: {
+				headers: {
+					[name: string]: unknown;
+				};
+				content: {
+					'application/json': components['schemas']['HTTPValidationError'];
+				};
+			};
+		};
+	};
+	patient_login_api_v1_public_auth_patient_login_post: {
+		parameters: {
+			query?: never;
+			header?: never;
+			path?: never;
+			cookie?: never;
+		};
+		requestBody: {
+			content: {
+				'application/json': components['schemas']['PatientTempLoginRequest'];
+			};
+		};
+		responses: {
+			/** @description Successful Response */
+			200: {
+				headers: {
+					[name: string]: unknown;
+				};
+				content: {
+					'application/json': components['schemas']['TokenPair'];
+				};
+			};
+			/** @description Validation Error */
+			422: {
+				headers: {
+					[name: string]: unknown;
+				};
+				content: {
+					'application/json': components['schemas']['HTTPValidationError'];
+				};
+			};
+		};
+	};
+	update_email_api_v1_public_auth_me_email_patch: {
+		parameters: {
+			query?: never;
+			header?: never;
+			path?: never;
+			cookie?: never;
+		};
+		requestBody: {
+			content: {
+				'application/json': components['schemas']['EmailUpdateIn'];
+			};
+		};
+		responses: {
+			/** @description Successful Response */
+			200: {
+				headers: {
+					[name: string]: unknown;
+				};
+				content: {
+					'application/json': {
+						[key: string]: boolean;
+					};
+				};
+			};
+			/** @description Validation Error */
+			422: {
+				headers: {
+					[name: string]: unknown;
+				};
+				content: {
+					'application/json': components['schemas']['HTTPValidationError'];
+				};
+			};
+		};
+	};
+	change_password_api_v1_public_auth_me_password_patch: {
+		parameters: {
+			query?: never;
+			header?: never;
+			path?: never;
+			cookie?: never;
+		};
+		requestBody: {
+			content: {
+				'application/json': components['schemas']['PasswordChangeRequest'];
+			};
+		};
+		responses: {
+			/** @description Successful Response */
+			200: {
+				headers: {
+					[name: string]: unknown;
+				};
+				content: {
+					'application/json': {
+						[key: string]: boolean;
+					};
+				};
+			};
+			/** @description Validation Error */
+			422: {
+				headers: {
+					[name: string]: unknown;
+				};
+				content: {
+					'application/json': components['schemas']['HTTPValidationError'];
+				};
+			};
+		};
+	};
+	me_api_v1_public_auth_me_get: {
+		parameters: {
+			query?: never;
+			header?: never;
+			path?: never;
+			cookie?: never;
+		};
+		requestBody?: never;
+		responses: {
+			/** @description Successful Response */
+			200: {
+				headers: {
+					[name: string]: unknown;
+				};
+				content: {
+					'application/json': components['schemas']['UserOut'];
+				};
+			};
+		};
+	};
+	delete_me_api_v1_public_auth_me_delete: {
+		parameters: {
+			query?: never;
+			header?: never;
+			path?: never;
+			cookie?: never;
+		};
+		requestBody?: never;
+		responses: {
+			/** @description Successful Response */
+			200: {
+				headers: {
+					[name: string]: unknown;
+				};
+				content: {
+					'application/json': components['schemas']['AccountDeletionResponse'];
+				};
+			};
+		};
+	};
+	logout_api_v1_public_auth_logout_post: {
+		parameters: {
+			query?: never;
+			header?: never;
+			path?: never;
+			cookie?: never;
+		};
+		requestBody?: never;
+		responses: {
+			/** @description Successful Response */
+			200: {
+				headers: {
+					[name: string]: unknown;
+				};
+				content: {
+					'application/json': {
+						[key: string]: string;
+					};
+				};
+			};
+		};
+	};
+	list_patients_api_v1_doctor_patients_get: {
+		parameters: {
+			query?: never;
+			header?: never;
+			path?: never;
+			cookie?: never;
+		};
+		requestBody?: never;
+		responses: {
+			/** @description Successful Response */
+			200: {
+				headers: {
+					[name: string]: unknown;
+				};
+				content: {
+					'application/json': components['schemas']['PatientOut'][];
+				};
+			};
+		};
+	};
+	create_patient_api_v1_doctor_patients_post: {
+		parameters: {
+			query?: never;
+			header?: never;
+			path?: never;
+			cookie?: never;
+		};
+		requestBody: {
+			content: {
+				'application/json': components['schemas']['PatientCreate'];
+			};
+		};
+		responses: {
+			/** @description Successful Response */
+			201: {
+				headers: {
+					[name: string]: unknown;
+				};
+				content: {
+					'application/json': components['schemas']['PatientCreatedOut'];
+				};
+			};
+			/** @description Validation Error */
+			422: {
+				headers: {
+					[name: string]: unknown;
+				};
+				content: {
+					'application/json': components['schemas']['HTTPValidationError'];
+				};
+			};
+		};
+	};
+	get_patient_api_v1_doctor_patients__patient_id__get: {
+		parameters: {
+			query?: never;
+			header?: never;
+			path: {
+				patient_id: string;
+			};
+			cookie?: never;
+		};
+		requestBody?: never;
+		responses: {
+			/** @description Successful Response */
+			200: {
+				headers: {
+					[name: string]: unknown;
+				};
+				content: {
+					'application/json': components['schemas']['PatientOut'];
+				};
+			};
+			/** @description Validation Error */
+			422: {
+				headers: {
+					[name: string]: unknown;
+				};
+				content: {
+					'application/json': components['schemas']['HTTPValidationError'];
+				};
+			};
+		};
+	};
+	update_patient_api_v1_doctor_patients__patient_id__patch: {
+		parameters: {
+			query?: never;
+			header?: never;
+			path: {
+				patient_id: string;
+			};
+			cookie?: never;
+		};
+		requestBody: {
+			content: {
+				'application/json': components['schemas']['PatientUpdate'];
+			};
+		};
+		responses: {
+			/** @description Successful Response */
+			200: {
+				headers: {
+					[name: string]: unknown;
+				};
+				content: {
+					'application/json': components['schemas']['PatientOut'];
+				};
+			};
+			/** @description Validation Error */
+			422: {
+				headers: {
+					[name: string]: unknown;
+				};
+				content: {
+					'application/json': components['schemas']['HTTPValidationError'];
+				};
+			};
+		};
+	};
+	archive_patient_api_v1_doctor_patients__patient_id__archive_post: {
+		parameters: {
+			query?: never;
+			header?: never;
+			path: {
+				patient_id: string;
+			};
+			cookie?: never;
+		};
+		requestBody?: never;
+		responses: {
+			/** @description Successful Response */
+			200: {
+				headers: {
+					[name: string]: unknown;
+				};
+				content: {
+					'application/json': {
+						[key: string]: boolean;
+					};
+				};
+			};
+			/** @description Validation Error */
+			422: {
+				headers: {
+					[name: string]: unknown;
+				};
+				content: {
+					'application/json': components['schemas']['HTTPValidationError'];
+				};
+			};
+		};
+	};
+	patient_me_api_v1_patient_me_get: {
+		parameters: {
+			query?: never;
+			header?: never;
+			path?: never;
+			cookie?: never;
+		};
+		requestBody?: never;
+		responses: {
+			/** @description Successful Response */
+			200: {
+				headers: {
+					[name: string]: unknown;
+				};
+				content: {
+					'application/json': components['schemas']['PatientMeOut'];
+				};
+			};
+		};
+	};
+	list_diagnoses_api_v1_doctor_patients__patient_id__diagnoses_get: {
+		parameters: {
+			query?: never;
+			header?: never;
+			path: {
+				patient_id: string;
+			};
+			cookie?: never;
+		};
+		requestBody?: never;
+		responses: {
+			/** @description Successful Response */
+			200: {
+				headers: {
+					[name: string]: unknown;
+				};
+				content: {
+					'application/json': components['schemas']['DiagnosisOut'][];
+				};
+			};
+			/** @description Validation Error */
+			422: {
+				headers: {
+					[name: string]: unknown;
+				};
+				content: {
+					'application/json': components['schemas']['HTTPValidationError'];
+				};
+			};
+		};
+	};
+	create_diagnosis_api_v1_doctor_patients__patient_id__diagnoses_post: {
+		parameters: {
+			query?: never;
+			header?: never;
+			path: {
+				patient_id: string;
+			};
+			cookie?: never;
+		};
+		requestBody: {
+			content: {
+				'application/json': components['schemas']['DiagnosisCreate'];
+			};
+		};
+		responses: {
+			/** @description Successful Response */
+			201: {
+				headers: {
+					[name: string]: unknown;
+				};
+				content: {
+					'application/json': components['schemas']['DiagnosisOut'];
+				};
+			};
+			/** @description Validation Error */
+			422: {
+				headers: {
+					[name: string]: unknown;
+				};
+				content: {
+					'application/json': components['schemas']['HTTPValidationError'];
+				};
+			};
+		};
+	};
+	update_diagnosis_api_v1_doctor_patients__patient_id__diagnoses__diagnosis_id__patch: {
+		parameters: {
+			query?: never;
+			header?: never;
+			path: {
+				patient_id: string;
+				diagnosis_id: string;
+			};
+			cookie?: never;
+		};
+		requestBody: {
+			content: {
+				'application/json': components['schemas']['DiagnosisUpdate'];
+			};
+		};
+		responses: {
+			/** @description Successful Response */
+			200: {
+				headers: {
+					[name: string]: unknown;
+				};
+				content: {
+					'application/json': components['schemas']['DiagnosisOut'];
+				};
+			};
+			/** @description Validation Error */
+			422: {
+				headers: {
+					[name: string]: unknown;
+				};
+				content: {
+					'application/json': components['schemas']['HTTPValidationError'];
+				};
+			};
+		};
+	};
+	list_medications_api_v1_ref_medications_get: {
+		parameters: {
+			query?: {
+				q?: string | null;
+				limit?: number;
+				offset?: number;
+			};
+			header?: never;
+			path?: never;
+			cookie?: never;
+		};
+		requestBody?: never;
+		responses: {
+			/** @description Successful Response */
+			200: {
+				headers: {
+					[name: string]: unknown;
+				};
+				content: {
+					'application/json': components['schemas']['MedicationReferenceOut'][];
+				};
+			};
+			/** @description Validation Error */
+			422: {
+				headers: {
+					[name: string]: unknown;
+				};
+				content: {
+					'application/json': components['schemas']['HTTPValidationError'];
+				};
+			};
+		};
+	};
+	list_patient_medications_api_v1_doctor_patients__patient_id__medications_get: {
+		parameters: {
+			query?: never;
+			header?: never;
+			path: {
+				patient_id: string;
+			};
+			cookie?: never;
+		};
+		requestBody?: never;
+		responses: {
+			/** @description Successful Response */
+			200: {
+				headers: {
+					[name: string]: unknown;
+				};
+				content: {
+					'application/json': components['schemas']['PatientMedicationOut'][];
+				};
+			};
+			/** @description Validation Error */
+			422: {
+				headers: {
+					[name: string]: unknown;
+				};
+				content: {
+					'application/json': components['schemas']['HTTPValidationError'];
+				};
+			};
+		};
+	};
+	assign_medication_api_v1_doctor_patients__patient_id__medications_post: {
+		parameters: {
+			query?: never;
+			header?: never;
+			path: {
+				patient_id: string;
+			};
+			cookie?: never;
+		};
+		requestBody: {
+			content: {
+				'application/json': components['schemas']['PatientMedicationCreate'];
+			};
+		};
+		responses: {
+			/** @description Successful Response */
+			201: {
+				headers: {
+					[name: string]: unknown;
+				};
+				content: {
+					'application/json': components['schemas']['PatientMedicationOut'];
+				};
+			};
+			/** @description Validation Error */
+			422: {
+				headers: {
+					[name: string]: unknown;
+				};
+				content: {
+					'application/json': components['schemas']['HTTPValidationError'];
+				};
+			};
+		};
+	};
+	update_patient_medication_api_v1_doctor_patients__patient_id__medications__medication_id__patch: {
+		parameters: {
+			query?: never;
+			header?: never;
+			path: {
+				patient_id: string;
+				medication_id: string;
+			};
+			cookie?: never;
+		};
+		requestBody: {
+			content: {
+				'application/json': components['schemas']['PatientMedicationUpdate'];
+			};
+		};
+		responses: {
+			/** @description Successful Response */
+			200: {
+				headers: {
+					[name: string]: unknown;
+				};
+				content: {
+					'application/json': components['schemas']['PatientMedicationOut'];
+				};
+			};
+			/** @description Validation Error */
+			422: {
+				headers: {
+					[name: string]: unknown;
+				};
+				content: {
+					'application/json': components['schemas']['HTTPValidationError'];
+				};
+			};
+		};
+	};
+	get_medication_chart_api_v1_doctor_patients__patient_id__charts_medications_get: {
+		parameters: {
+			query?: never;
+			header?: never;
+			path: {
+				patient_id: string;
+			};
+			cookie?: never;
+		};
+		requestBody?: never;
+		responses: {
+			/** @description Successful Response */
+			200: {
+				headers: {
+					[name: string]: unknown;
+				};
+				content: {
+					'application/json': components['schemas']['MedicationChartSeries'][];
+				};
+			};
+			/** @description Validation Error */
+			422: {
+				headers: {
+					[name: string]: unknown;
+				};
+				content: {
+					'application/json': components['schemas']['HTTPValidationError'];
+				};
+			};
+		};
+	};
+	list_my_medications_api_v1_patient_medications_get: {
+		parameters: {
+			query?: never;
+			header?: never;
+			path?: never;
+			cookie?: never;
+		};
+		requestBody?: never;
+		responses: {
+			/** @description Successful Response */
+			200: {
+				headers: {
+					[name: string]: unknown;
+				};
+				content: {
+					'application/json': components['schemas']['PatientMedicationOut'][];
+				};
+			};
+		};
+	};
+	add_my_medication_api_v1_patient_medications_post: {
+		parameters: {
+			query?: never;
+			header?: never;
+			path?: never;
+			cookie?: never;
+		};
+		requestBody: {
+			content: {
+				'application/json': components['schemas']['PatientMedicationCreate'];
+			};
+		};
+		responses: {
+			/** @description Successful Response */
+			201: {
+				headers: {
+					[name: string]: unknown;
+				};
+				content: {
+					'application/json': components['schemas']['PatientMedicationOut'];
+				};
+			};
+			/** @description Validation Error */
+			422: {
+				headers: {
+					[name: string]: unknown;
+				};
+				content: {
+					'application/json': components['schemas']['HTTPValidationError'];
+				};
+			};
+		};
+	};
+	log_dose_api_v1_patient_medications__medication_id__log_patch: {
+		parameters: {
+			query?: never;
+			header?: never;
+			path: {
+				medication_id: string;
+			};
+			cookie?: never;
+		};
+		requestBody: {
+			content: {
+				'application/json': components['schemas']['MedicationLogIn'];
+			};
+		};
+		responses: {
+			/** @description Successful Response */
+			200: {
+				headers: {
+					[name: string]: unknown;
+				};
+				content: {
+					'application/json': components['schemas']['EventLogOut'];
+				};
+			};
+			/** @description Validation Error */
+			422: {
+				headers: {
+					[name: string]: unknown;
+				};
+				content: {
+					'application/json': components['schemas']['HTTPValidationError'];
+				};
+			};
+		};
+	};
+	stop_my_medication_api_v1_patient_medications__medication_id__delete: {
+		parameters: {
+			query?: never;
+			header?: never;
+			path: {
+				medication_id: string;
+			};
+			cookie?: never;
+		};
+		requestBody?: never;
+		responses: {
+			/** @description Successful Response */
+			200: {
+				headers: {
+					[name: string]: unknown;
+				};
+				content: {
+					'application/json': {
+						[key: string]: unknown;
+					};
+				};
+			};
+			/** @description Validation Error */
+			422: {
+				headers: {
+					[name: string]: unknown;
+				};
+				content: {
+					'application/json': components['schemas']['HTTPValidationError'];
+				};
+			};
+		};
+	};
+	edit_my_medication_api_v1_patient_medications__medication_id__patch: {
+		parameters: {
+			query?: never;
+			header?: never;
+			path: {
+				medication_id: string;
+			};
+			cookie?: never;
+		};
+		requestBody: {
+			content: {
+				'application/json': components['schemas']['PatientMedicationUpdate'];
+			};
+		};
+		responses: {
+			/** @description Successful Response */
+			200: {
+				headers: {
+					[name: string]: unknown;
+				};
+				content: {
+					'application/json': components['schemas']['PatientMedicationOut'];
+				};
+			};
+			/** @description Validation Error */
+			422: {
+				headers: {
+					[name: string]: unknown;
+				};
+				content: {
+					'application/json': components['schemas']['HTTPValidationError'];
+				};
+			};
+		};
+	};
+	list_scales_api_v1_ref_scales_get: {
+		parameters: {
+			query?: never;
+			header?: never;
+			path?: never;
+			cookie?: never;
+		};
+		requestBody?: never;
+		responses: {
+			/** @description Successful Response */
+			200: {
+				headers: {
+					[name: string]: unknown;
+				};
+				content: {
+					'application/json': components['schemas']['ScaleOut'][];
+				};
+			};
+		};
+	};
+	get_scale_questions_api_v1_ref_scales__scale_id__questions_get: {
+		parameters: {
+			query?: never;
+			header?: never;
+			path: {
+				scale_id: string;
+			};
+			cookie?: never;
+		};
+		requestBody?: never;
+		responses: {
+			/** @description Successful Response */
+			200: {
+				headers: {
+					[name: string]: unknown;
+				};
+				content: {
+					'application/json': components['schemas']['ScaleQuestion'][];
+				};
+			};
+			/** @description Validation Error */
+			422: {
+				headers: {
+					[name: string]: unknown;
+				};
+				content: {
+					'application/json': components['schemas']['HTTPValidationError'];
+				};
+			};
+		};
+	};
+	list_patient_scales_api_v1_doctor_patients__patient_id__scales_get: {
+		parameters: {
+			query?: never;
+			header?: never;
+			path: {
+				patient_id: string;
+			};
+			cookie?: never;
+		};
+		requestBody?: never;
+		responses: {
+			/** @description Successful Response */
+			200: {
+				headers: {
+					[name: string]: unknown;
+				};
+				content: {
+					'application/json': components['schemas']['PatientScaleOut'][];
+				};
+			};
+			/** @description Validation Error */
+			422: {
+				headers: {
+					[name: string]: unknown;
+				};
+				content: {
+					'application/json': components['schemas']['HTTPValidationError'];
+				};
+			};
+		};
+	};
+	assign_scale_api_v1_doctor_patients__patient_id__scales_post: {
+		parameters: {
+			query?: never;
+			header?: never;
+			path: {
+				patient_id: string;
+			};
+			cookie?: never;
+		};
+		requestBody: {
+			content: {
+				'application/json': components['schemas']['PatientScaleCreate'];
+			};
+		};
+		responses: {
+			/** @description Successful Response */
+			201: {
+				headers: {
+					[name: string]: unknown;
+				};
+				content: {
+					'application/json': components['schemas']['PatientScaleOut'];
+				};
+			};
+			/** @description Validation Error */
+			422: {
+				headers: {
+					[name: string]: unknown;
+				};
+				content: {
+					'application/json': components['schemas']['HTTPValidationError'];
+				};
+			};
+		};
+	};
+	remove_scale_api_v1_doctor_patients__patient_id__scales__patient_scale_id__delete: {
+		parameters: {
+			query?: never;
+			header?: never;
+			path: {
+				patient_id: string;
+				patient_scale_id: string;
+			};
+			cookie?: never;
+		};
+		requestBody?: never;
+		responses: {
+			/** @description Successful Response */
+			200: {
+				headers: {
+					[name: string]: unknown;
+				};
+				content: {
+					'application/json': {
+						[key: string]: unknown;
+					};
+				};
+			};
+			/** @description Validation Error */
+			422: {
+				headers: {
+					[name: string]: unknown;
+				};
+				content: {
+					'application/json': components['schemas']['HTTPValidationError'];
+				};
+			};
+		};
+	};
+	submit_test_api_v1_patient_tests__patient_scale_id__submit_post: {
+		parameters: {
+			query?: never;
+			header?: never;
+			path: {
+				patient_scale_id: string;
+			};
+			cookie?: never;
+		};
+		requestBody: {
+			content: {
+				'application/json': components['schemas']['TestSubmitIn'];
+			};
+		};
+		responses: {
+			/** @description Successful Response */
+			201: {
+				headers: {
+					[name: string]: unknown;
+				};
+				content: {
+					'application/json': components['schemas']['TestCompletionOut'];
+				};
+			};
+			/** @description Validation Error */
+			422: {
+				headers: {
+					[name: string]: unknown;
+				};
+				content: {
+					'application/json': components['schemas']['HTTPValidationError'];
+				};
+			};
+		};
+	};
+	get_history_api_v1_patient_history_get: {
+		parameters: {
+			query?: {
+				limit?: number;
+				offset?: number;
+			};
+			header?: never;
+			path?: never;
+			cookie?: never;
+		};
+		requestBody?: never;
+		responses: {
+			/** @description Successful Response */
+			200: {
+				headers: {
+					[name: string]: unknown;
+				};
+				content: {
+					'application/json': components['schemas']['TestCompletionPage'];
+				};
+			};
+			/** @description Validation Error */
+			422: {
+				headers: {
+					[name: string]: unknown;
+				};
+				content: {
+					'application/json': components['schemas']['HTTPValidationError'];
+				};
+			};
+		};
+	};
+	list_my_scales_api_v1_patient_scales_get: {
+		parameters: {
+			query?: never;
+			header?: never;
+			path?: never;
+			cookie?: never;
+		};
+		requestBody?: never;
+		responses: {
+			/** @description Successful Response */
+			200: {
+				headers: {
+					[name: string]: unknown;
+				};
+				content: {
+					'application/json': components['schemas']['PatientScaleOut'][];
+				};
+			};
+		};
+	};
+	get_patient_scale_api_v1_patient_scales__patient_scale_id__get: {
+		parameters: {
+			query?: never;
+			header?: never;
+			path: {
+				patient_scale_id: string;
+			};
+			cookie?: never;
+		};
+		requestBody?: never;
+		responses: {
+			/** @description Successful Response */
+			200: {
+				headers: {
+					[name: string]: unknown;
+				};
+				content: {
+					'application/json': components['schemas']['PatientScaleOut'];
+				};
+			};
+			/** @description Validation Error */
+			422: {
+				headers: {
+					[name: string]: unknown;
+				};
+				content: {
+					'application/json': components['schemas']['HTTPValidationError'];
+				};
+			};
+		};
+	};
+	list_se_dictionary_api_v1_ref_se_dictionary_get: {
+		parameters: {
+			query?: {
+				q?: string | null;
+				body_system?: string | null;
+				page?: number;
+				size?: number;
+			};
+			header?: never;
+			path?: never;
+			cookie?: never;
+		};
+		requestBody?: never;
+		responses: {
+			/** @description Successful Response */
+			200: {
+				headers: {
+					[name: string]: unknown;
+				};
+				content: {
+					'application/json': components['schemas']['SeDictionaryPage'];
+				};
+			};
+			/** @description Validation Error */
+			422: {
+				headers: {
+					[name: string]: unknown;
+				};
+				content: {
+					'application/json': components['schemas']['HTTPValidationError'];
+				};
+			};
+		};
+	};
+	list_my_side_effects_api_v1_patient_side_effects_get: {
+		parameters: {
+			query?: never;
+			header?: never;
+			path?: never;
+			cookie?: never;
+		};
+		requestBody?: never;
+		responses: {
+			/** @description Successful Response */
+			200: {
+				headers: {
+					[name: string]: unknown;
+				};
+				content: {
+					'application/json': components['schemas']['PatientSideEffectOut'][];
+				};
+			};
+		};
+	};
+	report_side_effect_api_v1_patient_side_effects_post: {
+		parameters: {
+			query?: never;
+			header?: never;
+			path?: never;
+			cookie?: never;
+		};
+		requestBody: {
+			content: {
+				'application/json': components['schemas']['PatientSideEffectIn'];
+			};
+		};
+		responses: {
+			/** @description Successful Response */
+			201: {
+				headers: {
+					[name: string]: unknown;
+				};
+				content: {
+					'application/json': components['schemas']['PatientSideEffectOut'];
+				};
+			};
+			/** @description Validation Error */
+			422: {
+				headers: {
+					[name: string]: unknown;
+				};
+				content: {
+					'application/json': components['schemas']['HTTPValidationError'];
+				};
+			};
+		};
+	};
+	delete_side_effect_api_v1_patient_side_effects__se_record_id__delete: {
+		parameters: {
+			query?: never;
+			header?: never;
+			path: {
+				se_record_id: string;
+			};
+			cookie?: never;
+		};
+		requestBody?: never;
+		responses: {
+			/** @description Successful Response */
+			200: {
+				headers: {
+					[name: string]: unknown;
+				};
+				content: {
+					'application/json': {
+						[key: string]: unknown;
+					};
+				};
+			};
+			/** @description Validation Error */
+			422: {
+				headers: {
+					[name: string]: unknown;
+				};
+				content: {
+					'application/json': components['schemas']['HTTPValidationError'];
+				};
+			};
+		};
+	};
+	update_side_effect_api_v1_patient_side_effects__se_record_id__patch: {
+		parameters: {
+			query?: never;
+			header?: never;
+			path: {
+				se_record_id: string;
+			};
+			cookie?: never;
+		};
+		requestBody: {
+			content: {
+				'application/json': components['schemas']['PatientSideEffectUpdate'];
+			};
+		};
+		responses: {
+			/** @description Successful Response */
+			200: {
+				headers: {
+					[name: string]: unknown;
+				};
+				content: {
+					'application/json': components['schemas']['PatientSideEffectOut'];
+				};
+			};
+			/** @description Validation Error */
+			422: {
+				headers: {
+					[name: string]: unknown;
+				};
+				content: {
+					'application/json': components['schemas']['HTTPValidationError'];
+				};
+			};
+		};
+	};
+	list_se_rules_api_v1_doctor_patients__patient_id__se_rules_get: {
+		parameters: {
+			query?: never;
+			header?: never;
+			path: {
+				patient_id: string;
+			};
+			cookie?: never;
+		};
+		requestBody?: never;
+		responses: {
+			/** @description Successful Response */
+			200: {
+				headers: {
+					[name: string]: unknown;
+				};
+				content: {
+					'application/json': components['schemas']['SeMonitoringRuleOut'][];
+				};
+			};
+			/** @description Validation Error */
+			422: {
+				headers: {
+					[name: string]: unknown;
+				};
+				content: {
+					'application/json': components['schemas']['HTTPValidationError'];
+				};
+			};
+		};
+	};
+	add_se_rule_api_v1_doctor_patients__patient_id__se_rules_post: {
+		parameters: {
+			query?: never;
+			header?: never;
+			path: {
+				patient_id: string;
+			};
+			cookie?: never;
+		};
+		requestBody: {
+			content: {
+				'application/json': components['schemas']['SeMonitoringRuleIn'];
+			};
+		};
+		responses: {
+			/** @description Successful Response */
+			201: {
+				headers: {
+					[name: string]: unknown;
+				};
+				content: {
+					'application/json': components['schemas']['SeMonitoringRuleOut'];
+				};
+			};
+			/** @description Validation Error */
+			422: {
+				headers: {
+					[name: string]: unknown;
+				};
+				content: {
+					'application/json': components['schemas']['HTTPValidationError'];
+				};
+			};
+		};
+	};
+	remove_se_rule_api_v1_doctor_patients__patient_id__se_rules__rule_id__delete: {
+		parameters: {
+			query?: never;
+			header?: never;
+			path: {
+				patient_id: string;
+				rule_id: string;
+			};
+			cookie?: never;
+		};
+		requestBody?: never;
+		responses: {
+			/** @description Successful Response */
+			200: {
+				headers: {
+					[name: string]: unknown;
+				};
+				content: {
+					'application/json': {
+						[key: string]: unknown;
+					};
+				};
+			};
+			/** @description Validation Error */
+			422: {
+				headers: {
+					[name: string]: unknown;
+				};
+				content: {
+					'application/json': components['schemas']['HTTPValidationError'];
+				};
+			};
+		};
+	};
+	get_se_chart_api_v1_doctor_patients__patient_id__charts_side_effects_get: {
+		parameters: {
+			query?: {
+				locale?: string;
+			};
+			header?: never;
+			path: {
+				patient_id: string;
+			};
+			cookie?: never;
+		};
+		requestBody?: never;
+		responses: {
+			/** @description Successful Response */
+			200: {
+				headers: {
+					[name: string]: unknown;
+				};
+				content: {
+					'application/json': components['schemas']['SeSeverityDataPoint'][];
+				};
+			};
+			/** @description Validation Error */
+			422: {
+				headers: {
+					[name: string]: unknown;
+				};
+				content: {
+					'application/json': components['schemas']['HTTPValidationError'];
+				};
+			};
+		};
+	};
+	list_patient_events_api_v1_doctor_patients__patient_id__events_get: {
+		parameters: {
+			query?: {
+				page?: number;
+				size?: number;
+			};
+			header?: never;
+			path: {
+				patient_id: string;
+			};
+			cookie?: never;
+		};
+		requestBody?: never;
+		responses: {
+			/** @description Successful Response */
+			200: {
+				headers: {
+					[name: string]: unknown;
+				};
+				content: {
+					'application/json': components['schemas']['EventTimelinePage'];
+				};
+			};
+			/** @description Validation Error */
+			422: {
+				headers: {
+					[name: string]: unknown;
+				};
+				content: {
+					'application/json': components['schemas']['HTTPValidationError'];
+				};
+			};
+		};
+	};
+	generate_tasks_api_v1_system_tasks_generate_post: {
+		parameters: {
+			query?: never;
+			header?: {
+				'x-internal-key'?: string | null;
+			};
+			path?: never;
+			cookie?: never;
+		};
+		requestBody?: never;
+		responses: {
+			/** @description Successful Response */
+			200: {
+				headers: {
+					[name: string]: unknown;
+				};
+				content: {
+					'application/json': {
+						[key: string]: number;
+					};
+				};
+			};
+			/** @description Validation Error */
+			422: {
+				headers: {
+					[name: string]: unknown;
+				};
+				content: {
+					'application/json': components['schemas']['HTTPValidationError'];
+				};
+			};
+		};
+	};
+	list_patient_tasks_api_v1_patient_tasks_get: {
+		parameters: {
+			query?: never;
+			header?: never;
+			path?: never;
+			cookie?: never;
+		};
+		requestBody?: never;
+		responses: {
+			/** @description Successful Response */
+			200: {
+				headers: {
+					[name: string]: unknown;
+				};
+				content: {
+					'application/json': components['schemas']['TaskOut'][];
+				};
+			};
+		};
+	};
+	get_score_chart_api_v1_doctor_patients__patient_id__charts_scores_get: {
+		parameters: {
+			query?: never;
+			header?: never;
+			path: {
+				patient_id: string;
+			};
+			cookie?: never;
+		};
+		requestBody?: never;
+		responses: {
+			/** @description Successful Response */
+			200: {
+				headers: {
+					[name: string]: unknown;
+				};
+				content: {
+					'application/json': components['schemas']['ScoreChartSeries'][];
+				};
+			};
+			/** @description Validation Error */
+			422: {
+				headers: {
+					[name: string]: unknown;
+				};
+				content: {
+					'application/json': components['schemas']['HTTPValidationError'];
+				};
+			};
+		};
+	};
+	list_goals_api_v1_doctor_patients__patient_id__goals_get: {
+		parameters: {
+			query?: never;
+			header?: never;
+			path: {
+				patient_id: string;
+			};
+			cookie?: never;
+		};
+		requestBody?: never;
+		responses: {
+			/** @description Successful Response */
+			200: {
+				headers: {
+					[name: string]: unknown;
+				};
+				content: {
+					'application/json': components['schemas']['TherapyGoalOut'][];
+				};
+			};
+			/** @description Validation Error */
+			422: {
+				headers: {
+					[name: string]: unknown;
+				};
+				content: {
+					'application/json': components['schemas']['HTTPValidationError'];
+				};
+			};
+		};
+	};
+	create_goal_api_v1_doctor_patients__patient_id__goals_post: {
+		parameters: {
+			query?: never;
+			header?: never;
+			path: {
+				patient_id: string;
+			};
+			cookie?: never;
+		};
+		requestBody: {
+			content: {
+				'application/json': components['schemas']['TherapyGoalCreate'];
+			};
+		};
+		responses: {
+			/** @description Successful Response */
+			201: {
+				headers: {
+					[name: string]: unknown;
+				};
+				content: {
+					'application/json': components['schemas']['TherapyGoalOut'];
+				};
+			};
+			/** @description Validation Error */
+			422: {
+				headers: {
+					[name: string]: unknown;
+				};
+				content: {
+					'application/json': components['schemas']['HTTPValidationError'];
+				};
+			};
+		};
+	};
+	update_goal_api_v1_doctor_patients__patient_id__goals__goal_id__patch: {
+		parameters: {
+			query?: never;
+			header?: never;
+			path: {
+				patient_id: string;
+				goal_id: string;
+			};
+			cookie?: never;
+		};
+		requestBody: {
+			content: {
+				'application/json': components['schemas']['TherapyGoalUpdate'];
+			};
+		};
+		responses: {
+			/** @description Successful Response */
+			200: {
+				headers: {
+					[name: string]: unknown;
+				};
+				content: {
+					'application/json': components['schemas']['TherapyGoalOut'];
+				};
+			};
+			/** @description Validation Error */
+			422: {
+				headers: {
+					[name: string]: unknown;
+				};
+				content: {
+					'application/json': components['schemas']['HTTPValidationError'];
+				};
+			};
+		};
+	};
 }

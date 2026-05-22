@@ -70,7 +70,7 @@ STACK.md` for those.
 | Frontend type-check | `cd frontend && pnpm typecheck` | Runs tsc --noEmit; will surface stale `schema.ts` mismatches |
 | Frontend unit tests | `cd frontend && pnpm test` | Vitest |
 | E2E lint / determinism | `cd frontend && pnpm test:e2e:lint` | Checks for anti-flake patterns |
-| E2E | `cd frontend && pnpm test:e2e` | Playwright; requires running app stack |
+| E2E | `cd frontend && pnpm test:e2e` | Playwright runs locally on the host against the running Docker app stack; Chromium project only. Do not run Playwright inside Docker. |
 | Smoke | `docker compose up` | Full stack on :8000 / :3000; verify manually. Do NOT use `make dev`. |
 
 ---
@@ -89,8 +89,7 @@ uv run pytest tests/test_foo.py  # single file
 ```bash
 cd frontend && pnpm test              # Vitest unit tests
 cd frontend && pnpm typecheck         # TypeScript type check
-cd frontend && pnpm test:e2e          # Playwright e2e (full stack required)
-cd frontend && pnpm test:e2e:chromium # Chromium only
+cd frontend && pnpm test:e2e          # Playwright e2e; host-run Chromium only (full stack required)
 ```
 
 ---

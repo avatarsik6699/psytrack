@@ -1,10 +1,10 @@
 import type { FormEvent } from 'react';
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { useNavigate } from 'react-router';
 
 import { useLoginMutation, useMe, usePatientLoginMutation } from '@shared/api/auth';
 import { runtime } from '@shared/config/runtime';
+import { useRouter } from '@shared/hooks/use-router';
 
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -18,7 +18,7 @@ const DEV_CREDENTIALS = {
 export function LoginForm() {
 	const { t: tCommon } = useTranslation('common');
 	const { t: tErrors } = useTranslation('errors');
-	const navigate = useNavigate();
+	const router = useRouter();
 	const { refetch: refetchMe } = useMe();
 	const loginMutation = useLoginMutation();
 	const patientLoginMutation = usePatientLoginMutation();
@@ -49,7 +49,7 @@ export function LoginForm() {
 			await patientLoginMutation.mutateAsync({ temp_login: tempLogin, password });
 		}
 		const result = await refetchMe();
-		navigate(result.data?.role === 'doctor' ? '/doctor' : '/', { replace: true });
+		router.navigate(result.data?.role === 'doctor' ? '/doctor' : '/', { replace: true });
 	};
 
 	return (

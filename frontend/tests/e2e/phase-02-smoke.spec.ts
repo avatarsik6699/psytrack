@@ -87,8 +87,8 @@ test.describe('Phase 02 — Patient Management', () => {
 
 	test('doctor roster renders at /doctor', async ({ page }) => {
 		await page.goto('/doctor');
-		await expect(page.getByRole('heading', { name: 'Patients' })).toBeVisible();
-		await expect(page.getByRole('button', { name: /Add Patient/i })).toBeVisible();
+		await expect(page.getByRole('heading', { name: 'Пациенты' })).toBeVisible();
+		await expect(page.getByRole('button', { name: /Добавить пациента/i })).toBeVisible();
 	});
 
 	// -------------------------------------------------------------------------
@@ -99,11 +99,11 @@ test.describe('Phase 02 — Patient Management', () => {
 		await page.goto('/doctor');
 
 		// Open modal
-		await page.getByRole('button', { name: /Add Patient/i }).click();
+		await page.getByRole('button', { name: /Добавить пациента/i }).click();
 		await expect(page.getByRole('heading', { name: 'Add Patient' })).toBeVisible();
 
 		// Fill full name (first text input inside the modal)
-		await page.locator('input[type="text"]').fill('E2E Test Patient');
+		await page.locator('form input[type="text"]').fill('E2E Test Patient');
 
 		// Fill date of birth
 		await page.locator('input[type="date"]').fill('1990-06-15');
@@ -138,13 +138,13 @@ test.describe('Phase 02 — Patient Management', () => {
 		await expect(page.getByRole('heading', { name: patient.full_name })).toBeVisible();
 
 		// Archive button present (patient is not yet archived)
-		await expect(page.getByRole('button', { name: /Archive/i })).toBeVisible();
+		await expect(page.getByRole('button', { name: /Архив/i })).toBeVisible();
 
 		// Diagnoses section heading
-		await expect(page.getByRole('heading', { name: /Diagnoses/i })).toBeVisible();
+		await expect(page.getByRole('heading', { name: /Диагнозы/i })).toBeVisible();
 
 		// Medications section heading
-		await expect(page.getByRole('heading', { name: /Medications/i })).toBeVisible();
+		await expect(page.getByRole('heading', { name: /Препараты/i })).toBeVisible();
 	});
 
 	// -------------------------------------------------------------------------

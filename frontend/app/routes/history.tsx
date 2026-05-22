@@ -1,4 +1,5 @@
 import { useTestHistory } from '@shared/api/scales';
+import { date } from '@shared/lib/date';
 
 export default function HistoryPage() {
 	const { data, isLoading } = useTestHistory();
@@ -19,9 +20,7 @@ export default function HistoryPage() {
 						<li key={item.id} className='border border-border rounded p-3'>
 							<div className='flex justify-between items-center'>
 								<span className='text-sm font-medium'>{item.scale?.name ?? item.scale_id}</span>
-								<span className='text-xs text-muted-foreground'>
-									{new Date(item.completed_at).toLocaleDateString()}
-								</span>
+								<span className='text-xs text-muted-foreground'>{date.formatMonthShortRu(item.completed_at)}</span>
 							</div>
 							<p className='text-xs text-muted-foreground mt-0.5'>
 								Score: <span className='font-medium text-foreground'>{item.score}</span>

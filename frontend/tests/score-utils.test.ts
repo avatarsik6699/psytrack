@@ -1,10 +1,6 @@
 import { describe, expect, it } from 'vitest';
 
-import {
-	computeDelta,
-	computeSeverityLabel,
-	formatWeekLabel,
-} from '../app/shared/lib/score-utils';
+import { computeDelta, computeSeverityLabel, formatWeekLabel } from '../app/shared/lib/score-utils';
 
 describe('computeSeverityLabel', () => {
 	it('PHQ-9 boundaries', () => {

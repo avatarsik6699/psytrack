@@ -23,7 +23,7 @@ async function attemptRefresh(): Promise<TokenPair | null> {
 			const res = await fetch(buildUrl(REFRESH_PATH), {
 				method: 'POST',
 				headers: { 'Content-Type': 'application/json' },
-				body: JSON.stringify({ refresh_token: current.refresh_token }),
+				body: JSON.stringify({ refresh_token: current.refresh_token }), // HTTP body — not storage
 			});
 			if (!res.ok) {
 				jwtService.set(queryClient, null);
@@ -151,7 +151,7 @@ async function request<TResponse, TBody = unknown>(
 	if (token && !headers.has('Authorization')) headers.set('Authorization', `Bearer ${token}`);
 	if (options.body !== undefined && !headers.has('Content-Type')) headers.set('Content-Type', 'application/json');
 
-	const requestBody = options.rawBody ?? (options.body === undefined ? undefined : JSON.stringify(options.body));
+	const requestBody = options.rawBody ?? (options.body === undefined ? undefined : JSON.stringify(options.body)); // HTTP body — not storage
 	const query = options.query ?? options.params?.query;
 	const pathParams = options.params?.path;
 

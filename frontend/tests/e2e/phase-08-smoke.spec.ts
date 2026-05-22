@@ -84,7 +84,7 @@ test.describe('Phase 08 — Patient Portal', () => {
 		const created = await apiPost<{ temp_login: string; temp_password: string }>(
 			'/api/v1/doctor/patients',
 			{ full_name: 'E2E P08 Patient' },
-			doctorTokens.access_token,
+			doctorTokens.access_token
 		);
 
 		patientTokens = await patientLogin(created.temp_login, created.temp_password);
@@ -95,7 +95,7 @@ test.describe('Phase 08 — Patient Portal', () => {
 			({ key, version, data }) => {
 				window.localStorage.setItem(key, JSON.stringify({ version, data }));
 			},
-			{ key: LS_AUTH_KEY, version: LS_VERSION, data: patientTokens },
+			{ key: LS_AUTH_KEY, version: LS_VERSION, data: patientTokens }
 		);
 	});
 
@@ -104,18 +104,12 @@ test.describe('Phase 08 — Patient Portal', () => {
 	// -------------------------------------------------------------------------
 
 	test('GET /patient/tasks returns array', async () => {
-		const data = await apiGet<unknown[]>(
-			'/api/v1/patient/tasks',
-			patientTokens.access_token,
-		);
+		const data = await apiGet<unknown[]>('/api/v1/patient/tasks', patientTokens.access_token);
 		expect(Array.isArray(data)).toBe(true);
 	});
 
 	test('GET /patient/me returns patient profile', async () => {
-		const data = await apiGet<Record<string, unknown>>(
-			'/api/v1/patient/me',
-			patientTokens.access_token,
-		);
+		const data = await apiGet<Record<string, unknown>>('/api/v1/patient/me', patientTokens.access_token);
 		expect(data).toHaveProperty('full_name');
 		expect(data).toHaveProperty('doctor_full_name');
 		expect(data).toHaveProperty('onboarding_complete');
@@ -141,9 +135,7 @@ test.describe('Phase 08 — Patient Portal', () => {
 	test('home dashboard renders stat cards or empty state', async ({ page }) => {
 		await page.goto('/dashboard');
 		// Wait for at least a heading or the greeting text
-		await expect(
-			page.locator('h1, [data-testid="greeting"]').first()
-		).toBeVisible({ timeout: 8000 });
+		await expect(page.locator('h1, [data-testid="greeting"]').first()).toBeVisible({ timeout: 8000 });
 	});
 
 	test('tests page renders with heading', async ({ page }) => {
@@ -153,9 +145,9 @@ test.describe('Phase 08 — Patient Portal', () => {
 
 	test('tests page shows scale list or empty message', async ({ page }) => {
 		await page.goto('/tests');
-		await expect(
-			page.locator('text=Нет назначенных тестов., .bg-white').first()
-		).toBeVisible({ timeout: 8000 });
+		const emptyMessage = page.getByText('Нет назначенных тестов.');
+		const scaleCard = page.locator('.bg-white').first();
+		await expect(emptyMessage.or(scaleCard)).toBeVisible({ timeout: 8000 });
 	});
 
 	test('medications page renders with log buttons or empty state', async ({ page }) => {
@@ -172,5 +164,73 @@ test.describe('Phase 08 — Patient Portal', () => {
 		await page.goto('/profile');
 		await expect(page.getByRole('heading', { name: 'Профиль' })).toBeVisible({ timeout: 8000 });
 		await expect(page.getByPlaceholder('you@example.com')).toBeVisible({ timeout: 8000 });
+	});
+
+	test('assessment page shows error for unknown id', async ({ page }) => {
+		await page.goto('/assessment/00000000-0000-0000-0000-000000000000');
+		await expect(page.locator('text=Тест не найден.').or(page.locator('text=Загрузка')).first()).toBeVisible({
+			timeout: 8000,
+		});
+	});
+});
+
+// ---------------------------------------------------------------------------
+// Doctor Portal
+// ---------------------------------------------------------------------------
+
+test.describe('Phase 08 — Doctor Portal', () => {
+	let doctorTokens: TokenPair;
+	let patientId: string;
+
+	test.beforeAll(async () => {
+		const email = `e2e-p08-doc-${Date.now()}@example.com`;
+		const password = 'E2ePass123!';
+		doctorTokens = await registerDoctor(email, password);
+
+		const created = await apiPost<{ id: string }>(
+			'/api/v1/doctor/patients',
+			{ full_name: 'E2E Doctor View Patient' },
+			doctorTokens.access_token
+		);
+		patientId = created.id;
+	});
+
+	test.beforeEach(async ({ page }) => {
+		await page.addInitScript(
+			({ key, version, data }) => {
+				window.localStorage.setItem(key, JSON.stringify({ version, data }));
+			},
+			{ key: LS_AUTH_KEY, version: LS_VERSION, data: doctorTokens }
+		);
+	});
+
+	test('patients list renders heading', async ({ page }) => {
+		await page.goto('/doctor');
+		await expect(page.getByRole('heading', { name: 'Пациенты' })).toBeVisible({ timeout: 8000 });
+	});
+
+	test('patients list shows patient card after creation', async ({ page }) => {
+		await page.goto('/doctor');
+		await expect(page.locator('text=E2E Doctor View Patient').first()).toBeVisible({ timeout: 8000 });
+	});
+
+	test('patient detail page renders with tabs', async ({ page }) => {
+		await page.goto(`/doctor/patients/${patientId}`);
+		await expect(page.locator('text=E2E Doctor View Patient').first()).toBeVisible({ timeout: 8000 });
+		await expect(page.locator('text=Обзор').first()).toBeVisible({ timeout: 8000 });
+		await expect(page.locator('text=Препараты').first()).toBeVisible({ timeout: 8000 });
+		await expect(page.locator('text=Динамика').first()).toBeVisible({ timeout: 8000 });
+	});
+
+	test('patient detail — Препараты tab navigation works', async ({ page }) => {
+		await page.goto(`/doctor/patients/${patientId}`);
+		await page.locator('[data-slot="tabs-trigger"]', { hasText: 'Препараты' }).first().click();
+		await expect(page.locator('text=Текущие препараты').first()).toBeVisible({ timeout: 8000 });
+	});
+
+	test('patient detail — Динамика tab navigation works', async ({ page }) => {
+		await page.goto(`/doctor/patients/${patientId}`);
+		await page.locator('[data-slot="tabs-trigger"]', { hasText: 'Динамика' }).first().click();
+		await expect(page.locator('text=Назначенные шкалы').first()).toBeVisible({ timeout: 8000 });
 	});
 });

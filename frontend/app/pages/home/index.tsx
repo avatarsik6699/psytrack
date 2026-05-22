@@ -1,39 +1,41 @@
-import { useState } from 'react';
+import React, { useState } from 'react';
 import { Link } from 'react-router';
 
 import { useLogDoseMutation, useMyMedications } from '@shared/api/medications';
 import { useMyAssignedScales } from '@shared/api/scales';
+import { date } from '@shared/lib/date';
 
-interface MedRow {
+type MedRow = {
 	id: string;
 	medication: { inn: string };
 	dose_mg: string | null;
 	unit: string | null;
 	frequency: string | null;
-}
+};
 
-function MedicationRow({ med }: { med: MedRow }) {
-	const logMutation = useLogDoseMutation(med.id);
+type MedicationRowProps = {
+	med: MedRow;
+};
+
+const MedicationRow: React.FC<MedicationRowProps> = props => {
+	const logMutation = useLogDoseMutation(props.med.id);
 	const [logging, setLogging] = useState(false);
 
 	const log = (status: 'taken' | 'missed') => {
 		if (logging) return;
 		setLogging(true);
-		logMutation.mutate(
-			{ status, occurred_at: new Date().toISOString() },
-			{ onSettled: () => setLogging(false) },
-		);
+		logMutation.mutate({ status, occurred_at: date.nowIso() }, { onSettled: () => setLogging(false) });
 	};
 
 	return (
 		<li className='bg-white border border-border rounded-lg p-4 flex justify-between items-center'>
 			<div>
-				<p className='text-sm font-medium'>{med.medication.inn}</p>
-				{(med.dose_mg || med.frequency) && (
+				<p className='text-sm font-medium'>{props.med.medication.inn}</p>
+				{(props.med.dose_mg || props.med.frequency) && (
 					<p className='text-xs text-muted-foreground mt-0.5'>
-						{med.dose_mg && `${med.dose_mg}${med.unit ? ` ${med.unit}` : ''}`}
-						{med.dose_mg && med.frequency && ' · '}
-						{med.frequency}
+						{props.med.dose_mg && `${props.med.dose_mg}${props.med.unit ? ` ${props.med.unit}` : ''}`}
+						{props.med.dose_mg && props.med.frequency && ' · '}
+						{props.med.frequency}
 					</p>
 				)}
 			</div>
@@ -55,11 +57,13 @@ function MedicationRow({ med }: { med: MedRow }) {
 			</div>
 		</li>
 	);
-}
+};
 
-export default function HomePage() {
-	const { data: scales = [], isLoading } = useMyAssignedScales();
-	const { data: meds = [], isLoading: loadingMeds } = useMyMedications();
+const HomePage: React.FC = () => {
+	const scalesQuery = useMyAssignedScales();
+	const medsQuery = useMyMedications();
+	const scales = scalesQuery.data ?? [];
+	const meds = medsQuery.data ?? [];
 
 	return (
 		<main className='p-6 space-y-6'>
@@ -68,8 +72,8 @@ export default function HomePage() {
 					<h2 className='text-xl font-semibold'>My Medications</h2>
 					<p className='text-sm text-muted-foreground mt-1'>Log your daily doses.</p>
 				</header>
-				{loadingMeds && <p className='text-sm text-muted-foreground'>Loading…</p>}
-				{!loadingMeds && meds.length === 0 && (
+				{medsQuery.isLoading && <p className='text-sm text-muted-foreground'>Loading…</p>}
+				{!medsQuery.isLoading && meds.length === 0 && (
 					<p className='text-sm text-muted-foreground'>No active medications.</p>
 				)}
 				{meds.length > 0 && (
@@ -86,9 +90,9 @@ export default function HomePage() {
 				<p className='text-sm text-muted-foreground mt-1'>Complete the tests assigned by your doctor.</p>
 			</header>
 
-			{isLoading && <p className='text-sm text-muted-foreground'>Loading…</p>}
+			{scalesQuery.isLoading && <p className='text-sm text-muted-foreground'>Loading…</p>}
 
-			{!isLoading && scales.length === 0 && (
+			{!scalesQuery.isLoading && scales.length === 0 && (
 				<p className='text-sm text-muted-foreground'>No assessments assigned yet.</p>
 			)}
 
@@ -118,4 +122,6 @@ export default function HomePage() {
 			</nav>
 		</main>
 	);
-}
+};
+
+export default HomePage;

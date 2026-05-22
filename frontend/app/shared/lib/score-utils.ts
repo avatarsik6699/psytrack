@@ -1,6 +1,19 @@
-const PHQ9_THRESHOLDS: [number, string][] = [[4, 'Minimal'], [9, 'Mild'], [14, 'Moderate'], [19, 'Mod. Severe']];
-const GAD7_THRESHOLDS: [number, string][] = [[4, 'Minimal'], [9, 'Mild'], [14, 'Moderate']];
-const YMRS_THRESHOLDS: [number, string][] = [[7, 'Minimal'], [15, 'Mild'], [25, 'Moderate']];
+const PHQ9_THRESHOLDS: [number, string][] = [
+	[4, 'Minimal'],
+	[9, 'Mild'],
+	[14, 'Moderate'],
+	[19, 'Mod. Severe'],
+];
+const GAD7_THRESHOLDS: [number, string][] = [
+	[4, 'Minimal'],
+	[9, 'Mild'],
+	[14, 'Moderate'],
+];
+const YMRS_THRESHOLDS: [number, string][] = [
+	[7, 'Minimal'],
+	[15, 'Mild'],
+	[25, 'Moderate'],
+];
 
 const SEVERITY_TABLES: Record<string, [number, string][]> = {
 	'PHQ-9': PHQ9_THRESHOLDS,

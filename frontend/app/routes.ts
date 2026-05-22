@@ -5,18 +5,18 @@ export default [
 	route('register', './routes/register.tsx'),
 	// Patient-protected routes
 	layout('./layouts/patient-layout.tsx', [
-		index('./routes/_index.tsx'),
+		index('./routes/index.tsx'),
 		route('dashboard', './routes/dashboard.tsx'),
 		route('history', './routes/history.tsx'),
-		route('profile', './routes/profile.tsx'),
-		route('tests', './routes/tests.tsx'),
-		route('drugs', './routes/drugs.tsx'),
-		route('side-effects', './routes/side-effects.tsx'),
-		route('assessment/:patientScaleId', './routes/assessment.$patientScaleId.tsx'),
+		route('profile', './routes/profile/index.tsx'),
+		route('tests', './routes/tests/index.tsx'),
+		route('drugs', './routes/drugs/index.tsx'),
+		route('side-effects', './routes/side-effects/index.tsx'),
+		route('assessment/:patientScaleId', './routes/assessment/index.tsx'),
 	]),
 	// Doctor-protected routes
 	layout('./layouts/doctor-layout.tsx', [
-		route('doctor', './routes/doctor/_index.tsx'),
-		route('doctor/patients/:id', './routes/doctor/patients.$id.tsx'),
+		route('doctor', './routes/doctor/index.tsx'),
+		route('doctor/patients/:id', './routes/doctor/patient-detail.tsx'),
 	]),
 ];

@@ -6,6 +6,38 @@
 
 ---
 
+## 2026-05-23 — Phase 08 complete
+
+**Type**: phase-completion
+**Author**: AI (context-update)
+**Triggered by**: PHASE_08 gate passed and committed
+
+### Changes
+- Patient portal polish: dashboard stat cards, tests list, medications daily log, side effects list, 4-step side effect wizard, assessment success screen, and patient profile page
+- `GET /api/v1/patient/tasks`: patient-scoped pending tasks for dashboard stats and sidebar badges
+- `GET /api/v1/patient/me`: patient self-profile with email/onboarding status and joined doctor identity
+- `PATCH /api/v1/public/auth/me/email`: authenticated email binding/update endpoint for doctor or patient users
+- Full frontend refactor across patient, doctor, chart, shared UI, layout, and route modules following `docs/FRONTEND_CONVENTIONS.md`
+- Removed template `app-top-bar.tsx` artifact and moved language/theme controls into sidebar chrome
+- Added shared frontend utilities and conventions for safe JSON/localStorage access, runtime env access, date handling, typed search params, and typed router access
+- Added semantic severity/status color tokens, shadcn UI primitives (`badge`, `tabs`, `dialog`, `select`, `scroll-area`, `separator`), mobile-first responsive sidebar, and doctor portal visual alignment
+- Expanded frontend tests, including phase 08 smoke coverage plus utility tests for date, safe JSON, and safe localStorage helpers
+
+### Affected Phases
+- None (additive change)
+
+### Contract Updates
+- Endpoints added: `GET /api/v1/patient/tasks`, `GET /api/v1/patient/me`, `PATCH /api/v1/public/auth/me/email`
+- TypeScript/API schemas added: `PatientMeOut`, `EmailUpdateIn`; `TaskOut` reused from Phase 06 for the new patient tasks endpoint
+- UI routes added or completed: `/dashboard`, `/tests`, `/drugs`, `/side-effects`, `/profile`, `/assessment/:patientScaleId`
+- No new DB tables; Alembic head unchanged: `0009_therapy_goals`
+- No new env vars
+
+### Notes
+Phase 08 is contract-additive on the backend and primarily frontend-facing. Frontend API shapes continue to come from generated OpenAPI types in `frontend/app/shared/types/schema.ts`; raw API escape hatches, raw router hooks, raw search-param handling, raw localStorage/JSON, and direct `import.meta.env` access are now documented as forbidden project conventions.
+
+---
+
 ## 2026-05-18 — Phase 07 complete
 
 **Type**: phase-completion

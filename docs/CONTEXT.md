@@ -4,8 +4,8 @@
     "update_rule": "Append contracts after each phase via /context-update. Never remove existing entries."
   },
 
-  "captured_at": "2026-05-18",
-  "phase_completed": "07",
+  "captured_at": "2026-05-23",
+  "phase_completed": "08",
   "phase_in_progress": null,
 
   "stack": {
@@ -156,7 +156,10 @@
     { "phase": "07", "method": "GET",   "path": "/api/v1/doctor/patients/{id}/charts/scores",               "auth": "doctor",  "response": "ScoreChartSeries[]" },
     { "phase": "07", "method": "GET",   "path": "/api/v1/doctor/patients/{id}/goals",                       "auth": "doctor",  "response": "TherapyGoalOut[]" },
     { "phase": "07", "method": "POST",  "path": "/api/v1/doctor/patients/{id}/goals",                       "auth": "doctor",  "response": "TherapyGoalOut" },
-    { "phase": "07", "method": "PATCH", "path": "/api/v1/doctor/patients/{id}/goals/{gid}",                 "auth": "doctor",  "response": "TherapyGoalOut" }
+    { "phase": "07", "method": "PATCH", "path": "/api/v1/doctor/patients/{id}/goals/{gid}",                 "auth": "doctor",  "response": "TherapyGoalOut" },
+    { "phase": "08", "method": "GET",   "path": "/api/v1/patient/tasks",                                    "auth": "patient", "response": "TaskOut[]" },
+    { "phase": "08", "method": "GET",   "path": "/api/v1/patient/me",                                       "auth": "patient", "response": "PatientMeOut" },
+    { "phase": "08", "method": "PATCH", "path": "/api/v1/public/auth/me/email",                             "auth": "bearer",  "response": "{ ok: true }" }
   ],
 
   "db_schema": {
@@ -168,7 +171,13 @@
   "ui_pages_active": [
     { "phase": "01", "route": "/login",     "component": "frontend/app/routes/login.tsx",       "auth": "public" },
     { "phase": "01", "route": "/doctor/*",  "component": "frontend/app/routes.ts (doctor layout)", "auth": "doctor" },
-    { "phase": "01", "route": "/",          "component": "frontend/app/routes.ts (patient layout)", "auth": "patient" }
+    { "phase": "01", "route": "/",          "component": "frontend/app/routes.ts (patient layout)", "auth": "patient" },
+    { "phase": "08", "route": "/dashboard", "component": "frontend/app/pages/dashboard/ui/dashboard-page.tsx", "auth": "patient" },
+    { "phase": "08", "route": "/tests",     "component": "frontend/app/routes/tests/index.tsx",    "auth": "patient" },
+    { "phase": "08", "route": "/drugs",     "component": "frontend/app/routes/drugs/index.tsx",    "auth": "patient" },
+    { "phase": "08", "route": "/side-effects", "component": "frontend/app/routes/side-effects/index.tsx", "auth": "patient" },
+    { "phase": "08", "route": "/profile",   "component": "frontend/app/routes/profile/index.tsx",  "auth": "patient" },
+    { "phase": "08", "route": "/assessment/:patientScaleId", "component": "frontend/app/routes/assessment/index.tsx", "auth": "patient" }
   ],
 
   "env_config": {
@@ -185,5 +194,5 @@
 
   "db_seeds": {},
 
-  "notes": "Phase 07 complete. Added therapy_goals table + TherapyGoal ORM model, score chart endpoint (GET /doctor/patients/{id}/charts/scores returning ScoreChartSeries[]), therapy goals CRUD (GET/POST/PATCH /doctor/patients/{id}/goals), PatientOut extended with adherencePercent/latestScores/activeMedicationsSummary (B3), frontend ScoreChart (Recharts multi-series), AssessmentResultsTable, PatientHeader, DiagnosisTabSwitcher, TherapyGoals sidebar, PatientCard roster enhancements, and full /doctor/patients/:id detail page composition."
+  "notes": "Phase 08 complete. Added patient portal polish and full frontend refactoring, including patient task/profile/email endpoints, patient dashboard/tests/drugs/side-effects/profile routes, assessment success polish, shared frontend conventions/utilities, semantic UI components/tokens, responsive sidebar, and expanded frontend test coverage."
 }
