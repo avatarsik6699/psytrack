@@ -169,11 +169,12 @@ The SDD workflows are defined in `docs/playbooks/`:
 - [`impl-brief`](docs/playbooks/impl-brief.md) — generate a concrete implementation plan for phase tasks (optional)
 - [`phase-explore`](docs/playbooks/phase-explore.md) — explore the codebase for task context before planning (optional)
 - [`impl-assist`](docs/playbooks/impl-assist.md) — implement uncompleted phase tasks (optional)
+- [`impl-review-notes`](docs/playbooks/impl-review-notes.md) — fix unchecked Architect Review Notes for a phase without gate/sync/branch overhead (optional; for manual-testing defects)
 - [`project-sync`](docs/playbooks/project-sync.md) — sync phase tasks to GitHub Issues + GitHub Projects board (optional; requires `gh` CLI and a GitHub remote)
 
 Different runtimes expose them differently:
 
-- **Claude Code**: slash commands (`/spec-init`, `/phase-init`, `/phase-gate`, `/spec-sync`, `/context-update`, `/impl-brief`, `/impl-assist`, `/project-sync`) defined under `.claude/skills/`.
+- **Claude Code**: slash commands (`/spec-init`, `/phase-init`, `/phase-gate`, `/spec-sync`, `/context-update`, `/impl-brief`, `/impl-assist`, `/impl-review-notes`, `/project-sync`) defined under `.claude/skills/`.
 - **Codex**: slash commands defined under `plugins/sdd-workflow/`.
 - **Other runtimes**: follow the markdown procedure in `docs/playbooks/` manually.
 
@@ -194,6 +195,8 @@ The runtime wrappers are thin stubs — all workflow logic lives in `docs/playbo
     - Optional: `/impl-assist N [task-id|group]` → agent implements uncompleted tasks
 6.  phase-gate N      → automated baseline
 7.  Architect manual verification → add unchecked items to Architect Review Notes
+7.5 Optional: `/impl-review-notes N [R[n]]` → fix individual unchecked review notes
+    (explore → plan → implement per note, no auto-commit or branch)
 8.  phase-gate N      → ✅ PASS only when all automated checks green AND review notes all checked off
 9.  git commit        → feat(phase-N): [description]
 10. context-update N  → updates CONTEXT, STATE, CHANGELOG

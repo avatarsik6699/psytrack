@@ -14,6 +14,7 @@ This file only adds Claude-specific items.
 | `/impl-brief [N] [ID\|group]` | Before implementing: generate a concrete Implementation Plan per task in `docs/PHASE_N_NOTES.md` | [docs/playbooks/impl-brief.md](docs/playbooks/impl-brief.md) |
 | `/phase-add-task [N] "description"` | Mid-phase: add an unplanned task from a one-line description; auto-assigns ID, derives contracts, runs explore + impl-brief | [docs/playbooks/phase-add-task.md](docs/playbooks/phase-add-task.md) |
 | `/impl-assist [N] [ID\|group]` | Have the agent implement uncompleted tasks (reads plan from `PHASE_N_NOTES.md`) | [docs/playbooks/impl-assist.md](docs/playbooks/impl-assist.md) |
+| `/impl-review-notes [N] [R\|N]` | After manual testing: fix unchecked Architect Review Notes with explore → plan → implement discipline, without gate/sync/branch overhead | [docs/playbooks/impl-review-notes.md](docs/playbooks/impl-review-notes.md) |
 | `/project-sync [XX] [--dry-run\|--setup]` | Sync phase task checkboxes to GitHub Issues + GitHub Projects Kanban board (requires `gh` CLI + GitHub remote) | [docs/playbooks/project-sync.md](docs/playbooks/project-sync.md) |
 | `/phase-gate [N]` | Validate a phase before committing | [docs/playbooks/phase-gate.md](docs/playbooks/phase-gate.md) |
 | `/spec-sync [description]` | Immediately after editing `docs/SPEC.md` | [docs/playbooks/spec-sync.md](docs/playbooks/spec-sync.md) |
