@@ -23,6 +23,8 @@
 | PHASE_06 | ✅ done    | v0.06.0 | ✅ | 🤝 hybrid | Event Timeline & Color Logic |
 | PHASE_07 | ✅ done    | v0.07.0 | ✅ | 🤝 hybrid | Charts & Doctor Detail |
 
+| PHASE_08 | ⏳ pending | v0.08.0 | ⬜ | — | Patient Portal Polish |
+
 <!-- Add new rows here via /phase-init N -->
 
 ---

@@ -1,16 +1,18 @@
 from uuid import UUID
 
-from fastapi import APIRouter, Depends, status
+from fastapi import APIRouter, Depends, HTTPException, status
 
-from app.modules.auth.dependencies import require_doctor
+from app.modules.auth.dependencies import require_doctor, require_patient
 from app.modules.doctors.dependencies import get_doctor_service
 from app.modules.doctors.service import DoctorService
-from app.modules.patients.dependencies import get_patient_service
-from app.modules.patients.schemas import PatientCreate, PatientCreatedOut, PatientOut, PatientUpdate
+from app.modules.patients.dependencies import get_patient_repository, get_patient_service
+from app.modules.patients.repository import PatientRepository
+from app.modules.patients.schemas import PatientCreate, PatientCreatedOut, PatientMeOut, PatientOut, PatientUpdate
 from app.modules.patients.service import PatientService
 from app.modules.users.models import User
 
 router = APIRouter(prefix="/doctor/patients", tags=["doctor-patients"])
+patient_me_router = APIRouter(prefix="/patient", tags=["patient-me"])
 
 
 @router.get("", response_model=list[PatientOut])
@@ -62,6 +64,17 @@ async def update_patient(
     patient = await patient_service.get_for_doctor(patient_id, profile.id)
     patient = await patient_service.update(patient, body)
     return PatientOut.model_validate(patient)
+
+
+@patient_me_router.get("/me", response_model=PatientMeOut)
+async def patient_me(
+    current_user: User = Depends(require_patient),
+    patient_repo: PatientRepository = Depends(get_patient_repository),
+) -> PatientMeOut:
+    data = await patient_repo.get_me(current_user.id)
+    if data is None:
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Patient profile not found")
+    return PatientMeOut.model_validate(data)
 
 
 @router.post("/{patient_id}/archive", status_code=status.HTTP_200_OK)

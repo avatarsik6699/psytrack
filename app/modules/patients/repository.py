@@ -200,6 +200,35 @@ class PatientRepository:
                 )
         return result
 
+    async def get_me(self, user_id: UUID) -> dict | None:
+        from app.modules.doctors.models import DoctorProfile
+
+        row = await self._session.execute(
+            select(
+                Patient.id,
+                Patient.full_name,
+                Patient.email,
+                Patient.email_verified,
+                Patient.onboarding_complete,
+                DoctorProfile.full_name.label("doctor_full_name"),
+                DoctorProfile.specialty.label("doctor_specialty"),
+            )
+            .join(DoctorProfile, DoctorProfile.id == Patient.doctor_id)
+            .where(Patient.user_id == user_id)
+        )
+        r = row.first()
+        if r is None:
+            return None
+        return {
+            "id": r.id,
+            "full_name": r.full_name,
+            "email": r.email,
+            "email_verified": r.email_verified,
+            "onboarding_complete": r.onboarding_complete,
+            "doctor_full_name": r.doctor_full_name,
+            "doctor_specialty": r.doctor_specialty,
+        }
+
     async def get_active_medications_summary(self, patient_id: UUID) -> list[dict]:
         import datetime as dt
 

@@ -55,3 +55,15 @@ class PatientOut(BaseModel):
 class PatientCreatedOut(PatientOut):
     temp_login: str
     temp_password: str
+
+
+class PatientMeOut(BaseModel):
+    model_config = ConfigDict(from_attributes=True)
+
+    id: UUID
+    full_name: str
+    email: str | None
+    email_verified: bool
+    onboarding_complete: bool
+    doctor_full_name: str
+    doctor_specialty: str | None

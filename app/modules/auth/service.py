@@ -111,6 +111,16 @@ class AuthService:
         user.hashed_password = hash_password(new)
         await self._user_service.add(user)
 
+    async def update_email(self, user: User, new_email: str) -> None:
+        if user.role == UserRole.doctor:
+            user.email = new_email
+            await self._user_service.add(user)
+        else:
+            patient = await self._patient_repository.get_by_user_id(user.id)
+            if patient is not None:
+                patient.email = new_email
+                await self._patient_repository._session.flush()
+
     async def delete_account(self, user: User) -> None:
         await self._user_service.delete(user)
 

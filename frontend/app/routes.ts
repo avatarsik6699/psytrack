@@ -9,6 +9,9 @@ export default [
 		route('dashboard', './routes/dashboard.tsx'),
 		route('history', './routes/history.tsx'),
 		route('profile', './routes/profile.tsx'),
+		route('tests', './routes/tests.tsx'),
+		route('drugs', './routes/drugs.tsx'),
+		route('side-effects', './routes/side-effects.tsx'),
 		route('assessment/:patientScaleId', './routes/assessment.$patientScaleId.tsx'),
 	]),
 	// Doctor-protected routes

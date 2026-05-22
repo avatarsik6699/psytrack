@@ -37,3 +37,7 @@ class PasswordChangeRequest(BaseModel):
 
 class AccountDeletionResponse(BaseModel):
     deleted: bool
+
+
+class EmailUpdateIn(BaseModel):
+    email: EmailStr

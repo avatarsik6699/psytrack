@@ -107,6 +107,16 @@ Rules:
 
 Stale library knowledge is the #1 source of rework. Treat documentation lookup as required, not optional.
 
+## Design Assets
+
+All design reference screenshots and mockups for this project are stored in **`docs/assets/`** as image files (PNG, JPG, etc.). This is the canonical location for design assets across all phases.
+
+**Pipeline rules:**
+- When running `/phase-init N`, check `docs/assets/` for any screenshots relevant to that phase's screens before asking the user to attach files.
+- Name new screenshots descriptively: `<screen-slug>-<variant>.png` (e.g. `patient-home-dashboard.png`, `patient-history-filter.png`).
+- When design assets are present in `docs/assets/`, describe each relevant screenshot in the phase doc's `## Design References` section.
+- If no screenshots exist for a phase's screens, fall back to the design descriptions in `docs/SPEC.md §5.3` and the design system tokens in `§5.4`.
+
 ## Repo Memory Files
 
 Keep lightweight long-lived project memory in `docs/` so future sessions recover context without reconstructing it from chat history:
