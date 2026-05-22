@@ -5,7 +5,7 @@
   },
 
   "captured_at": "2026-05-18",
-  "phase_completed": "06",
+  "phase_completed": "07",
   "phase_in_progress": null,
 
   "stack": {
@@ -102,6 +102,12 @@
       "name": "Task",
       "module": "app/modules/tasks/models.py",
       "fields": ["id:UUID", "patient_id:UUID FK patients CASCADE", "task_type:TEXT('test'|'medication_log'|'se_report')", "reference_id:UUID nullable", "due_at:TIMESTAMPTZ", "status:TEXT('pending'|'done'|'missed'|'snoozed') DEFAULT 'pending'", "created_at:TIMESTAMPTZ", "updated_at:TIMESTAMPTZ nullable"]
+    },
+    {
+      "phase": "07",
+      "name": "TherapyGoal",
+      "module": "app/modules/therapy_goals/models.py",
+      "fields": ["id:UUID", "patient_id:UUID FK patients CASCADE", "description:TEXT", "is_completed:BOOL DEFAULT false", "created_at:TIMESTAMPTZ"]
     }
   ],
 
@@ -146,13 +152,17 @@
     { "phase": "05", "method": "DELETE", "path": "/api/v1/doctor/patients/{id}/se-rules/{rid}",             "auth": "doctor",  "response": "{ ok: true }" },
     { "phase": "05", "method": "GET",    "path": "/api/v1/doctor/patients/{id}/charts/side-effects",        "auth": "doctor",  "response": "SeSeverityDataPoint[]" },
     { "phase": "06", "method": "GET",   "path": "/api/v1/doctor/patients/{id}/events",                      "auth": "doctor",  "response": "EventTimelinePage { items: EventLogOut[], total: int, page: int, size: int } (?page=1&size=20)" },
-    { "phase": "06", "method": "POST",  "path": "/api/v1/system/tasks/generate",                            "auth": "internal (X-Internal-Key header)", "response": "{ generated: int }" }
+    { "phase": "06", "method": "POST",  "path": "/api/v1/system/tasks/generate",                            "auth": "internal (X-Internal-Key header)", "response": "{ generated: int }" },
+    { "phase": "07", "method": "GET",   "path": "/api/v1/doctor/patients/{id}/charts/scores",               "auth": "doctor",  "response": "ScoreChartSeries[]" },
+    { "phase": "07", "method": "GET",   "path": "/api/v1/doctor/patients/{id}/goals",                       "auth": "doctor",  "response": "TherapyGoalOut[]" },
+    { "phase": "07", "method": "POST",  "path": "/api/v1/doctor/patients/{id}/goals",                       "auth": "doctor",  "response": "TherapyGoalOut" },
+    { "phase": "07", "method": "PATCH", "path": "/api/v1/doctor/patients/{id}/goals/{gid}",                 "auth": "doctor",  "response": "TherapyGoalOut" }
   ],
 
   "db_schema": {
-    "tables": ["users", "doctor_profiles", "patients", "diagnoses", "medications_reference", "patient_medications", "scales", "clinical_rules", "patient_scales", "test_completions", "event_log", "se_dictionary", "patient_side_effects", "se_monitoring_rules", "tasks"],
+    "tables": ["users", "doctor_profiles", "patients", "diagnoses", "medications_reference", "patient_medications", "scales", "clinical_rules", "patient_scales", "test_completions", "event_log", "se_dictionary", "patient_side_effects", "se_monitoring_rules", "tasks", "therapy_goals"],
     "source": "alembic/versions/",
-    "current_head": "0008_tasks_constraints"
+    "current_head": "0009_therapy_goals"
   },
 
   "ui_pages_active": [
@@ -175,5 +185,5 @@
 
   "db_seeds": {},
 
-  "notes": "Phase 06 complete. Added event timeline endpoint (GET /doctor/patients/{id}/events, paginated), color computation service (card_color: red|yellow|green|gray on PatientOut, roster sorted red→yellow→green→gray), tasks table + Task ORM model, APScheduler daily cron calling POST /system/tasks/generate (internal key-guarded), frontend EventTimeline component in doctor patient detail, and PatientCard left-border color strip wired to card_color."
+  "notes": "Phase 07 complete. Added therapy_goals table + TherapyGoal ORM model, score chart endpoint (GET /doctor/patients/{id}/charts/scores returning ScoreChartSeries[]), therapy goals CRUD (GET/POST/PATCH /doctor/patients/{id}/goals), PatientOut extended with adherencePercent/latestScores/activeMedicationsSummary (B3), frontend ScoreChart (Recharts multi-series), AssessmentResultsTable, PatientHeader, DiagnosisTabSwitcher, TherapyGoals sidebar, PatientCard roster enhancements, and full /doctor/patients/:id detail page composition."
 }

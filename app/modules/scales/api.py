@@ -8,9 +8,11 @@ from app.modules.doctors.service import DoctorService
 from app.modules.patients.dependencies import get_patient_repository, get_patient_service
 from app.modules.patients.repository import PatientRepository
 from app.modules.patients.service import PatientService
+from app.modules.scales.charts import ScoreChartService
 from app.modules.scales.dependencies import (
     get_patient_scale_service,
     get_scale_service,
+    get_score_chart_service,
     get_test_completion_service,
 )
 from app.modules.scales.schemas import (
@@ -18,6 +20,7 @@ from app.modules.scales.schemas import (
     PatientScaleOut,
     ScaleOut,
     ScaleQuestion,
+    ScoreChartSeries,
     TestCompletionOut,
     TestCompletionPage,
     TestSubmitIn,
@@ -179,3 +182,23 @@ async def get_patient_scale(
         raise HTTPException(status_code=404, detail="Patient profile not found")
     ps = await ps_service.get_for_patient(patient.id, patient_scale_id)
     return PatientScaleOut.model_validate(ps)
+
+
+# --- Doctor: score chart ---
+
+doctor_score_chart_router = APIRouter(
+    prefix="/doctor/patients/{patient_id}/charts/scores", tags=["doctor-charts"]
+)
+
+
+@doctor_score_chart_router.get("", response_model=list[ScoreChartSeries])
+async def get_score_chart(
+    patient_id: UUID,
+    current_user: User = Depends(require_doctor),
+    doctor_service: DoctorService = Depends(get_doctor_service),
+    patient_service: PatientService = Depends(get_patient_service),
+    chart_service: ScoreChartService = Depends(get_score_chart_service),
+) -> list[ScoreChartSeries]:
+    profile = await doctor_service.get_for_user(current_user.id)
+    await patient_service.get_for_doctor(patient_id, profile.id)
+    return await chart_service.get_series(patient_id)

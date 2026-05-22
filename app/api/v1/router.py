@@ -11,12 +11,14 @@ from app.modules.medications.api import doctor_chart_router, doctor_med_router, 
 from app.modules.medications.api import ref_router as med_ref_router
 from app.modules.patients.api import router as patients_router
 from app.modules.scales.api import (
+    doctor_score_chart_router,
     doctor_scales_router,
     patient_history_router,
     patient_scales_router,
     patient_tests_router,
     ref_scales_router,
 )
+from app.modules.therapy_goals.router import router as therapy_goals_router
 from app.modules.side_effects.api import (
     doctor_se_chart_router,
     doctor_se_rules_router,
@@ -45,3 +47,5 @@ api_v1_router.include_router(doctor_se_rules_router)
 api_v1_router.include_router(doctor_se_chart_router)
 api_v1_router.include_router(events_router)
 api_v1_router.include_router(tasks_router)
+api_v1_router.include_router(doctor_score_chart_router)
+api_v1_router.include_router(therapy_goals_router)

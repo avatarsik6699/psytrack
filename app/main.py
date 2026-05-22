@@ -10,6 +10,7 @@ from slowapi.errors import RateLimitExceeded
 import app.modules.doctors  # noqa: F401
 import app.modules.patients  # noqa: F401
 import app.modules.tasks  # noqa: F401
+import app.modules.therapy_goals  # noqa: F401
 import app.modules.users  # noqa: F401
 from app.api.v1.router import api_v1_router
 from app.core.config import settings

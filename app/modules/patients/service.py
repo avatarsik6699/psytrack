@@ -55,15 +55,24 @@ class PatientService:
     async def list_by_doctor(self, doctor_id: UUID) -> list[Patient]:
         return await self._repository.list_by_doctor(doctor_id)
 
+    async def _build_with_extras(self, patient: Patient) -> PatientOut:
+        color_inputs = await self._repository.get_color_inputs(patient.id)
+        color = compute_card_color(color_inputs)
+        adherence = await self._repository.compute_adherence_percent(patient.id)
+        latest_scores = await self._repository.get_latest_scores(patient.id)
+        active_meds = await self._repository.get_active_medications_summary(patient.id)
+        data = PatientOut.model_validate(patient).model_dump()
+        data["card_color"] = color
+        data["adherence_percent"] = adherence
+        data["latest_scores"] = latest_scores
+        data["active_medications_summary"] = active_meds
+        return PatientOut.model_validate(data)
+
     async def list_with_colors(self, doctor_id: UUID) -> list[PatientOut]:
         patients = await self._repository.list_by_doctor(doctor_id)
         result: list[PatientOut] = []
         for patient in patients:
-            color_inputs = await self._repository.get_color_inputs(patient.id)
-            color = compute_card_color(color_inputs)
-            data = PatientOut.model_validate(patient).model_dump()
-            data["card_color"] = color
-            result.append(PatientOut.model_validate(data))
+            result.append(await self._build_with_extras(patient))
         result.sort(key=lambda p: _COLOR_ORDER[p.card_color])
         return result
 

@@ -98,3 +98,12 @@ class TestCompletionRepository:
             )
         )
         return (result or 0) > 0
+
+    async def list_all_by_patient(self, patient_id: UUID) -> list[TestCompletion]:
+        result = await self._session.scalars(
+            select(TestCompletion)
+            .where(TestCompletion.patient_id == patient_id)
+            .options(selectinload(TestCompletion.scale))
+            .order_by(TestCompletion.completed_at.asc())
+        )
+        return list(result)

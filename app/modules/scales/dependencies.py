@@ -48,3 +48,11 @@ def get_test_completion_service(
     event_repo: EventLogRepository = Depends(get_event_log_repository),
 ) -> TestCompletionService:
     return TestCompletionService(tc_repo, ps_repo, event_repo)
+
+
+def get_score_chart_service(
+    tc_repo: TestCompletionRepository = Depends(get_test_completion_repository),
+) -> "ScoreChartService":
+    from app.modules.scales.charts import ScoreChartService
+
+    return ScoreChartService(tc_repo)

@@ -627,6 +627,58 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/api/v1/doctor/patients/{patient_id}/charts/scores": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Get Score Chart */
+        get: operations["get_score_chart_api_v1_doctor_patients__patient_id__charts_scores_get"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/doctor/patients/{patient_id}/goals": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** List Goals */
+        get: operations["list_goals_api_v1_doctor_patients__patient_id__goals_get"];
+        put?: never;
+        /** Create Goal */
+        post: operations["create_goal_api_v1_doctor_patients__patient_id__goals_post"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/doctor/patients/{patient_id}/goals/{goal_id}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        /** Update Goal */
+        patch: operations["update_goal_api_v1_doctor_patients__patient_id__goals__goal_id__patch"];
+        trace?: never;
+    };
 }
 export type webhooks = Record<string, never>;
 export interface components {
@@ -750,6 +802,17 @@ export interface components {
             /** Password */
             password: string;
         };
+        /** MedSummary */
+        MedSummary: {
+            /** Inn */
+            inn: string;
+            /** Dose Mg */
+            dose_mg: number | null;
+            /** Unit */
+            unit: string | null;
+            /** Frequency */
+            frequency: string | null;
+        };
         /** MedicationChartPoint */
         MedicationChartPoint: {
             /** Date */
@@ -852,6 +915,18 @@ export interface components {
              * @enum {string}
              */
             card_color: "red" | "yellow" | "green" | "gray";
+            /** Adherence Percent */
+            adherence_percent?: number | null;
+            /**
+             * Latest Scores
+             * @default []
+             */
+            latest_scores: components["schemas"]["ScoreSnapshot"][];
+            /**
+             * Active Medications Summary
+             * @default []
+             */
+            active_medications_summary: components["schemas"]["MedSummary"][];
             /** Temp Login */
             temp_login: string;
             /** Temp Password */
@@ -972,6 +1047,18 @@ export interface components {
              * @enum {string}
              */
             card_color: "red" | "yellow" | "green" | "gray";
+            /** Adherence Percent */
+            adherence_percent?: number | null;
+            /**
+             * Latest Scores
+             * @default []
+             */
+            latest_scores: components["schemas"]["ScoreSnapshot"][];
+            /**
+             * Active Medications Summary
+             * @default []
+             */
+            active_medications_summary: components["schemas"]["MedSummary"][];
         };
         /** PatientScaleCreate */
         PatientScaleCreate: {
@@ -1168,6 +1255,49 @@ export interface components {
                 [key: string]: unknown;
             }[];
         };
+        /** ScoreChartPoint */
+        ScoreChartPoint: {
+            /**
+             * Completed At
+             * Format: date-time
+             */
+            completed_at: string;
+            /** Score */
+            score: number;
+            /** Baseline */
+            baseline: boolean;
+        };
+        /** ScoreChartSeries */
+        ScoreChartSeries: {
+            /**
+             * Scale Id
+             * Format: uuid
+             */
+            scale_id: string;
+            /** Scale Code */
+            scale_code: string;
+            /** Scale Name */
+            scale_name: string;
+            /** Score Min */
+            score_min: number;
+            /** Score Max */
+            score_max: number;
+            /** Improvement Direction */
+            improvement_direction: string | null;
+            /** Points */
+            points: components["schemas"]["ScoreChartPoint"][];
+        };
+        /** ScoreSnapshot */
+        ScoreSnapshot: {
+            /** Scale Code */
+            scale_code: string;
+            /** Scale Name */
+            scale_name: string;
+            /** Score */
+            score: number;
+            /** Severity Label */
+            severity_label: string;
+        };
         /** SeDictionaryOut */
         SeDictionaryOut: {
             /**
@@ -1295,6 +1425,40 @@ export interface components {
              * @default false
              */
             baseline: boolean;
+        };
+        /** TherapyGoalCreate */
+        TherapyGoalCreate: {
+            /** Description */
+            description: string;
+        };
+        /** TherapyGoalOut */
+        TherapyGoalOut: {
+            /**
+             * Id
+             * Format: uuid
+             */
+            id: string;
+            /**
+             * Patient Id
+             * Format: uuid
+             */
+            patient_id: string;
+            /** Description */
+            description: string;
+            /** Is Completed */
+            is_completed: boolean;
+            /**
+             * Created At
+             * Format: date-time
+             */
+            created_at: string;
+        };
+        /** TherapyGoalUpdate */
+        TherapyGoalUpdate: {
+            /** Description */
+            description?: string | null;
+            /** Is Completed */
+            is_completed?: boolean | null;
         };
         /** TokenPair */
         TokenPair: {
@@ -2793,6 +2957,139 @@ export interface operations {
                     "application/json": {
                         [key: string]: number;
                     };
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    get_score_chart_api_v1_doctor_patients__patient_id__charts_scores_get: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                patient_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ScoreChartSeries"][];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    list_goals_api_v1_doctor_patients__patient_id__goals_get: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                patient_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["TherapyGoalOut"][];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    create_goal_api_v1_doctor_patients__patient_id__goals_post: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                patient_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["TherapyGoalCreate"];
+            };
+        };
+        responses: {
+            /** @description Successful Response */
+            201: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["TherapyGoalOut"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    update_goal_api_v1_doctor_patients__patient_id__goals__goal_id__patch: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                patient_id: string;
+                goal_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["TherapyGoalUpdate"];
+            };
+        };
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["TherapyGoalOut"];
                 };
             };
             /** @description Validation Error */

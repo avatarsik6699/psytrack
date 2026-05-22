@@ -44,11 +44,14 @@
 ### Frontend
 - [ ] `F1` [task] — _Depends on:_ —
 
+### Frontend Tests
+<!-- Authoring new tests is a Scope task. Running them is a Gate command — those are different things.
+     FT1 is mandatory whenever new routes or major UI interactions are added. FT2 is optional. -->
+- [ ] `FT1` `frontend/tests/e2e/phase-[XX]-smoke.spec.ts` — e2e smoke covering the critical happy path of every new route and major UI interaction added in this phase; minimum one `test()` block per new page/feature — _Depends on:_ [F tasks that add routes or components]
+- [ ] `FT2` Unit tests for new utility functions, hooks, or pure-logic modules introduced in this phase — mark `n/a` and check off if no new testable utilities were added — _Depends on:_ —
+
 ### Infra
 - [ ] `I1` [task] — _Depends on:_ —
-
-<!-- Test execution is governed by `## Gate Checks` below + docs/STACK.md § Gate Commands.
-     Do not duplicate that list here. -->
 
 ---
 
@@ -116,6 +119,10 @@ Use the commands in [docs/STACK.md](./STACK.md#gate-commands) as the source of t
 - e2e (if an e2e suite exists)
 - the default smoke check
 
+**Frontend test coverage check (hard requirement):** before the gate can pass, confirm one of the following:
+- `FT1` checkbox is checked — `frontend/tests/e2e/phase-[XX]-smoke.spec.ts` exists and all its tests are green in `pnpm test:e2e`; OR
+- `FT1` is explicitly deferred in Architect Review Notes with a written justification (e.g. "phase adds no new routes or UI interactions").
+
 If this phase needs a custom smoke target or other phase-specific note, record it here:
 
 ```bash
@@ -148,6 +155,7 @@ feat(phase-[XX]): [short description — what was built, not how]
 ## Post-Phase Checklist
 
 - [ ] All Scope checkboxes checked (or deferred in Architect Review Notes)
+- [ ] `FT1` checked — `frontend/tests/e2e/phase-[XX]-smoke.spec.ts` exists, or deferral documented in Architect Review Notes
 - [ ] `docs/PHASE_[XX]_NOTES.md` complete — Implementation Plans filled, key decisions recorded
 - [ ] All automated gate checks green
 - [ ] All architect review notes resolved

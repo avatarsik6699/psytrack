@@ -1,8 +1,9 @@
-from datetime import datetime, timezone
+from datetime import UTC, datetime, timedelta, timezone
 from uuid import UUID
 
 from sqlalchemy import func, select
 from sqlalchemy.ext.asyncio import AsyncSession
+from sqlalchemy.orm import selectinload
 
 from app.modules.patients.color_service import ColorInputs
 from app.modules.patients.models import Patient
@@ -146,3 +147,79 @@ class PatientRepository:
             response_threshold_abs=response_threshold_abs,
             improvement_direction=improvement_direction,
         )
+
+    async def compute_adherence_percent(self, patient_id: UUID) -> float | None:
+        from app.modules.events.models import EventLog
+
+        window = datetime.now(UTC) - timedelta(days=30)
+        taken: int = (
+            await self._session.scalar(
+                select(func.count()).select_from(EventLog).where(
+                    EventLog.patient_id == patient_id,
+                    EventLog.event_type == "dose_taken",
+                    EventLog.occurred_at >= window,
+                )
+            )
+        ) or 0
+        missed: int = (
+            await self._session.scalar(
+                select(func.count()).select_from(EventLog).where(
+                    EventLog.patient_id == patient_id,
+                    EventLog.event_type == "dose_missed",
+                    EventLog.occurred_at >= window,
+                )
+            )
+        ) or 0
+        total = taken + missed
+        if total == 0:
+            return None
+        return round(taken / total * 100, 1)
+
+    async def get_latest_scores(self, patient_id: UUID) -> list[dict]:
+        from app.modules.scales.models import TestCompletion
+        from app.modules.scales.severity import compute_severity_label
+
+        rows = await self._session.scalars(
+            select(TestCompletion)
+            .where(TestCompletion.patient_id == patient_id)
+            .options(selectinload(TestCompletion.scale))
+            .order_by(TestCompletion.completed_at.desc())
+        )
+        seen: set = set()
+        result: list[dict] = []
+        for tc in rows:
+            if tc.scale_id not in seen:
+                seen.add(tc.scale_id)
+                result.append(
+                    {
+                        "scale_code": tc.scale.code,
+                        "scale_name": tc.scale.name,
+                        "score": tc.score,
+                        "severity_label": compute_severity_label(tc.scale.code, tc.score),
+                    }
+                )
+        return result
+
+    async def get_active_medications_summary(self, patient_id: UUID) -> list[dict]:
+        import datetime as dt
+
+        from app.modules.medications.models import PatientMedication
+
+        rows = await self._session.scalars(
+            select(PatientMedication)
+            .where(
+                PatientMedication.patient_id == patient_id,
+                (PatientMedication.ended_at.is_(None))
+                | (PatientMedication.ended_at > dt.date.today()),
+            )
+            .options(selectinload(PatientMedication.medication))
+        )
+        return [
+            {
+                "inn": pm.medication.inn,
+                "dose_mg": float(pm.dose_mg) if pm.dose_mg is not None else None,
+                "unit": pm.unit,
+                "frequency": pm.frequency,
+            }
+            for pm in rows
+        ]

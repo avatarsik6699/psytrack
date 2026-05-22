@@ -53,6 +53,12 @@ All frontend TypeScript types that mirror API contracts (request bodies, respons
 3. **Use `*Create` / `*Update` schemas for mutation inputs**, not `Partial<*Out>`. The backend exposes dedicated input schemas (e.g. `PatientCreate`, `DiagnosisUpdate`) — prefer these over structural derivations from output types.
 4. **`schema.ts` is not hand-edited.** Treat it like a compiled artefact. Any manual edit will be overwritten on the next `generate:api` run.
 5. **`generate:api` is a gate check.** The gate will fail type-check if `schema.ts` is stale and a component uses a type that no longer matches the backend.
+6. **`api.rawGet` / `api.rawPost` / `api.rawPatch` are forbidden.** These methods bypass schema-driven type safety and do not exist on the `api` object. If a path is missing from `schema.ts`, the fix is to run `pnpm generate:api`, not to use raw escape hatches. For endpoints with path parameters use `params.path`:
+   ```typescript
+   api.get('/api/v1/doctor/patients/{patient_id}/goals', {
+     params: { path: { patient_id: patientId } },
+   })
+   ```
 
 Forgetting to run `generate:api` after an API change is the #1 source of "works locally but type-checks fail" failures. See `docs/KNOWN_GOTCHAS.md` for the symptoms and fix.
 

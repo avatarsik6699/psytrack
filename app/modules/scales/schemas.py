@@ -61,3 +61,19 @@ class TestCompletionOut(BaseModel):
 class TestCompletionPage(BaseModel):
     items: list[TestCompletionOut]
     total: int
+
+
+class ScoreChartPoint(BaseModel):
+    completed_at: datetime
+    score: int
+    baseline: bool
+
+
+class ScoreChartSeries(BaseModel):
+    scale_id: UUID
+    scale_code: str
+    scale_name: str
+    score_min: int
+    score_max: int
+    improvement_direction: str | None
+    points: list[ScoreChartPoint]

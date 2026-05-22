@@ -47,7 +47,7 @@ async def get_patient(
 ) -> PatientOut:
     profile = await doctor_service.get_for_user(current_user.id)
     patient = await patient_service.get_for_doctor(patient_id, profile.id)
-    return PatientOut.model_validate(patient)
+    return await patient_service._build_with_extras(patient)
 
 
 @router.patch("/{patient_id}", response_model=PatientOut)

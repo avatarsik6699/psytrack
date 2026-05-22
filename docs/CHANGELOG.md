@@ -6,6 +6,45 @@
 
 ---
 
+## 2026-05-18 — Phase 07 complete
+
+**Type**: phase-completion
+**Author**: AI (context-update)
+**Triggered by**: PHASE_07 gate passed and committed
+
+### Changes
+- `therapy_goals` table added (Alembic migration `0009_therapy_goals`): stores per-patient therapy goals with `description`, `is_completed`, and `created_at`
+- `TherapyGoal` ORM model + `TherapyGoalOut` Pydantic schema in `app/modules/therapy_goals/`
+- `GET /api/v1/doctor/patients/{id}/charts/scores`: returns `ScoreChartSeries[]` — one series per assigned scale with `scoreMin`, `scoreMax`, `improvementDirection`, and time-series `points` (score + baseline flag + ISO timestamp)
+- Therapy goals CRUD: `GET/POST /doctor/patients/{id}/goals`, `PATCH /doctor/patients/{id}/goals/{gid}`
+- `PatientOut` extended (B3) with three computed fields: `adherencePercent: float | null` (30-day event_log window), `latestScores: ScoreSnapshot[]` (latest score per active scale with severity label), `activeMedicationsSummary: MedSummary[]` (active patient_medications rows)
+- Frontend `ScoreChart` (Recharts `LineChart`, multi-series: PHQ-9 teal, GAD-7 purple, YMRS amber; dot markers; weekly x-axis; delta chip)
+- Frontend `AssessmentResultsTable` (DATE / TEST / SCORE / INTERPRETATION severity badge / Δ)
+- Frontend `PatientHeader` (colored-initials avatar, severity badge pills, adherence %, card-color status chip, active medication chips, action buttons)
+- Frontend `DiagnosisTabSwitcher` (one tab per patient diagnosis)
+- Frontend `TherapyGoals` sidebar panel (checkbox list, teal progress bar, PATCH on toggle)
+- Full `/doctor/patients/:id` detail page composed of PatientHeader, DiagnosisTabSwitcher, ScoreChart, MedicationChart, SEChart, EventTimeline, TherapyGoals, and right-sidebar panels
+- `PatientCard` roster enhancements: PHQ-9/GAD-7 score+severity pills, adherence color progress bar, active medication chips, list/grid toggle
+- `app/modules/scales/charts.py`: score chart service and router
+- `app/modules/scales/severity.py`: severity label mapping utility
+- E2e smoke test `frontend/tests/e2e/phase-07-smoke.spec.ts` covering critical path
+- Unit tests for score utilities (`frontend/tests/score-utils.test.ts`): severity label mapping, delta computation, week-label formatter
+
+### Affected Phases
+- None (additive change)
+
+### Contract Updates
+- DB tables added: `therapy_goals`; Alembic head: `0009_therapy_goals`
+- Endpoints added: `GET /api/v1/doctor/patients/{id}/charts/scores`, `GET /api/v1/doctor/patients/{id}/goals`, `POST /api/v1/doctor/patients/{id}/goals`, `PATCH /api/v1/doctor/patients/{id}/goals/{gid}`
+- Endpoint modified: `GET /api/v1/doctor/patients` and `GET /api/v1/doctor/patients/{id}` — `PatientOut` extended with `adherencePercent`, `latestScores`, `activeMedicationsSummary`
+- TypeScript types added: `TherapyGoalOut`, `ScoreChartPoint`, `ScoreChartSeries`, `ScoreSnapshot`, `MedSummary`
+- No new env vars
+
+### Notes
+Score chart series carry `scoreMin`/`scoreMax`/`improvementDirection` directly so the frontend can render correct axis bounds and delta-arrow direction without re-fetching the scale reference. `PatientOut` B3 fields are computed on the fly from `event_log` and `patient_medications` — no denormalized columns added. Adherence is a 30-day rolling window counting `dose_taken` events against expected dose frequency. Severity labels ("Minimal"/"Mild"/"Moderate"/"Mod. Severe"/"Severe") are derived from per-scale thresholds in `app/modules/scales/severity.py`.
+
+---
+
 ## 2026-05-18 — Phase 06 complete
 
 **Type**: phase-completion
