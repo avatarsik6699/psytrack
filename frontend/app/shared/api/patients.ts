@@ -62,3 +62,12 @@ export function useArchivePatientMutation(id: string) {
 		},
 	});
 }
+
+export function useResetPatientCredentialsMutation(patientId: string) {
+	return useMutation({
+		mutationFn: () =>
+			api.post('/api/v1/doctor/patients/{patient_id}/credentials/reset', {
+				params: { path: { patient_id: patientId } },
+			}),
+	});
+}

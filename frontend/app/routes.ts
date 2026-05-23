@@ -18,5 +18,6 @@ export default [
 	layout('./layouts/doctor-layout.tsx', [
 		route('doctor', './routes/doctor/index.tsx'),
 		route('doctor/patients/:id', './routes/doctor/patient-detail.tsx'),
+		route('doctor/profile', './routes/doctor/profile.tsx'),
 	]),
 ];

@@ -3,6 +3,7 @@ from fastapi import APIRouter, Depends, status
 from app.modules.auth.dependencies import get_auth_service, get_current_user
 from app.modules.auth.schemas import (
     AccountDeletionResponse,
+    CurrentSessionOut,
     EmailUpdateIn,
     LoginRequest,
     PasswordChangeRequest,
@@ -47,6 +48,14 @@ async def patient_login(
     service: AuthService = Depends(get_auth_service),
 ) -> TokenPair:
     return await service.patient_login(body.temp_login, body.password)
+
+
+@router.get("/session", response_model=CurrentSessionOut)
+async def session(
+    current_user: User = Depends(get_current_user),
+    service: AuthService = Depends(get_auth_service),
+) -> CurrentSessionOut:
+    return await service.current_session(current_user)
 
 
 @router.patch("/me/email", status_code=status.HTTP_200_OK)

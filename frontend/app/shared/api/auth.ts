@@ -29,6 +29,16 @@ export function useMe() {
 	});
 }
 
+export function useCurrentSession() {
+	const { data: token } = useAuthToken();
+
+	return useQuery({
+		queryKey: authQueryKeys.session,
+		enabled: Boolean(token?.access_token),
+		queryFn: () => api.get('/api/v1/public/auth/session'),
+	});
+}
+
 export function useLoginMutation() {
 	const queryClient = useQueryClient();
 
@@ -38,6 +48,7 @@ export function useLoginMutation() {
 		onSuccess: tokens => {
 			jwtService.set(queryClient, tokens);
 			queryClient.invalidateQueries({ queryKey: authQueryKeys.me });
+			queryClient.invalidateQueries({ queryKey: authQueryKeys.session });
 		},
 	});
 }
@@ -51,6 +62,7 @@ export function useRegisterMutation() {
 		onSuccess: tokens => {
 			jwtService.set(queryClient, tokens);
 			queryClient.invalidateQueries({ queryKey: authQueryKeys.me });
+			queryClient.invalidateQueries({ queryKey: authQueryKeys.session });
 		},
 	});
 }
@@ -64,6 +76,7 @@ export function usePatientLoginMutation() {
 		onSuccess: tokens => {
 			jwtService.set(queryClient, tokens);
 			queryClient.invalidateQueries({ queryKey: authQueryKeys.me });
+			queryClient.invalidateQueries({ queryKey: authQueryKeys.session });
 		},
 	});
 }
@@ -77,6 +90,7 @@ export function useRefreshMutation() {
 		onSuccess: tokens => {
 			jwtService.set(queryClient, tokens);
 			queryClient.invalidateQueries({ queryKey: authQueryKeys.me });
+			queryClient.invalidateQueries({ queryKey: authQueryKeys.session });
 		},
 	});
 }
@@ -89,6 +103,7 @@ export function useLogoutMutation() {
 		onSettled: () => {
 			jwtService.set(queryClient, null);
 			queryClient.removeQueries({ queryKey: authQueryKeys.me });
+			queryClient.removeQueries({ queryKey: authQueryKeys.session });
 		},
 	});
 }

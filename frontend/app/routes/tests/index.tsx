@@ -1,4 +1,5 @@
 import React from 'react';
+import { useTranslation } from 'react-i18next';
 
 import { useMyAssignedScales } from '@shared/api/scales';
 import { usePatientTasks } from '@shared/api/tasks';
@@ -13,6 +14,7 @@ export function meta() {
 }
 
 const TestsPage: React.FC = () => {
+	const { t } = useTranslation('common');
 	const scalesQuery = useMyAssignedScales();
 	const tasksQuery = usePatientTasks();
 
@@ -23,7 +25,7 @@ const TestsPage: React.FC = () => {
 	);
 
 	if (scalesQuery.isLoading) {
-		return <div className='p-6 text-sm text-muted-foreground'>Загрузка…</div>;
+		return <div className='p-6 text-sm text-muted-foreground'>{t('loading')}</div>;
 	}
 
 	const scales = (scalesQuery.data ?? []) as PatientScaleOut[];
@@ -31,11 +33,11 @@ const TestsPage: React.FC = () => {
 	return (
 		<div className='p-6 space-y-4'>
 			<div>
-				<h1 className='text-lg font-semibold'>Тесты</h1>
-				<p className='text-sm text-muted-foreground'>Опросники, назначенные врачом</p>
+				<h1 className='text-lg font-semibold'>{t('nav.tests')}</h1>
+				<p className='text-sm text-muted-foreground'>{t('patientPortal.testsSubtitle')}</p>
 			</div>
 
-			{scales.length === 0 && <p className='text-sm text-muted-foreground'>Нет назначенных тестов.</p>}
+			{scales.length === 0 && <p className='text-sm text-muted-foreground'>{t('patientPortal.noTests')}</p>}
 
 			<div className='space-y-3'>
 				{scales.map(ps => (

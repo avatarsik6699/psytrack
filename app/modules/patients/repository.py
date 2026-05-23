@@ -1,4 +1,4 @@
-from datetime import UTC, datetime, timedelta, timezone
+from datetime import UTC, datetime, timedelta
 from uuid import UUID
 
 from sqlalchemy import func, select
@@ -15,8 +15,18 @@ class PatientRepository:
 
     async def get_by_temp_login(self, temp_login: str) -> Patient | None:
         return await self._session.scalar(
-            select(Patient).where(Patient.temp_login == temp_login)
+            select(Patient).where(func.lower(Patient.temp_login) == temp_login.lower())
         )
+
+    async def find_by_temp_login(
+        self,
+        temp_login: str,
+        exclude_patient_id: UUID | None = None,
+    ) -> Patient | None:
+        stmt = select(Patient).where(func.lower(Patient.temp_login) == temp_login.lower())
+        if exclude_patient_id is not None:
+            stmt = stmt.where(Patient.id != exclude_patient_id)
+        return await self._session.scalar(stmt)
 
     async def add(self, patient: Patient) -> Patient:
         self._session.add(patient)
@@ -72,7 +82,7 @@ class PatientRepository:
                 therapy_start_date.year,
                 therapy_start_date.month,
                 therapy_start_date.day,
-                tzinfo=timezone.utc,
+                tzinfo=UTC,
             )
 
         # Primary diagnosis ICD code
@@ -207,6 +217,7 @@ class PatientRepository:
             select(
                 Patient.id,
                 Patient.full_name,
+                Patient.temp_login,
                 Patient.email,
                 Patient.email_verified,
                 Patient.onboarding_complete,
@@ -222,6 +233,7 @@ class PatientRepository:
         return {
             "id": r.id,
             "full_name": r.full_name,
+            "temp_login": r.temp_login,
             "email": r.email,
             "email_verified": r.email_verified,
             "onboarding_complete": r.onboarding_complete,

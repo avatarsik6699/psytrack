@@ -1,7 +1,7 @@
 import HomePage from '@pages/home';
 
 export function meta() {
-	return [{ title: 'Template App' }, { name: 'description', content: 'Reusable FastAPI + React Router SSR template.' }];
+	return [{ title: 'PsychTrack' }, { name: 'description', content: 'Кабинет клинического мониторинга.' }];
 }
 
 export default function HomeRoute() {

@@ -34,7 +34,7 @@ export function RegisterForm() {
 	return (
 		<form className='grid gap-4' onSubmit={onSubmit}>
 			<div className='grid gap-1.5'>
-				<Label htmlFor='register-full-name'>Full name</Label>
+				<Label htmlFor='register-full-name'>{t('register.fullName')}</Label>
 				<Input
 					id='register-full-name'
 					type='text'
@@ -64,12 +64,12 @@ export function RegisterForm() {
 					required
 				/>
 			</div>
-			<label className='flex items-start gap-2 text-sm'>
+			<label className='flex items-start gap-2 text-sm cursor-pointer'>
 				<input
-					className='mt-1'
 					type='checkbox'
 					checked={consent}
 					onChange={event => setConsent(event.target.checked)}
+					className='mt-1 accent-docassist-primary'
 				/>
 				<span>{t('register.consent')}</span>
 			</label>

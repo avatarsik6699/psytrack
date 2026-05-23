@@ -2,7 +2,7 @@ from datetime import date, datetime
 from typing import Literal
 from uuid import UUID
 
-from pydantic import BaseModel, ConfigDict
+from pydantic import BaseModel, ConfigDict, Field, model_validator
 
 
 class ScoreSnapshot(BaseModel):
@@ -62,8 +62,29 @@ class PatientMeOut(BaseModel):
 
     id: UUID
     full_name: str
+    temp_login: str | None
     email: str | None
     email_verified: bool
     onboarding_complete: bool
     doctor_full_name: str
     doctor_specialty: str | None
+
+
+class PatientCredentialUpdateIn(BaseModel):
+    current_password: str
+    new_login: str | None = Field(default=None, min_length=3, max_length=50)
+    new_password: str | None = Field(default=None, min_length=8, max_length=128)
+
+    @model_validator(mode="after")
+    def require_change(self) -> "PatientCredentialUpdateIn":
+        if self.new_login is None and self.new_password is None:
+            raise ValueError("new_login or new_password is required")
+        return self
+
+
+class PatientCredentialOut(BaseModel):
+    temp_login: str
+
+
+class PatientCredentialResetOut(PatientCredentialOut):
+    temp_password: str

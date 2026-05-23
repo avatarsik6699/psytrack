@@ -23,7 +23,7 @@ export const DiagnosisTabSwitcher: React.FC<Props> = props => {
 						'px-3 py-1 rounded-full text-xs font-medium border transition-colors',
 						props.activeId === d.id
 							? 'bg-primary text-primary-foreground border-primary'
-							: 'bg-white text-gray-600 border-border hover:bg-gray-50',
+							: 'bg-background text-muted-foreground border-border hover:bg-muted',
 					].join(' ')}
 				>
 					{d.icd_code} — {d.name}

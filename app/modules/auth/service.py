@@ -3,7 +3,7 @@ from uuid import UUID
 
 from app.modules.auth.constants import JWT_CLAIM_ROLE, JWT_CLAIM_SUBJECT, TOKEN_TYPE_REFRESH
 from app.modules.auth.exceptions import AccountDisabled, InvalidCredentials, InvalidToken
-from app.modules.auth.schemas import TokenPair
+from app.modules.auth.schemas import CurrentSessionOut, TokenPair
 from app.modules.auth.utils import (
     create_access_token,
     create_refresh_token,
@@ -103,6 +103,28 @@ class AuthService:
         return TokenPair(
             access_token=create_access_token(claims),
             refresh_token=create_refresh_token(claims),
+        )
+
+    async def current_session(self, user: User) -> CurrentSessionOut:
+        if user.role == UserRole.doctor:
+            profile = await self._doctor_repository.get_by_user_id(user.id)
+            return CurrentSessionOut(
+                user_id=user.id,
+                role=user.role,
+                email=user.email,
+                display_name=profile.full_name if profile is not None else None,
+                specialty=profile.specialty if profile is not None else None,
+                doctor_id=profile.id if profile is not None else None,
+            )
+
+        patient = await self._patient_repository.get_by_user_id(user.id)
+        return CurrentSessionOut(
+            user_id=user.id,
+            role=user.role,
+            email=patient.email if patient is not None else user.email,
+            display_name=patient.full_name if patient is not None else None,
+            patient_id=patient.id if patient is not None else None,
+            doctor_id=patient.doctor_id if patient is not None else None,
         )
 
     async def change_password(self, user: User, current: str, new: str) -> None:

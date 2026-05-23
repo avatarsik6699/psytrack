@@ -1,8 +1,13 @@
 import { useQuery } from '@tanstack/react-query';
 import React, { useState } from 'react';
+import { useTranslation } from 'react-i18next';
 
 import { api } from '@shared/api/client';
 import { useAddSeRuleMutation, useDeleteSeRuleMutation, useSeDictionary } from '@shared/api/side-effects';
+
+import { Button } from '@/components/ui/button';
+import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog';
+import { Input } from '@/components/ui/input';
 
 type SeDictionaryItem = {
 	id: string;
@@ -25,6 +30,7 @@ type Props = {
 };
 
 export const SEMonitoringModal: React.FC<Props> = props => {
+	const { t } = useTranslation('common');
 	const [searchQ, setSearchQ] = useState('');
 	const [selectedSeId, setSelectedSeId] = useState('');
 	const [frequencyDays, setFrequencyDays] = useState('');
@@ -60,25 +66,22 @@ export const SEMonitoringModal: React.FC<Props> = props => {
 					setSelectedSeId('');
 					setSearchQ('');
 					setFrequencyDays('');
-					rulesQuery.refetch();
+					void rulesQuery.refetch();
 				},
 			}
 		);
 	};
 
 	return (
-		<div className='fixed inset-0 z-50 flex items-center justify-center bg-black/40'>
-			<div className='bg-white rounded-lg shadow-lg w-full max-w-md p-6 space-y-4'>
-				<div className='flex justify-between items-center'>
-					<h2 className='font-semibold'>Мониторинг побочных эффектов</h2>
-					<button className='text-sm text-muted-foreground hover:text-foreground' onClick={props.onClose}>
-						✕
-					</button>
-				</div>
+		<Dialog open onOpenChange={open => { if (!open) props.onClose(); }}>
+			<DialogContent className='max-w-md space-y-4'>
+				<DialogHeader>
+					<DialogTitle>{t('seMonitoring.title')}</DialogTitle>
+				</DialogHeader>
 
 				<div>
-					<h3 className='text-xs font-medium text-muted-foreground mb-2'>Активные правила</h3>
-					{rules.length === 0 && <p className='text-xs text-muted-foreground'>Правила мониторинга не назначены.</p>}
+					<h3 className='text-xs font-medium text-muted-foreground mb-2'>{t('seMonitoring.activeRules')}</h3>
+					{rules.length === 0 && <p className='text-xs text-muted-foreground'>{t('seMonitoring.noRules')}</p>}
 					{rules.map(rule => (
 						<div
 							key={rule.id}
@@ -87,33 +90,36 @@ export const SEMonitoringModal: React.FC<Props> = props => {
 							<span>
 								{rule.se.name_ru}
 								{rule.frequency_days && (
-									<span className='text-xs text-muted-foreground ml-2'>каждые {rule.frequency_days} д.</span>
+									<span className='text-xs text-muted-foreground ml-2'>
+										{t('seMonitoring.everyDays', { days: rule.frequency_days })}
+									</span>
 								)}
 							</span>
-							<button
-								className='text-xs text-red-500 hover:underline disabled:opacity-40'
+							<Button
+								variant='ghost'
+								size='xs'
+								className='text-destructive hover:text-destructive'
 								disabled={deleteMutation.isPending}
-								onClick={() => deleteMutation.mutate(rule.id, { onSuccess: () => rulesQuery.refetch() })}
+								onClick={() => deleteMutation.mutate(rule.id, { onSuccess: () => void rulesQuery.refetch() })}
 							>
-								Удалить
-							</button>
+								{t('seMonitoring.delete')}
+							</Button>
 						</div>
 					))}
 				</div>
 
 				<form onSubmit={handleAdd} className='space-y-3 border-t border-border pt-3'>
-					<h3 className='text-xs font-medium text-muted-foreground'>Добавить правило</h3>
+					<h3 className='text-xs font-medium text-muted-foreground'>{t('seMonitoring.addRule')}</h3>
 
-					<div>
-						<input
+					<div className='relative'>
+						<Input
 							type='text'
-							placeholder='Поиск побочного эффекта…'
-							className='w-full border border-border rounded px-2 py-1 text-sm'
+							placeholder={t('seMonitoring.searchPlaceholder')}
 							value={searchQ}
 							onChange={e => setSearchQ(e.target.value)}
 						/>
 						{dictItems.length > 0 && (
-							<ul className='border border-border rounded mt-1 max-h-36 overflow-y-auto text-sm'>
+							<ul className='absolute z-10 w-full border border-border rounded-lg mt-1 max-h-36 overflow-y-auto bg-popover text-popover-foreground text-sm shadow-sm'>
 								{dictItems.map(item => (
 									<li
 										key={item.id}
@@ -131,30 +137,26 @@ export const SEMonitoringModal: React.FC<Props> = props => {
 					</div>
 
 					<div className='flex gap-2 items-center'>
-						<input
+						<Input
 							type='number'
 							min={1}
-							placeholder='Период (дней)'
-							className='border border-border rounded px-2 py-1 text-sm w-36'
+							placeholder={t('seMonitoring.periodPlaceholder')}
+							className='w-36'
 							value={frequencyDays}
 							onChange={e => setFrequencyDays(e.target.value)}
 						/>
-						<button
-							type='submit'
-							disabled={addMutation.isPending || !selectedSeId}
-							className='text-xs bg-primary text-primary-foreground rounded px-3 py-1.5 disabled:opacity-40'
-						>
-							{addMutation.isPending ? 'Добавление…' : 'Добавить'}
-						</button>
+						<Button type='submit' size='sm' disabled={addMutation.isPending || !selectedSeId}>
+							{addMutation.isPending ? t('seMonitoring.adding') : t('seMonitoring.add')}
+						</Button>
 					</div>
 				</form>
 
 				<div className='flex justify-end'>
-					<button className='text-sm text-muted-foreground hover:underline' onClick={props.onClose}>
-						Закрыть
-					</button>
+					<Button variant='ghost' size='sm' onClick={props.onClose}>
+						{t('seMonitoring.close')}
+					</Button>
 				</div>
-			</div>
-		</div>
+			</DialogContent>
+		</Dialog>
 	);
 };

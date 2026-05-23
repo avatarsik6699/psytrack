@@ -121,6 +121,9 @@
   --sidebar-accent-foreground: oklch(0.985 0 0);
   --sidebar-border: oklch(1 0 0 / 10%);
   --sidebar-ring: oklch(0.556 0 0);
+  --primary: var(--docassist-primary);
+  --primary-foreground: oklch(1 0 0);
+  --ring: var(--docassist-primary);
 }
 
 @theme inline {

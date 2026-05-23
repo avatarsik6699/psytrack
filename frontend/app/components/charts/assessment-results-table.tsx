@@ -14,7 +14,7 @@ const SEVERITY_COLOR: Record<string, string> = {
 	Moderate: 'bg-orange-100 text-orange-800',
 	'Mod. Severe': 'bg-red-100 text-red-700',
 	Severe: 'bg-red-200 text-red-900',
-	'N/A': 'bg-gray-100 text-gray-600',
+	'N/A': 'bg-muted text-muted-foreground',
 };
 
 type Row = {
@@ -59,7 +59,7 @@ export const AssessmentResultsTable: React.FC<Props> = props => {
 				<tbody>
 					{rows.map((r, i) => (
 						<tr key={i} className='border-b border-border last:border-0'>
-							<td className='py-1.5 pr-3 text-gray-500'>{formatWeekLabel(r.date)}</td>
+							<td className='py-1.5 pr-3 text-muted-foreground'>{formatWeekLabel(r.date)}</td>
 							<td className='py-1.5 pr-3 font-medium'>{r.scaleCode}</td>
 							<td className='py-1.5 pr-3'>{r.score}</td>
 							<td className='py-1.5 pr-3'>
@@ -71,11 +71,11 @@ export const AssessmentResultsTable: React.FC<Props> = props => {
 							</td>
 							<td className='py-1.5'>
 								{r.delta !== null ? (
-									<span className={r.delta < 0 ? 'text-green-600' : r.delta > 0 ? 'text-red-500' : 'text-gray-500'}>
+									<span className={r.delta < 0 ? 'text-green-600' : r.delta > 0 ? 'text-red-500' : 'text-muted-foreground'}>
 										{r.delta > 0 ? `↑${r.delta}` : r.delta < 0 ? `↓${Math.abs(r.delta)}` : '—'}
 									</span>
 								) : (
-									<span className='text-gray-400'>baseline</span>
+									<span className='text-muted-foreground'>baseline</span>
 								)}
 							</td>
 						</tr>

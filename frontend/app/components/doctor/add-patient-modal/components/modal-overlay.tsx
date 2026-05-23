@@ -1,5 +1,7 @@
 import React from 'react';
 
+import { Dialog, DialogContent } from '@/components/ui/dialog';
+
 type Props = {
 	onClose?: () => void;
 	children: React.ReactNode;
@@ -7,10 +9,8 @@ type Props = {
 
 export const ModalOverlay: React.FC<Props> = props => {
 	return (
-		<div className='fixed inset-0 bg-black/40 flex items-center justify-center z-50' onClick={props.onClose}>
-			<div className='bg-white rounded-xl p-6 shadow-lg w-[400px]' onClick={e => e.stopPropagation()}>
-				{props.children}
-			</div>
-		</div>
+		<Dialog open onOpenChange={open => { if (!open && props.onClose) props.onClose(); }}>
+			<DialogContent className='max-w-100'>{props.children}</DialogContent>
+		</Dialog>
 	);
 };

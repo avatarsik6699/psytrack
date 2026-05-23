@@ -1,8 +1,11 @@
 import { Archive, Pencil } from 'lucide-react';
 import React from 'react';
+import { useTranslation } from 'react-i18next';
 
 import { date } from '@shared/lib/date';
 import type { components } from '@shared/types/schema';
+
+import { Button } from '@/components/ui/button';
 
 type PatientOut = components['schemas']['PatientOut'];
 type DiagnosisOut = components['schemas']['DiagnosisOut'];
@@ -11,13 +14,6 @@ type PatientOutExtended = PatientOut & {
 	adherence_percent?: number | null;
 	latest_scores?: { scale_code: string; score: number; severity_label: string }[];
 	active_medications_summary?: { inn: string; dose_mg: number | null; unit: string | null }[];
-};
-
-const STATUS_LABEL: Record<PatientOut['card_color'], string> = {
-	red: 'Критический',
-	yellow: 'Внимание',
-	green: 'Стабильно',
-	gray: 'Нет данных',
 };
 
 const STATUS_BADGE: Record<PatientOut['card_color'], string> = {
@@ -31,12 +27,12 @@ const AVATAR_BG: Record<PatientOut['card_color'], string> = {
 	red: 'bg-rose-200 text-rose-700',
 	yellow: 'bg-amber-200 text-amber-700',
 	green: 'bg-teal-200 text-teal-700',
-	gray: 'bg-gray-200 text-gray-600',
+	gray: 'bg-muted text-muted-foreground',
 };
 
-function genderRu(gender: string | null): string {
-	if (gender === 'male' || gender === 'Male' || gender === 'М') return 'Мужской';
-	if (gender === 'female' || gender === 'Female' || gender === 'Ж') return 'Женский';
+function genderLabel(gender: string | null, t: (key: string) => string): string {
+	if (gender === 'male' || gender === 'Male' || gender === 'М') return t('gender.male');
+	if (gender === 'female' || gender === 'Female' || gender === 'Ж') return t('gender.female');
 	return gender ?? '';
 }
 
@@ -48,6 +44,7 @@ type Props = {
 };
 
 export const PatientHeader: React.FC<Props> = props => {
+	const { t } = useTranslation('common');
 	const initials = props.patient.full_name
 		.split(' ')
 		.map(w => w[0] ?? '')
@@ -56,8 +53,13 @@ export const PatientHeader: React.FC<Props> = props => {
 		.toUpperCase();
 
 	const age = date.ageLabel(props.patient.birth_date);
-	const gender = genderRu(props.patient.gender);
-	const statusLabel = STATUS_LABEL[props.patient.card_color];
+	const gender = genderLabel(props.patient.gender, t);
+	const statusLabel = {
+		red: t('status.critical'),
+		yellow: t('status.warning'),
+		green: t('status.stable'),
+		gray: t('status.none'),
+	}[props.patient.card_color];
 	const badgeClass = STATUS_BADGE[props.patient.card_color];
 	const avatarClass = AVATAR_BG[props.patient.card_color];
 	const diagnoses = props.diagnoses ?? [];
@@ -72,7 +74,7 @@ export const PatientHeader: React.FC<Props> = props => {
 				</div>
 
 				<div>
-					<h1 className='text-xl font-bold text-gray-900 leading-tight'>{props.patient.full_name}</h1>
+					<h1 className='text-xl font-bold text-foreground leading-tight'>{props.patient.full_name}</h1>
 					<div className='flex flex-wrap items-center gap-2 mt-1'>
 						{(age || gender) && (
 							<span className='text-sm text-muted-foreground'>{[age, gender].filter(Boolean).join(' · ')}</span>
@@ -94,21 +96,15 @@ export const PatientHeader: React.FC<Props> = props => {
 			</div>
 
 			<div className='flex items-center gap-2 shrink-0'>
-				<button
-					className='flex items-center gap-1.5 px-3 py-1.5 text-sm border border-border rounded-lg hover:bg-muted transition-colors'
-					onClick={props.onEdit}
-				>
+				<Button variant='outline' size='sm' onClick={props.onEdit}>
 					<Pencil size={13} />
-					Редактировать
-				</button>
+					{t('actions.edit')}
+				</Button>
 				{!props.patient.archived_at && (
-					<button
-						className='flex items-center gap-1.5 px-3 py-1.5 text-sm border border-border rounded-lg hover:bg-muted transition-colors'
-						onClick={props.onArchive}
-					>
+					<Button variant='outline' size='sm' onClick={props.onArchive}>
 						<Archive size={13} />
-						Архив
-					</button>
+						{t('actions.archive')}
+					</Button>
 				)}
 			</div>
 		</div>

@@ -1,9 +1,13 @@
 import React, { useMemo, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 
 import { usePatients } from '@shared/api/patients';
 import { useRouter } from '@shared/hooks/use-router';
 import { date } from '@shared/lib/date';
 import type { components } from '@shared/types/schema';
+
+import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
 
 import { AddPatientModal } from '@/components/doctor/add-patient-modal';
 import { PatientCard } from '@/components/doctor/patient-card';
@@ -12,6 +16,7 @@ type PatientOut = components['schemas']['PatientOut'];
 type Filter = 'all' | 'attention';
 
 const DoctorIndexRoute: React.FC = () => {
+	const { t } = useTranslation('common');
 	const patientsQuery = usePatients();
 	const patients = (patientsQuery.data ?? []) as PatientOut[];
 	const [showAdd, setShowAdd] = useState(false);
@@ -42,22 +47,22 @@ const DoctorIndexRoute: React.FC = () => {
 	}, [patients, filter, search]);
 
 	if (patientsQuery.isLoading) {
-		return <div className='p-6 text-sm text-muted-foreground'>Загрузка…</div>;
+		return <div className='p-6 text-sm text-muted-foreground'>{t('loading')}</div>;
 	}
 
 	return (
 		<div className='p-6 max-w-3xl'>
 			<div className='flex items-start justify-between mb-5'>
 				<div>
-					<h1 className='text-2xl font-bold text-gray-900'>Пациенты</h1>
+					<h1 className='text-2xl font-bold text-foreground'>{t('doctorRoster.title')}</h1>
 					<p className='text-xs text-muted-foreground mt-0.5'>{date.formatDateRu(date.now())}</p>
 				</div>
-				<button
-					className='flex items-center gap-1.5 px-4 py-2 text-sm bg-docassist-primary text-white rounded-lg hover:bg-docassist-primary-hover transition-colors font-medium'
+				<Button
+					className='bg-docassist-primary text-white hover:bg-docassist-primary-hover'
 					onClick={() => setShowAdd(true)}
 				>
-					+ Добавить пациента
-				</button>
+					+ {t('actions.addPatient')}
+				</Button>
 			</div>
 
 			{patients.length > 0 && (
@@ -68,7 +73,7 @@ const DoctorIndexRoute: React.FC = () => {
 							onClick={() => setFilter(filter === 'all' ? 'attention' : 'all')}
 						>
 							<span className='w-1.5 h-1.5 rounded-full bg-status-critical' />
-							{summary.critical} критический
+							{summary.critical} {t('status.critical')}
 						</span>
 					)}
 					{summary.warning > 0 && (
@@ -77,19 +82,19 @@ const DoctorIndexRoute: React.FC = () => {
 							onClick={() => setFilter(filter === 'all' ? 'attention' : 'all')}
 						>
 							<span className='w-1.5 h-1.5 rounded-full bg-status-warning' />
-							{summary.warning} внимание
+							{summary.warning} {t('status.warning')}
 						</span>
 					)}
 					{summary.ok > 0 && (
 						<span className='flex items-center gap-1.5 text-xs px-2.5 py-1 rounded-full border text-status-ok-fg bg-status-ok-bg border-status-ok-bg'>
 							<span className='w-1.5 h-1.5 rounded-full bg-status-ok' />
-							{summary.ok} хорошо
+							{summary.ok} {t('status.ok')}
 						</span>
 					)}
 					{summary.none > 0 && (
 						<span className='flex items-center gap-1.5 text-xs px-2.5 py-1 rounded-full border text-status-none-fg bg-status-none-bg border-status-none-bg'>
 							<span className='w-1.5 h-1.5 rounded-full bg-status-none' />
-							{summary.none} без данных
+							{summary.none} {t('status.none')}
 						</span>
 					)}
 				</div>
@@ -101,33 +106,33 @@ const DoctorIndexRoute: React.FC = () => {
 						type='button'
 						onClick={() => setFilter('all')}
 						className={`px-3 py-1 text-xs rounded-md transition-colors font-medium ${
-							filter === 'all' ? 'bg-gray-900 text-white' : 'text-muted-foreground hover:text-foreground'
+							filter === 'all' ? 'bg-foreground text-background' : 'text-muted-foreground hover:text-foreground'
 						}`}
 					>
-						Все
+						{t('doctorRoster.all')}
 					</button>
 					<button
 						type='button'
 						onClick={() => setFilter('attention')}
 						className={`px-3 py-1 text-xs rounded-md transition-colors font-medium ${
-							filter === 'attention' ? 'bg-gray-900 text-white' : 'text-muted-foreground hover:text-foreground'
+							filter === 'attention' ? 'bg-foreground text-background' : 'text-muted-foreground hover:text-foreground'
 						}`}
 					>
-						Требуют внимания
+						{t('doctorRoster.attention')}
 					</button>
 				</div>
-				<input
+				<Input
 					type='text'
-					placeholder='Поиск по имени…'
+					placeholder={t('doctorRoster.search')}
 					value={search}
 					onChange={e => setSearch(e.target.value)}
-					className='flex-1 h-8 rounded-lg border border-border bg-background px-3 text-xs placeholder:text-muted-foreground focus:outline-none focus:ring-1 focus:ring-ring'
+					className='flex-1 h-8 text-xs'
 				/>
 			</div>
 
 			{displayed.length === 0 ? (
 				<p className='text-muted-foreground text-sm py-8 text-center'>
-					{patients.length === 0 ? 'Пациенты ещё не добавлены.' : 'Ничего не найдено.'}
+					{patients.length === 0 ? t('doctorRoster.empty') : t('doctorRoster.notFound')}
 				</p>
 			) : (
 				<div className='flex flex-col gap-3'>

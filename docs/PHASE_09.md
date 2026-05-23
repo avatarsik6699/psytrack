@@ -110,23 +110,23 @@ Explicitly out of scope:
 ## Scope
 
 ### Documentation / Audit
-- [ ] `T1` Create `docs/PHASE_09_DESIGN_AUDIT.md` with a per-route current-vs-target audit, mapping each public/patient/doctor route to provided references or derived-reference rules; include unresolved screenshot gaps for future design input — _Depends on:_ —
+- [x] `T1` Create `docs/PHASE_09_DESIGN_AUDIT.md` with a per-route current-vs-target audit, mapping each public/patient/doctor route to provided references or derived-reference rules; include unresolved screenshot gaps for future design input — _Depends on:_ —
 
 ### Backend / API
-- [ ] `B1` Patient credential and session contracts — add patient self-service login/password update, current-session metadata, generic login-unavailable errors, OpenAPI schemas, and focused backend tests; preserve current patient login/password auth and remove patient email/password login from MVP language — _Depends on:_ `T1`
-- [ ] `B2` Doctor patient credential reset — add doctor-only endpoint that generates a new patient login/password pair, replaces existing credentials, returns plaintext once, and is tested for doctor ownership boundaries — _Depends on:_ `B1`
+- [x] `B1` Patient credential and session contracts — add patient self-service login/password update, current-session metadata, generic login-unavailable errors, OpenAPI schemas, and focused backend tests; preserve current patient login/password auth and remove patient email/password login from MVP language — _Depends on:_ `T1`
+- [x] `B2` Doctor patient credential reset — add doctor-only endpoint that generates a new patient login/password pair, replaces existing credentials, returns plaintext once, and is tested for doctor ownership boundaries — _Depends on:_ `B1`
 
 ### Frontend
-- [ ] `F1` Global application chrome — align doctor, patient, and public auth layouts with Docassist sidebar/top-bar spacing, active states, badges, avatar blocks, typography, empty/loading/error states; place `LanguageSwitcher` and `ThemeToggle` visibly in role-aware navigation/account chrome with mobile-safe states; remove production artifacts listed above, including the top-bar doctor/patient switch, out-of-scope doctor nav links, and hardcoded identity data — _Depends on:_ `T1`
-- [ ] `F2` Public auth UX — redesign `/login` and `/register` for doctor login, patient login/password login, role switching between login form modes only, registration links, validation, loading, error, and redirect states; do not add patient email/password login; remove or strictly dev-guard visible demo credential helpers — _Depends on:_ `F1`, `B1`
-- [ ] `F3` Patient portal completion — reconcile `/dashboard`, `/tests`, `/assessment/:patientScaleId`, `/drugs`, `/side-effects`, `/profile`, and `/history` with patient-profile references and SPEC §5.1; use `patient-profile-page.png` for the canonical profile layout; finish real `/history`, patient credential forms, current-session panel, in-app notification placeholder, and task/test/medication/side-effect/success states — _Depends on:_ `F1`, `B1`
-- [ ] `F4` Doctor portal completion — reconcile `/doctor`, `/doctor/profile`, add-patient modal, and `/doctor/patients/:id` tabs with roster/detail/add-patient/profile references; use `doctor-profile-page.png` and `doctor-profile-page-dark.png` for profile light/dark states; add patient credential reset UX from `doctor-reset-login-pass-for-patient-page.png`; do not add `/doctor/settings` or `/doctor/schedule` routes in this phase — _Depends on:_ `F1`, `B2`
-- [ ] `F5` Design-system refactor — consolidate repeated page/card/status/control patterns into shared primitives where it reduces duplication; preserve `docs/FRONTEND_CONVENTIONS.md`, generated API types from `schema.ts`, typed router/search helpers, and no raw API escape hatches — _Depends on:_ `F2`, `F3`, `F4`
-- [ ] `F6` Responsive and accessibility pass — verify desktop/tablet/mobile states, WCAG 2.1 AA contrast, keyboard navigation, focus indicators, accessible names, and no text overlap/truncation in core workflows — _Depends on:_ `F5`
+- [x] `F1` Global application chrome — align doctor, patient, and public auth layouts with Docassist sidebar/top-bar spacing, active states, badges, avatar blocks, typography, empty/loading/error states; place `LanguageSwitcher` and `ThemeToggle` visibly in role-aware navigation/account chrome with mobile-safe states; remove production artifacts listed above, including the top-bar doctor/patient switch, out-of-scope doctor nav links, and hardcoded identity data — _Depends on:_ `T1`
+- [x] `F2` Public auth UX — redesign `/login` and `/register` for doctor login, patient login/password login, role switching between login form modes only, registration links, validation, loading, error, and redirect states; do not add patient email/password login; remove or strictly dev-guard visible demo credential helpers — _Depends on:_ `F1`, `B1`
+- [x] `F3` Patient portal completion — reconcile `/dashboard`, `/tests`, `/assessment/:patientScaleId`, `/drugs`, `/side-effects`, `/profile`, and `/history` with patient-profile references and SPEC §5.1; use `patient-profile-page.png` for the canonical profile layout; finish real `/history`, patient credential forms, current-session panel, in-app notification placeholder, and task/test/medication/side-effect/success states — _Depends on:_ `F1`, `B1`
+- [x] `F4` Doctor portal completion — reconcile `/doctor`, `/doctor/profile`, add-patient modal, and `/doctor/patients/:id` tabs with roster/detail/add-patient/profile references; use `doctor-profile-page.png` and `doctor-profile-page-dark.png` for profile light/dark states; add patient credential reset UX from `doctor-reset-login-pass-for-patient-page.png`; do not add `/doctor/settings` or `/doctor/schedule` routes in this phase — _Depends on:_ `F1`, `B2`
+- [x] `F5` Design-system refactor — consolidate repeated page/card/status/control patterns into shared primitives where it reduces duplication; preserve `docs/FRONTEND_CONVENTIONS.md`, generated API types from `schema.ts`, typed router/search helpers, and no raw API escape hatches — _Depends on:_ `F2`, `F3`, `F4`
+- [x] `F6` Responsive and accessibility pass — verify desktop/tablet/mobile states, WCAG 2.1 AA contrast, keyboard navigation, focus indicators, accessible names, and no text overlap/truncation in core workflows — _Depends on:_ `F5`
 
 ### Frontend Tests
-- [ ] `FT1` `frontend/tests/e2e/phase-09-smoke.spec.ts` — e2e smoke covering auth, patient portal, real history, patient credential profile controls, doctor roster/detail/profile, add-patient modal, doctor credential reset controls, language switcher, theme toggle, and responsive navigation; minimum one `test()` block per route group or major interaction — _Depends on:_ `F6`
-- [ ] `FT2` Unit tests for new utility functions, hooks, or pure-logic modules introduced in this phase; mark `n/a` and check off if no new testable utilities were added — _Depends on:_ `F5`
+- [x] `FT1` `frontend/tests/e2e/phase-09-smoke.spec.ts` — e2e smoke covering auth, patient portal, real history, patient credential profile controls, doctor roster/detail/profile, add-patient modal, doctor credential reset controls, language switcher, theme toggle, and responsive navigation; minimum one `test()` block per route group or major interaction — _Depends on:_ `F6`
+- [x] `FT2` Unit tests for new utility functions, hooks, or pure-logic modules introduced in this phase; n/a — no new pure utility modules were introduced — _Depends on:_ `F5`
 
 ---
 
@@ -307,10 +307,19 @@ Use this section after manual verification. Add one checkbox item per issue the 
 fixed before the phase can close. Leave the item unchecked while it is still open. Check it off
 only after the fix is implemented and re-verified.
 
-- [ ] Confirm SPEC v1.7 Phase 09 scope: patient login/password only, patient credential self-change,
+- [x] Confirm SPEC v1.7 Phase 09 scope: patient login/password only, patient credential self-change,
   `/doctor/profile`, doctor credential reset, real `/history`, in-app-only notification
   indicators, and removal of generated/demo artifacts marked **К удалению**.
 
+- [x] На данный момент есть проблемные места в отображении контента на frontend части. В шапке постоянно присутствуют кнопки для переключения языка и темы. Эти же компоненты дублируются в боковом меню. В спецификации и фазе было чётко зафксировано, что этот функционал должен быть в рамках настроек профиля. Убери дублирующиеся компоненты из шапки и бокового меню.
+
+- [x] На данный момент есть проблема с тем, что визуально дизайн в плане цветов, отступов, расположения некоторых элементов расходится с тем, что было представлено в дизайн референсах /home/niquetamerewsl/projects/patient_tracker/docs/assets. Также во многих частях приложения "захардкожены" английские и русские текста, то есть переключение языка никак не меняет текст, хотя он должен был поменяться. Также переключение между темной и светлой темой работает не до конца, какие то компоненты так и остаются светлыми, а какие-то темными, то есть функционал работает не полностью. Я хочу чтобы ты детально разобрался с этим и решил все эти проблемы. 
+
+- [x] На данный момент всё ещё есть проблемы с тем, что реализованные компоненты и дизайн система расходятся с тем, что представлено в качестве дизайн референсов в /home/niquetamerewsl/projects/patient_tracker/docs/assets. Я хочу чтобы ты детально изучил предоставленные дизайн референсы и скорректировал дизайн систему, компоненты. Также, по прежнему во многих местах используются сырые компоненты по типу <input/>, <button/>, списки и т.д. вместо того, чтобы использовать компоненты из shadcn и наши собственные переиспользуемые обертки из shared/ui, для избежания дублирования компонентов, разметки, предустановленного функционала и т.д.
+
+- [x] На данный момент на странице входа в систему /login в хедере присутствуют кнопки смена языка, темы. Я предлагаю убрать эти компоненты из хедера. Язык и тема должен определяться автоматически на основе метаданных клиента, который зашел в систему.
+
+- [] 
 ---
 
 ## Atomic Commit Message

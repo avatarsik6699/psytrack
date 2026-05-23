@@ -8,12 +8,16 @@ const languages = [
 	{ code: 'ru', label: 'RU' },
 ] as const;
 
-export const LanguageSwitcher: React.FC = () => {
+type Props = {
+	compact?: boolean;
+};
+
+export const LanguageSwitcher: React.FC<Props> = props => {
 	const i18nHook = useTranslation('common');
 
 	return (
 		<div className='flex items-center gap-2'>
-			<span className='text-xs text-muted-foreground'>{i18nHook.t('language')}</span>
+			{props.compact ? null : <span className='text-xs text-muted-foreground'>{i18nHook.t('language')}</span>}
 			<div className='inline-flex rounded-lg border border-border bg-background p-1'>
 				{languages.map(language => (
 					<Button

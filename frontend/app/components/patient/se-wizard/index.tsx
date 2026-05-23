@@ -23,7 +23,7 @@ export const SEWizard: React.FC<Props> = props => {
 
 	return (
 		<div className='fixed inset-0 z-50 flex items-start justify-center bg-black/40 p-4 overflow-y-auto'>
-			<div className='bg-white rounded-xl w-full max-w-lg mt-8 mb-8 shadow-xl'>
+			<div className='bg-card text-card-foreground rounded-xl w-full max-w-lg mt-8 mb-8 shadow-xl'>
 				{/* Header */}
 				<div className='flex items-center justify-between px-5 pt-5 pb-3 border-b border-border'>
 					<div>

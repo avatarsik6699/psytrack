@@ -1,7 +1,7 @@
 import LoginPage from '@pages/auth/login';
 
 export function meta() {
-	return [{ title: 'Login - Template App' }];
+	return [{ title: 'Вход — PsychTrack' }];
 }
 
 export default function LoginRoute() {

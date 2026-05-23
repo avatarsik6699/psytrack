@@ -54,34 +54,41 @@ export function LoginForm() {
 
 	return (
 		<form className='grid gap-4' onSubmit={onSubmit}>
-			<div className='flex gap-2 text-xs'>
+			<div className='grid grid-cols-2 rounded-lg border border-border bg-background p-1 text-sm'>
 				<button
 					type='button'
 					onClick={() => setMode('doctor')}
-					className={mode === 'doctor' ? 'font-semibold text-docassist-primary' : 'text-muted-foreground'}
+					className={
+						mode === 'doctor'
+							? 'rounded-md bg-foreground px-3 py-2 font-medium text-background'
+							: 'rounded-md px-3 py-2 font-medium text-muted-foreground hover:text-foreground'
+					}
 				>
-					Doctor
+					{tCommon('roles.doctor')}
 				</button>
-				<span className='text-muted-foreground'>·</span>
 				<button
 					type='button'
 					onClick={() => setMode('patient')}
-					className={mode === 'patient' ? 'font-semibold text-docassist-primary' : 'text-muted-foreground'}
+					className={
+						mode === 'patient'
+							? 'rounded-md bg-foreground px-3 py-2 font-medium text-background'
+							: 'rounded-md px-3 py-2 font-medium text-muted-foreground hover:text-foreground'
+					}
 				>
-					Patient
+					{tCommon('roles.patient')}
 				</button>
 			</div>
 
 			{runtime.isDev ? (
-				<div className='grid gap-1.5 rounded border border-dashed border-amber-300 bg-amber-50 px-3 py-2 text-xs dark:border-amber-700 dark:bg-amber-950/30'>
-					<div className='flex items-center justify-between'>
-						<span className='font-semibold text-amber-700 dark:text-amber-400'>Dev credentials</span>
+				<div className='grid gap-1.5 rounded-lg border border-dashed border-amber-300 bg-amber-50 px-3 py-2 text-xs dark:border-amber-700 dark:bg-amber-950/30'>
+					<div className='flex items-center justify-between gap-3'>
+						<span className='font-semibold text-amber-700 dark:text-amber-400'>{tCommon('login.devCredentials')}</span>
 						<button
 							type='button'
 							onClick={fillDevCredentials}
-							className='rounded bg-amber-200 px-2 py-0.5 text-amber-800 hover:bg-amber-300 dark:bg-amber-800 dark:text-amber-100 dark:hover:bg-amber-700'
+							className='rounded-md bg-amber-200 px-2 py-1 text-amber-800 hover:bg-amber-300 dark:bg-amber-800 dark:text-amber-100 dark:hover:bg-amber-700'
 						>
-							Fill
+							{tCommon('actions.fill')}
 						</button>
 					</div>
 					<div className='text-muted-foreground'>
@@ -109,7 +116,7 @@ export function LoginForm() {
 				</div>
 			) : (
 				<div className='grid gap-1.5'>
-					<Label htmlFor='temp_login'>Temporary login</Label>
+					<Label htmlFor='temp_login'>{tCommon('login.patientLogin')}</Label>
 					<Input
 						id='temp_login'
 						name='temp_login'
@@ -138,7 +145,7 @@ export function LoginForm() {
 			<Button
 				type='submit'
 				disabled={isPending}
-				className='bg-docassist-primary text-white hover:bg-docassist-primary-hover'
+				className='h-10 bg-docassist-primary text-white hover:bg-docassist-primary-hover'
 			>
 				{isPending ? tErrors('signingIn') : tErrors('signIn')}
 			</Button>

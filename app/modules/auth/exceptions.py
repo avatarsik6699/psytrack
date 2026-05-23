@@ -9,8 +9,13 @@ class NotAuthenticated(AppException):
 
 class InvalidCredentials(AppException):
     status_code = 401
-    detail = "Invalid email or password"
+    detail = "Invalid login or password"
     headers = {"WWW-Authenticate": "Bearer"}
+
+
+class LoginUnavailable(AppException):
+    status_code = 409
+    detail = "Login is unavailable"
 
 
 class InvalidToken(AppException):

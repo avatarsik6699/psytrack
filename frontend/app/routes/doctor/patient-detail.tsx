@@ -17,6 +17,7 @@ import { DiagnosisTabSwitcher } from '@/components/doctor/diagnosis-tab-switcher
 import { EventTimeline } from '@/components/doctor/event-timeline';
 import { MedicationAssignForm } from '@/components/doctor/medication-assign-form';
 import { MedicationChart } from '@/components/doctor/medication-chart';
+import { PatientCredentialResetAction } from '@/components/doctor/patient-credential-reset-action';
 import { PatientHeader } from '@/components/doctor/patient-header';
 import { SEChart } from '@/components/doctor/se-chart';
 import { SEMonitoringModal } from '@/components/doctor/se-monitoring-modal';
@@ -123,12 +124,17 @@ const PatientDetailRoute: React.FC = () => {
 				<span className='text-foreground font-medium'>{nameShort}</span>
 			</div>
 
-			<div className='bg-white rounded-xl border border-border p-5 mb-4'>
-				<PatientHeader patient={patient as never} diagnoses={diagnoses} onEdit={() => {}} onArchive={handleArchive} />
+			<div className='bg-card text-card-foreground rounded-xl border border-border p-5 mb-4'>
+				<div className='space-y-4'>
+					<PatientHeader patient={patient as never} diagnoses={diagnoses} onEdit={() => {}} onArchive={handleArchive} />
+					<div className='flex justify-end border-t border-border pt-3'>
+						<PatientCredentialResetAction patientId={id} patientName={patient.full_name} />
+					</div>
+				</div>
 			</div>
 
 			<Tabs defaultValue='overview' className='space-y-4'>
-				<div className='bg-white rounded-xl border border-border px-4'>
+				<div className='bg-card text-card-foreground rounded-xl border border-border px-4'>
 					<TabsList variant='line' className='w-full justify-start h-auto py-0 rounded-none'>
 						<TabsTrigger value='overview' className='px-4 py-3 text-sm'>
 							Обзор
@@ -149,7 +155,7 @@ const PatientDetailRoute: React.FC = () => {
 				</div>
 
 				<TabsContent value='overview' className='space-y-4'>
-					<div className='bg-white rounded-xl border border-border p-5'>
+					<div className='bg-card text-card-foreground rounded-xl border border-border p-5'>
 						<div className='grid grid-cols-2 sm:grid-cols-4 gap-4 divide-x divide-border'>
 							<div className='px-2 first:pl-0'>
 								<p className='text-xs text-muted-foreground mb-1'>Последний визит</p>
@@ -173,7 +179,7 @@ const PatientDetailRoute: React.FC = () => {
 					</div>
 
 					<div className='grid grid-cols-1 lg:grid-cols-2 gap-4'>
-						<div className='bg-white rounded-xl border border-border p-5'>
+						<div className='bg-card text-card-foreground rounded-xl border border-border p-5'>
 							<h2 className='font-semibold text-sm mb-3'>Препараты</h2>
 							{meds.length === 0 ? (
 								<p className='text-xs text-muted-foreground'>Препараты не назначены.</p>
@@ -182,26 +188,26 @@ const PatientDetailRoute: React.FC = () => {
 							)}
 						</div>
 
-						<div className='bg-white rounded-xl border border-border p-5'>
+						<div className='bg-card text-card-foreground rounded-xl border border-border p-5'>
 							<h2 className='font-semibold text-sm mb-3'>Цели терапии</h2>
 							<TherapyGoals patientId={id} />
 						</div>
 					</div>
 
-					<div className='bg-white rounded-xl border border-border p-5'>
+					<div className='bg-card text-card-foreground rounded-xl border border-border p-5'>
 						<h2 className='font-semibold text-sm mb-3'>Диагнозы</h2>
 						<DiagnosisList patientId={id} />
 					</div>
 				</TabsContent>
 
 				<TabsContent value='medications' className='space-y-4'>
-					<div className='bg-white rounded-xl border border-border p-5'>
+					<div className='bg-card text-card-foreground rounded-xl border border-border p-5'>
 						<h2 className='font-semibold text-sm mb-1'>График препаратов</h2>
 						<p className='text-xs text-muted-foreground mb-3'>Хронология доз</p>
 						<MedicationChart patientId={id} />
 					</div>
 
-					<div className='bg-white rounded-xl border border-border p-5'>
+					<div className='bg-card text-card-foreground rounded-xl border border-border p-5'>
 						<div className='flex justify-between items-center mb-3'>
 							<h2 className='font-semibold text-sm'>Текущие препараты</h2>
 							<button
@@ -267,7 +273,7 @@ const PatientDetailRoute: React.FC = () => {
 
 				<TabsContent value='dynamics' className='space-y-4'>
 					{diagnoses.length > 0 && (
-						<div className='bg-white rounded-xl border border-border p-5'>
+						<div className='bg-card text-card-foreground rounded-xl border border-border p-5'>
 							<h2 className='font-semibold text-sm mb-3'>Диагноз</h2>
 							<DiagnosisTabSwitcher
 								diagnoses={diagnoses}
@@ -277,11 +283,11 @@ const PatientDetailRoute: React.FC = () => {
 						</div>
 					)}
 
-					<div className='bg-white rounded-xl border border-border p-5'>
+					<div className='bg-card text-card-foreground rounded-xl border border-border p-5'>
 						<ScoreChart patientId={id} />
 					</div>
 
-					<div className='bg-white rounded-xl border border-border p-5'>
+					<div className='bg-card text-card-foreground rounded-xl border border-border p-5'>
 						<div className='flex justify-between items-center mb-3'>
 							<h2 className='font-semibold text-sm'>Назначенные шкалы</h2>
 							{!showAssignTest && (
@@ -328,7 +334,7 @@ const PatientDetailRoute: React.FC = () => {
 				</TabsContent>
 
 				<TabsContent value='se' className='space-y-4'>
-					<div className='bg-white rounded-xl border border-border p-5'>
+					<div className='bg-card text-card-foreground rounded-xl border border-border p-5'>
 						<div className='flex justify-between items-center mb-1'>
 							<div>
 								<h2 className='font-semibold text-sm'>График тяжести ПЭ</h2>
@@ -346,7 +352,7 @@ const PatientDetailRoute: React.FC = () => {
 				</TabsContent>
 
 				<TabsContent value='events'>
-					<div className='bg-white rounded-xl border border-border p-5'>
+					<div className='bg-card text-card-foreground rounded-xl border border-border p-5'>
 						<h2 className='font-semibold text-sm mb-3'>Лента событий</h2>
 						<EventTimeline patientId={id} />
 					</div>

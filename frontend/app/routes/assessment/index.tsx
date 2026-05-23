@@ -31,7 +31,7 @@ const AssessmentPage: React.FC = () => {
 	return (
 		<div className='max-w-lg mx-auto'>
 			{/* Header bar */}
-			<div className='bg-white border-b border-border px-4 py-3'>
+			<div className='bg-card text-card-foreground border-b border-border px-4 py-3'>
 				<div className='flex items-center justify-between'>
 					<Link to='/tests' className='text-xs text-primary hover:underline'>
 						← К тестам
@@ -66,7 +66,7 @@ const AssessmentPage: React.FC = () => {
 								className={`w-full text-left border rounded-lg px-4 py-3 text-sm transition-colors disabled:opacity-50 ${
 									isSelected
 										? 'border-primary bg-docassist-primary-subtle text-primary'
-										: 'border-border hover:bg-gray-50'
+										: 'border-border hover:bg-muted'
 								}`}
 							>
 								{opt.label as string}

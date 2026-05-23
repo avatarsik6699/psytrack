@@ -1,12 +1,17 @@
 import React, { useState } from 'react';
+import { useTranslation } from 'react-i18next';
 
 import { useCreateGoalMutation, useTherapyGoals, useToggleGoalMutation } from '@shared/api/therapy-goals';
+
+import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
 
 type Props = {
 	patientId: string;
 };
 
 export const TherapyGoals: React.FC<Props> = props => {
+	const { t } = useTranslation('common');
 	const goalsQuery = useTherapyGoals(props.patientId);
 	const goals = goalsQuery.data ?? [];
 	const createMutation = useCreateGoalMutation(props.patientId);
@@ -29,19 +34,17 @@ export const TherapyGoals: React.FC<Props> = props => {
 		});
 	};
 
-	if (goalsQuery.isLoading) return <p className='text-xs text-muted-foreground'>Loading…</p>;
+	if (goalsQuery.isLoading) return <p className='text-xs text-muted-foreground'>{t('loading')}</p>;
 
 	return (
 		<div>
 			{total > 0 && (
 				<div className='mb-3'>
 					<div className='flex justify-between text-xs text-muted-foreground mb-1'>
-						<span>Progress</span>
-						<span>
-							{completed}/{total} complete
-						</span>
+						<span>{t('therapyGoal.progress')}</span>
+						<span>{t('therapyGoal.complete', { completed, total })}</span>
 					</div>
-					<div className='w-full bg-gray-100 rounded-full h-2'>
+					<div className='w-full bg-muted rounded-full h-2'>
 						<div className='bg-docassist-primary h-2 rounded-full transition-all' style={{ width: `${pct}%` }} />
 					</div>
 				</div>
@@ -56,7 +59,7 @@ export const TherapyGoals: React.FC<Props> = props => {
 							onChange={e => toggleMutation.mutate({ goalId: g.id, isCompleted: e.target.checked })}
 							className='mt-0.5 accent-docassist-primary cursor-pointer'
 						/>
-						<span className={`text-sm ${g.is_completed ? 'line-through text-muted-foreground' : 'text-gray-800'}`}>
+						<span className={`text-sm ${g.is_completed ? 'line-through text-muted-foreground' : 'text-foreground'}`}>
 							{g.description}
 						</span>
 					</li>
@@ -65,33 +68,31 @@ export const TherapyGoals: React.FC<Props> = props => {
 
 			{adding ? (
 				<form onSubmit={handleAdd} className='mt-3 flex gap-2'>
-					<input
+					<Input
 						autoFocus
 						type='text'
 						value={newDesc}
 						onChange={e => setNewDesc(e.target.value)}
-						placeholder='New goal…'
-						className='flex-1 border border-border rounded px-2 py-1 text-xs'
+						placeholder={t('therapyGoal.newGoalPlaceholder')}
+						className='flex-1 h-7 text-xs'
 					/>
-					<button
-						type='button'
-						onClick={() => setAdding(false)}
-						className='text-xs text-muted-foreground hover:text-gray-700'
-					>
-						Cancel
-					</button>
-					<button
-						type='submit'
-						disabled={createMutation.isPending}
-						className='text-xs text-docassist-primary font-medium disabled:opacity-50'
-					>
-						Add
-					</button>
+					<Button type='button' variant='ghost' size='sm' onClick={() => setAdding(false)}>
+						{t('therapyGoal.cancel')}
+					</Button>
+					<Button type='submit' size='sm' disabled={createMutation.isPending}>
+						{t('therapyGoal.add')}
+					</Button>
 				</form>
 			) : (
-				<button className='mt-3 text-xs text-primary hover:underline' onClick={() => setAdding(true)}>
-					+ Add goal
-				</button>
+				<Button
+					type='button'
+					variant='link'
+					size='sm'
+					className='mt-3 px-0 text-xs h-auto'
+					onClick={() => setAdding(true)}
+				>
+					{t('therapyGoal.addGoal')}
+				</Button>
 			)}
 		</div>
 	);

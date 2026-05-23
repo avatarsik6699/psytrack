@@ -55,7 +55,7 @@ export const ScoreChart: React.FC<Props> = props => {
 							chip && (
 								<span
 									key={chip.code}
-									className={`text-xs font-medium px-2 py-0.5 rounded-full border ${chip.delta < 0 ? 'border-green-300 text-green-700 bg-green-50' : chip.delta > 0 ? 'border-red-300 text-red-700 bg-red-50' : 'border-gray-200 text-gray-600 bg-gray-50'}`}
+									className={`text-xs font-medium px-2 py-0.5 rounded-full border ${chip.delta < 0 ? 'border-green-300 text-green-700 bg-green-50 dark:bg-green-950/30 dark:text-green-300' : chip.delta > 0 ? 'border-red-300 text-red-700 bg-red-50 dark:bg-red-950/30 dark:text-red-300' : 'border-border text-muted-foreground bg-muted'}`}
 								>
 									{chip.code} {chip.arrow}
 									{Math.abs(chip.delta)}

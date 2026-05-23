@@ -100,7 +100,7 @@ test.describe('Phase 02 — Patient Management', () => {
 
 		// Open modal
 		await page.getByRole('button', { name: /Добавить пациента/i }).click();
-		await expect(page.getByRole('heading', { name: 'Add Patient' })).toBeVisible();
+		await expect(page.getByRole('heading', { name: 'Добавить пациента' })).toBeVisible();
 
 		// Fill full name (first text input inside the modal)
 		await page.locator('form input[type="text"]').fill('E2E Test Patient');
@@ -112,12 +112,12 @@ test.describe('Phase 02 — Patient Management', () => {
 		await page.locator('select').selectOption('female');
 
 		// Submit
-		await page.getByRole('button', { name: 'Create' }).click();
+		await page.getByRole('button', { name: 'Создать' }).click();
 
 		// Credentials panel appears with Login and Password copy-fields
-		await expect(page.getByText('Patient created')).toBeVisible();
-		await expect(page.getByText('Login')).toBeVisible();
-		await expect(page.getByText('Password')).toBeVisible();
+		await expect(page.getByText('Пациент добавлен')).toBeVisible();
+		await expect(page.getByText('Логин')).toBeVisible();
+		await expect(page.getByText('Пароль')).toBeVisible();
 	});
 
 	// -------------------------------------------------------------------------

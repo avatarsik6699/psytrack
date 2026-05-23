@@ -7,7 +7,12 @@ from app.modules.patients.color_service import CardColor, compute_card_color
 from app.modules.patients.exceptions import PatientNotFound
 from app.modules.patients.models import Patient
 from app.modules.patients.repository import PatientRepository
-from app.modules.patients.schemas import PatientCreate, PatientOut, PatientUpdate
+from app.modules.patients.schemas import (
+    PatientCreate,
+    PatientCredentialUpdateIn,
+    PatientOut,
+    PatientUpdate,
+)
 from app.modules.users.models import User, UserRole
 from app.modules.users.service import UserService
 
@@ -92,3 +97,59 @@ class PatientService:
         patient.archived_at = datetime.now(UTC)
         await self._repository._session.flush()
         return patient
+
+    async def update_own_credentials(
+        self,
+        user: User,
+        data: PatientCredentialUpdateIn,
+    ) -> Patient:
+        from app.modules.auth.exceptions import InvalidCredentials, LoginUnavailable
+        from app.modules.auth.utils import hash_password, verify_password
+
+        patient = await self._repository.get_by_user_id(user.id)
+        if patient is None:
+            raise PatientNotFound()
+
+        if not verify_password(data.current_password, patient.temp_password_hash or ""):
+            raise InvalidCredentials()
+
+        if data.new_login is not None:
+            existing = await self._repository.find_by_temp_login(
+                data.new_login,
+                exclude_patient_id=patient.id,
+            )
+            if existing is not None:
+                raise LoginUnavailable()
+            patient.temp_login = data.new_login
+
+        if data.new_password is not None:
+            password_hash = hash_password(data.new_password)
+            patient.temp_password_hash = password_hash
+            user.hashed_password = password_hash
+            await self._user_service.add(user)
+
+        await self._repository._session.flush()
+        return patient
+
+    async def reset_credentials(self, patient: Patient) -> tuple[Patient, str]:
+        from app.modules.auth.utils import hash_password
+
+        temp_login, temp_password = _generate_temp_credentials()
+        while (
+            await self._repository.find_by_temp_login(
+                temp_login,
+                exclude_patient_id=patient.id,
+            )
+            is not None
+        ):
+            temp_login, temp_password = _generate_temp_credentials()
+
+        password_hash = hash_password(temp_password)
+        patient.temp_login = temp_login
+        patient.temp_password_hash = password_hash
+
+        user = await self._user_service.get_by_id(patient.user_id)
+        user.hashed_password = password_hash
+        await self._user_service.add(user)
+        await self._repository._session.flush()
+        return patient, temp_password

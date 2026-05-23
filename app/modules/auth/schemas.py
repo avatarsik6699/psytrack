@@ -1,6 +1,9 @@
 from typing import Literal
+from uuid import UUID
 
 from pydantic import BaseModel, EmailStr, Field
+
+from app.modules.users.models import UserRole
 
 
 class LoginRequest(BaseModel):
@@ -16,6 +19,16 @@ class TokenPair(BaseModel):
     access_token: str
     refresh_token: str
     token_type: str = "bearer"
+
+
+class CurrentSessionOut(BaseModel):
+    user_id: UUID
+    role: UserRole
+    email: str | None
+    display_name: str | None
+    specialty: str | None = None
+    doctor_id: UUID | None = None
+    patient_id: UUID | None = None
 
 
 class RegisterRequest(BaseModel):

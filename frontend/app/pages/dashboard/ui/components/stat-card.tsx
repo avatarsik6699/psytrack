@@ -16,7 +16,7 @@ export const StatCard: React.FC<Props> = props => {
 	return (
 		<Link
 			to={props.to}
-			className='relative flex flex-col gap-2 p-4 rounded-xl border border-border bg-white hover:shadow-md transition-shadow'
+			className='relative flex flex-col gap-2 p-4 rounded-xl border border-border bg-card text-card-foreground hover:shadow-md transition-shadow'
 		>
 			{props.badge && (
 				<span className='absolute top-3 right-3 text-[10px] font-bold px-1.5 py-0.5 rounded-full bg-red-500 text-white'>

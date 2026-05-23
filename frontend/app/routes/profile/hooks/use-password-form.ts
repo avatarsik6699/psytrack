@@ -22,7 +22,7 @@ export function usePasswordForm() {
 			setCurrent('');
 			setNext('');
 		} catch {
-			setError('Ошибка. Проверьте текущий пароль.');
+			setError('error');
 		} finally {
 			setIsPending(false);
 		}

@@ -7,7 +7,16 @@ from app.modules.doctors.dependencies import get_doctor_service
 from app.modules.doctors.service import DoctorService
 from app.modules.patients.dependencies import get_patient_repository, get_patient_service
 from app.modules.patients.repository import PatientRepository
-from app.modules.patients.schemas import PatientCreate, PatientCreatedOut, PatientMeOut, PatientOut, PatientUpdate
+from app.modules.patients.schemas import (
+    PatientCreate,
+    PatientCreatedOut,
+    PatientCredentialOut,
+    PatientCredentialResetOut,
+    PatientCredentialUpdateIn,
+    PatientMeOut,
+    PatientOut,
+    PatientUpdate,
+)
 from app.modules.patients.service import PatientService
 from app.modules.users.models import User
 
@@ -73,8 +82,37 @@ async def patient_me(
 ) -> PatientMeOut:
     data = await patient_repo.get_me(current_user.id)
     if data is None:
-        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Patient profile not found")
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail="Patient profile not found",
+        )
     return PatientMeOut.model_validate(data)
+
+
+@patient_me_router.patch("/me/credentials", response_model=PatientCredentialOut)
+async def update_patient_credentials(
+    body: PatientCredentialUpdateIn,
+    current_user: User = Depends(require_patient),
+    patient_service: PatientService = Depends(get_patient_service),
+) -> PatientCredentialOut:
+    patient = await patient_service.update_own_credentials(current_user, body)
+    return PatientCredentialOut(temp_login=patient.temp_login or "")
+
+
+@router.post("/{patient_id}/credentials/reset", response_model=PatientCredentialResetOut)
+async def reset_patient_credentials(
+    patient_id: UUID,
+    current_user: User = Depends(require_doctor),
+    doctor_service: DoctorService = Depends(get_doctor_service),
+    patient_service: PatientService = Depends(get_patient_service),
+) -> PatientCredentialResetOut:
+    profile = await doctor_service.get_for_user(current_user.id)
+    patient = await patient_service.get_for_doctor(patient_id, profile.id)
+    patient, plaintext_password = await patient_service.reset_credentials(patient)
+    return PatientCredentialResetOut(
+        temp_login=patient.temp_login or "",
+        temp_password=plaintext_password,
+    )
 
 
 @router.post("/{patient_id}/archive", status_code=status.HTTP_200_OK)

@@ -1,5 +1,6 @@
 import { ChevronRight } from 'lucide-react';
 import React from 'react';
+import { useTranslation } from 'react-i18next';
 
 import { date } from '@shared/lib/date';
 import type { components } from '@shared/types/schema';
@@ -20,13 +21,6 @@ const STRIP_COLOR: Record<PatientOut['card_color'], string> = {
 	gray: 'bg-status-none',
 };
 
-const STATUS_LABEL: Record<PatientOut['card_color'], string> = {
-	red: 'Критический',
-	yellow: 'Внимание',
-	green: 'Хорошо',
-	gray: 'Без данных',
-};
-
 const STATUS_BADGE: Record<PatientOut['card_color'], string> = {
 	red: 'text-status-critical-fg bg-status-critical-bg',
 	yellow: 'text-status-warning-fg bg-status-warning-bg',
@@ -40,10 +34,16 @@ type Props = {
 };
 
 export const PatientCard: React.FC<Props> = props => {
+	const { t } = useTranslation('common');
 	const age = date.ageLabel(props.patient.birth_date);
 	const strip = STRIP_COLOR[props.patient.card_color];
 	const badgeClass = STATUS_BADGE[props.patient.card_color];
-	const statusLabel = STATUS_LABEL[props.patient.card_color];
+	const statusLabel = {
+		red: t('status.critical'),
+		yellow: t('status.warning'),
+		green: t('status.ok'),
+		gray: t('status.none'),
+	}[props.patient.card_color];
 	const meds = props.patient.active_medications_summary ?? [];
 	const scores = props.patient.latest_scores ?? [];
 
@@ -54,7 +54,7 @@ export const PatientCard: React.FC<Props> = props => {
 
 	return (
 		<div
-			className='flex items-stretch bg-white rounded-xl border border-border shadow-sm cursor-pointer hover:shadow-md transition-shadow overflow-hidden'
+			className='flex items-stretch bg-card text-card-foreground rounded-xl border border-border shadow-sm cursor-pointer hover:shadow-md transition-shadow overflow-hidden'
 			onClick={props.onClick}
 		>
 			<div className={`w-1 shrink-0 ${strip}`} />
@@ -62,7 +62,7 @@ export const PatientCard: React.FC<Props> = props => {
 			<div className='flex-1 min-w-0 p-4 space-y-2'>
 				<div className='flex items-start justify-between gap-3'>
 					<div className='min-w-0'>
-						<p className='font-semibold text-gray-900 truncate'>
+						<p className='font-semibold text-foreground truncate'>
 							{props.patient.full_name}
 							{age ? `, ${age}` : ''}
 						</p>
@@ -99,7 +99,7 @@ export const PatientCard: React.FC<Props> = props => {
 
 			<div className='flex items-center pr-4'>
 				<div className='flex items-center gap-1 text-xs text-muted-foreground border border-border rounded-lg px-2.5 py-1.5 hover:bg-muted transition-colors'>
-					Открыть <ChevronRight size={13} />
+					{t('actions.open')} <ChevronRight size={13} />
 				</div>
 			</div>
 		</div>

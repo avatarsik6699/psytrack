@@ -13,7 +13,7 @@ const PatientLayout: React.FC = () => {
 			<TopBar activeRole='patient' />
 			<Sidebar role='patient' />
 			<main
-				className='flex-1 ml-(--docassist-sidebar-width,180px)'
+				className='flex-1 md:ml-(--docassist-sidebar-width,180px)'
 				style={{ paddingTop: 'var(--docassist-topbar-height)' }}
 			>
 				<Outlet />

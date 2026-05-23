@@ -6,13 +6,17 @@ import { Button } from '@/components/ui/button';
 
 const themes = ['light', 'dark', 'system'] as const;
 
-export const ThemeToggle: React.FC = () => {
+type Props = {
+	compact?: boolean;
+};
+
+export const ThemeToggle: React.FC<Props> = props => {
 	const themeHook = useTheme();
 	const i18nHook = useTranslation('common');
 
 	return (
 		<div className='flex items-center gap-2'>
-			<span className='text-xs text-muted-foreground'>{i18nHook.t('theme')}</span>
+			{props.compact ? null : <span className='text-xs text-muted-foreground'>{i18nHook.t('theme')}</span>}
 			<div className='inline-flex rounded-lg border border-border bg-background p-1'>
 				{themes.map(value => (
 					<Button

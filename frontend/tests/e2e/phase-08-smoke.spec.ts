@@ -145,9 +145,7 @@ test.describe('Phase 08 — Patient Portal', () => {
 
 	test('tests page shows scale list or empty message', async ({ page }) => {
 		await page.goto('/tests');
-		const emptyMessage = page.getByText('Нет назначенных тестов.');
-		const scaleCard = page.locator('.bg-white').first();
-		await expect(emptyMessage.or(scaleCard)).toBeVisible({ timeout: 8000 });
+		await expect(page.getByText('Нет назначенных тестов.')).toBeVisible({ timeout: 8000 });
 	});
 
 	test('medications page renders with log buttons or empty state', async ({ page }) => {
@@ -160,10 +158,10 @@ test.describe('Phase 08 — Patient Portal', () => {
 		await expect(page.getByRole('button', { name: /Добавить/i })).toBeVisible({ timeout: 8000 });
 	});
 
-	test('profile page renders email form', async ({ page }) => {
+	test('profile page renders credential form', async ({ page }) => {
 		await page.goto('/profile');
 		await expect(page.getByRole('heading', { name: 'Профиль' })).toBeVisible({ timeout: 8000 });
-		await expect(page.getByPlaceholder('you@example.com')).toBeVisible({ timeout: 8000 });
+		await expect(page.getByText('Логин и пароль')).toBeVisible({ timeout: 8000 });
 	});
 
 	test('assessment page shows error for unknown id', async ({ page }) => {

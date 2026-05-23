@@ -28,7 +28,7 @@ const MedicationRow: React.FC<MedicationRowProps> = props => {
 	};
 
 	return (
-		<li className='bg-white border border-border rounded-lg p-4 flex justify-between items-center'>
+		<li className='bg-card text-card-foreground border border-border rounded-lg p-4 flex justify-between items-center'>
 			<div>
 				<p className='text-sm font-medium'>{props.med.medication.inn}</p>
 				{(props.med.dose_mg || props.med.frequency) && (
@@ -99,7 +99,7 @@ const HomePage: React.FC = () => {
 			{scales.length > 0 && (
 				<ul className='space-y-3'>
 					{scales.map(ps => (
-						<li key={ps.id} className='bg-white border border-border rounded-lg p-4 flex justify-between items-center'>
+						<li key={ps.id} className='bg-card text-card-foreground border border-border rounded-lg p-4 flex justify-between items-center'>
 							<div>
 								<p className='text-sm font-medium'>{ps.scale?.name ?? 'Assessment'}</p>
 								<p className='text-xs text-muted-foreground mt-0.5'>Every {ps.frequency_days} days</p>
