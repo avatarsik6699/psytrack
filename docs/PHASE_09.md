@@ -2,17 +2,13 @@
 
 <!-- TOKEN BUDGET: keep this file under 10,000 tokens. Be concise. -->
 
-> ⚠️ **NEEDS_REVIEW** — SPEC v1.7 revises Phase 09 around patient credentials, newly supplied
-> profile/credential-reset design references, and removal of generated demo/design artifacts.
-> Architect should confirm this revised scope before implementation starts.
-
 ## Phase Metadata
 
 | Field | Value |
 |-------|-------|
 | Phase | `09` |
 | Title | Frontend Design-System Completion & UX Refactor |
-| Status | `⚠️ NEEDS_REVIEW` |
+| Status | `✅ done` |
 | Tag | `v0.09.0` |
 | Depends on | PHASE_08 gate passing |
 
@@ -361,14 +357,14 @@ feat(phase-09): complete frontend design-system refactor
 
 ## Post-Phase Checklist
 
-- [ ] All Scope checkboxes checked (or deferred in Architect Review Notes)
-- [ ] `FT1` checked — `frontend/tests/e2e/phase-09-smoke.spec.ts` exists, or deferral documented in Architect Review Notes
-- [ ] `docs/PHASE_09_NOTES.md` complete — Implementation Plans filled, key decisions recorded
-- [ ] `docs/PHASE_09_DESIGN_AUDIT.md` complete
-- [ ] All automated gate checks green
-- [ ] All architect review notes resolved
-- [ ] `docs/CONTEXT.md` updated — run `/context-update 09`
-- [ ] `docs/STATE.md` phase row updated to `✅ done`
-- [ ] `docs/CHANGELOG.md` entry added (if contracts changed)
-- [ ] Committed atomically on `feat/phase-09` branch
-- [ ] Tag created after merge to develop: `git tag -a v0.09.0 -m "Phase 09: Frontend Design-System Completion & UX Refactor"`
+- [x] All Scope checkboxes checked (or deferred in Architect Review Notes)
+- [x] `FT1` checked — `frontend/tests/e2e/phase-09-smoke.spec.ts` exists, or deferral documented in Architect Review Notes
+- [x] `docs/PHASE_09_NOTES.md` complete — Implementation Plans filled, key decisions recorded
+- [x] `docs/PHASE_09_DESIGN_AUDIT.md` complete
+- [x] All automated gate checks green
+- [x] All architect review notes resolved
+- [x] `docs/CONTEXT.md` updated — run `/context-update 09`
+- [x] `docs/STATE.md` phase row updated to `✅ done`
+- [x] `docs/CHANGELOG.md` entry added (if contracts changed)
+- [x] Committed atomically on `feat/phase-09` branch
+- [x] Tag created after merge to develop: `git tag -a v0.09.0 -m "Phase 09: Frontend Design-System Completion & UX Refactor"`
