@@ -6,6 +6,143 @@
 
 ---
 
+## 2026-05-23 — Generated demo/design artifacts marked for removal
+
+**Type**: spec-change
+**Author**: AI (spec-sync)
+**Triggered by**: Architect clarified that UI elements generated as design/demo artifacts must not ship when they are not backed by product specification or business logic.
+
+### Changes
+- `docs/SPEC.md` updated from `v1.6` to `v1.7`
+- `TopBar` and `Sidebar` component contracts now explicitly forbid production doctor/patient role switching and cross-role view toggles
+- Phase 09 now contains a **Production Artifacts — К Удалению** section
+- Phase 09 audit/gate requirements now require finding and removing generated/demo artifacts before close
+- Phase 08 design-reference notes now clarify that the `Врач / Пациент` top-bar switch was a generated design artifact, not production behavior
+
+### Affected Phases
+- PHASE_09 — must remove or strictly dev-guard the listed artifacts during frontend cleanup
+- PHASE_08 — historical documentation annotated only; completed implementation is not reopened
+
+### Contract Updates
+- No backend endpoint, DB schema, env var, or active CONTEXT contract change
+- Frontend production contract tightened: no cross-role top-bar switch, no out-of-scope doctor settings/schedule affordances, no hardcoded production identity data, no visible production demo credential helpers
+
+### Notes
+Known artifacts marked **К удалению**: top-bar `Врач` / `Пациент` links, `/doctor/settings` or `/doctor/schedule` nav affordances, hardcoded doctor chrome identity such as `Волков А.Н.`, and production-visible demo credential helper UI.
+
+---
+
+## 2026-05-23 — Profile and credential reset design references added
+
+**Type**: spec-change
+**Author**: AI (spec-sync)
+**Triggered by**: Architect added new `docs/assets/` references for doctor profile, patient profile, and doctor-side patient credential reset.
+
+### Changes
+- `docs/SPEC.md` updated from `v1.5` to `v1.6`
+- SPEC §5.1 now includes `/doctor/profile` as a Phase 09 doctor route target
+- SPEC §5.3 inventories `doctor-profile-page.png`, `doctor-profile-page-dark.png`, `doctor-reset-login-pass-for-patient-page.png`, and `patient-profile-page.png`
+- Patient profile, doctor profile, credential reset, and global language/theme control placement are no longer treated as missing visual references
+- Phase 09 now maps `/doctor/profile`, patient `/profile`, and doctor credential reset UX to the new canonical screenshots
+- Phase 08 design-reference notes now record the newly supplied patient profile screenshot for historical traceability
+
+### Affected Phases
+- PHASE_09 — pending implementation must use the newly supplied profile and credential-reset references
+- PHASE_08 — completed phase documentation updated only to replace the historical "no screenshot yet" note for patient `/profile`
+
+### Contract Updates
+- Frontend route target added for Phase 09: `/doctor/profile`
+- No backend endpoint, DB schema, env var, or active CONTEXT contract change
+
+### Notes
+`/doctor/settings` and `/doctor/schedule` remain out of scope. `/history`, auth screens, and responsive states still require derived design work or future screenshots.
+
+---
+
+## 2026-05-23 — Patient credential model and real history scope clarified
+
+**Type**: spec-change
+**Author**: AI (spec-sync)
+**Triggered by**: Architect clarified MVP patient authentication and profile requirements: patients should use doctor-issued/self-changed login/password, not email/password; doctors must be able to reset patient credentials; `/history` must show real data; notifications are in-app visual indicators only.
+
+### Changes
+- `docs/SPEC.md` updated from `v1.4` to `v1.5`
+- Patient email/password login and email-based recovery removed from MVP scope
+- Patient login/password management added: patient self-change, generic login-unavailable errors, and doctor reset that returns a new login/password once
+- Current-session/token metadata added for profile UX, while full token inventory, device management, refresh-token revocation, and revoke-all-sessions are deferred to a later auth hardening phase
+- `/history` clarified as a real completed-assessment history screen backed by `GET /patient/history`
+- Browser push, web push, email notifications, and server-side notification contracts deferred; Phase 09 may use only in-app visual indicators such as badges, counters, highlighted rows, and a bell icon
+- Phase 09 route inventory now explicitly covers public, patient, and doctor routes and excludes `/doctor/settings` and `/doctor/schedule`
+
+### Affected Phases
+- PHASE_09 — scope expanded from pure frontend refactor to include narrowly scoped patient credential/session API work and doctor credential reset
+
+### Contract Updates
+- Endpoints to add: `GET /api/v1/public/auth/session`, `PATCH /api/v1/patient/me/credentials`, `POST /api/v1/doctor/patients/{patient_id}/credentials/reset`
+- Types to add: `SessionInfoOut`, `PatientCredentialUpdateIn`, `PatientCredentialResetOut`
+- Existing patient login column remains `patients.temp_login`; API/UI copy should present it as patient "login"
+- Possible narrow DB migration: case-insensitive unique constraint/index for patient login if current DB semantics do not enforce it
+- No appointment, notification-delivery, or token-store tables are added in this clarification
+
+### Notes
+Do not fake server-side token revocation in the UI. Until a persistent token/session store exists, token management is limited to current-session metadata and clearing tokens for the current browser session.
+
+---
+
+## 2026-05-23 — Removed undefined doctor settings and schedule routes from MVP scope
+
+**Type**: spec-change
+**Author**: AI (spec-sync)
+**Triggered by**: Architect clarified that `/doctor/settings` and `/doctor/schedule` were likely design/specification artefacts and should not become implementation scope without explicit product logic.
+
+### Changes
+- `docs/SPEC.md` updated from `v1.3` to `v1.4`
+- Removed `/doctor/settings` and `/doctor/schedule` from SPEC §5.1 doctor page contract
+- Removed doctor settings/schedule reference-gap language from SPEC §5.3 and Phase 09 scope
+- Added explicit Phase 09 non-goal: do not add `/doctor/settings` or `/doctor/schedule` frontend routes unless a later phase defines user value, route logic, and contracts
+
+### Affected Phases
+- PHASE_09 — scope updated before implementation; requires architect review before coding starts
+
+### Contract Updates
+- No backend contract change
+- No DB schema change
+- No API endpoint change
+- No env var change
+- Frontend route contract reduced: `/doctor/settings` and `/doctor/schedule` are no longer MVP routes
+
+### Notes
+Patient `/profile` and `/history` remain in Phase 09. Appointment backend work remains out of scope.
+
+---
+
+## 2026-05-23 — Phase 09 replanned for frontend design completion
+
+**Type**: spec-change
+**Author**: AI (spec-sync)
+**Triggered by**: Architect requested replacing Phase 09 appointments/notifications with a full frontend design-system completion and UX refactor after Phase 08 visual gaps were identified.
+
+### Changes
+- `docs/SPEC.md` updated from `v1.2` to `v1.3`
+- SPEC §5.3 now inventories current `docs/assets/` design references and records known missing reference gaps: login/role entry, profile/settings, global language/theme controls, history/schedule placeholders, and responsive states
+- SPEC §8 Phase 09 changed from "Appointments & Notifications" to "Frontend Design-System Completion & UX Refactor"
+- SPEC §8.1 added detailed Phase 09 scope covering visual audit, global chrome, auth UX, patient portal, doctor portal, design-system refactor, responsive/accessibility pass, and frontend regression coverage
+
+### Affected Phases
+- PHASE_09 — new pending phase initialized from the updated SPEC scope
+- Completed PHASE_08 is not reopened; its residual visual/reference debt is carried forward into PHASE_09
+
+### Contract Updates
+- No backend contract change
+- No DB schema change
+- No API endpoint change
+- No env var change
+
+### Notes
+Appointments, notification expansion, appointment DB model, schedule endpoints, and push/web/email notification work are deferred until the implemented frontend matches the Docassist reference system.
+
+---
+
 ## 2026-05-23 — Phase 08 complete
 
 **Type**: phase-completion

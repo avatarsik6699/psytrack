@@ -8,7 +8,7 @@
 |-------|-------|
 | Phase | `08` |
 | Title | Full Frontend Refactoring — Design Alignment & Code Conventions |
-| Status | `⏳ in-progress` |
+| Status | `✅ done` |
 | Tag | `v0.08.0` |
 | Depends on | PHASE_07 gate passing |
 
@@ -30,9 +30,13 @@ Phase 08 was originally "Patient Portal Polish." It has been expanded to cover a
 
 ## Design References
 
-Screenshots in `docs/assets/patient-profile-*` (10 files). All screens share the same chrome:
+Screenshots in `docs/assets/patient-profile-*` (11 files). All screens share the same chrome:
 - **TopBar**: black `#111827` bar; "PsychTrack" logo left; "Врач / Пациент" role-toggle pills right.
 - **Sidebar** (180 px, white): brand logo + subtitle "Мониторинг" at top; 4 nav links with teal active state and red badge counters; patient avatar + full name + "34 года · Пациент" pinned at bottom.
+
+> Phase 09 correction: the "Врач / Пациент" top-bar switch is now classified as a generated
+> design/demo artifact, not production behavior. It is **к удалению** unless a later spec defines a
+> real impersonation or cross-role switching contract.
 
 ---
 
@@ -114,8 +118,14 @@ Post-submission screen (shown after `POST /patient/tests/{patient_scale_id}/subm
 
 ---
 
-### 8. Profile Page — no screenshot yet
-Implemented from SPEC §5.1: `EmailBindForm`, `PasswordChangeForm`, `NotificationToggle` placeholder. Update this section when screenshots are added to `docs/assets/`.
+### 8. Profile Page — `patient-profile-page.png`
+Canonical target for `/profile`:
+- Header: "Профиль" + subtitle "Настройки вашего аккаунта".
+- Identity card: patient avatar/initials, full name, login handle, "Пациент" badge, age.
+- **Изменить логин** card: current login, new-login input, validation hint, full-width save button.
+- **Изменить пароль** card: current password, new password, confirmation inputs, full-width save button.
+- **Предпочтения** card: RU/EN language segmented control and light/dark theme segmented control.
+- **Текущая сессия** card: device, login time, IP, session id, red "Завершить сессию" action.
 
 ---
 

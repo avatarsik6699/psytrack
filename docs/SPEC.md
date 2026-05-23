@@ -8,8 +8,8 @@
 
 | Field | Value |
 |-------|-------|
-| Document Version | `v1.2` |
-| Date | `2026-05-09` |
+| Document Version | `v1.7` |
+| Date | `2026-05-23` |
 | Architect / Owner | `v.godlevskiy` |
 | Contract Version | `v1.0` (see `docs/CONTEXT.md`) |
 | Stack | See [docs/STACK.md](./STACK.md) |
@@ -46,7 +46,7 @@ Build **Docassist** — a web-based inter-visit monitoring platform for psychiat
 | Included (MVP) | Excluded (V2+) |
 |----------------|----------------|
 | Doctor registration (email + password) | Document verification, e-mail invite to patient |
-| Temporary login/password for patient | EMR/HIS integration, multi-tenant org model |
+| Doctor-issued patient login/password, patient self-change, doctor credential reset | Patient email/password login, email-based account recovery |
 | Soft onboarding with flexible dates | Multi-domain symptom scales, predictive models |
 | Color logic: side-effect severity > clinical dynamics | Chart overlays, automated clinical conclusions |
 | 3 chart types (medications / test scores / UKU side effects) | Push notifications, email campaigns |
@@ -93,7 +93,7 @@ doctor_profiles(id UUID PK, user_id UUID FK users, full_name TEXT,
 
 patients(id UUID PK, doctor_id UUID FK doctor_profiles,
          full_name TEXT NOT NULL, birth_date DATE, gender TEXT,
-         temp_login TEXT UNIQUE, temp_password_hash TEXT,
+         temp_login TEXT UNIQUE, temp_password_hash TEXT,  -- patient login/password credential pair
          email TEXT, email_verified BOOL DEFAULT false,
          onboarding_complete BOOL DEFAULT false,
          archived_at TIMESTAMPTZ, created_at TIMESTAMPTZ)
@@ -214,9 +214,22 @@ Base path: `/api/v1`. JWT Bearer auth on all protected routes.
 | POST | `/auth/register` | — | Doctor registration; creates `users` + `doctor_profiles` |
 | POST | `/auth/login` | — | Returns `access_token` (JWT) + `refresh_token` |
 | POST | `/auth/refresh` | refresh token | Rotates tokens |
-| POST | `/auth/patient-login` | — | Patient login via `temp_login`/`temp_password` or email+pass |
-| PATCH | `/auth/me/password` | bearer | Change password (patient or doctor) |
-| PATCH | `/auth/me/email` | bearer | Bind / update email |
+| POST | `/auth/patient-login` | — | Patient login via patient `login` + password only |
+| PATCH | `/auth/me/password` | bearer | Change current user's password; patient changes update the patient credential password |
+| GET | `/auth/session` | bearer | Current-session metadata derived from JWT/client context; no multi-session store in MVP |
+
+Patient login/password rules:
+- MVP patients do **not** authenticate by email/password. Patient email may exist later as contact
+  data only; it is not a login identifier in MVP.
+- `patients.temp_login` is the current technical column for the patient login. UI copy should call it
+  "login", not "temporary login", once the patient has accepted/changed credentials.
+- Patient login is globally unique, case-insensitive if the DB collation/type supports it; API
+  responses must never reveal whether a specific login belongs to another patient.
+- Login update failures use a generic validation message, e.g. "This login cannot be used. Try
+  another one."
+- Full server-side refresh-token inventory, device list, and revoke-all-sessions require a persistent
+  token/session store and are deferred until a dedicated auth hardening phase. MVP must not fake
+  revocation beyond clearing tokens for the current browser session.
 
 ### 4.2 Doctor — Patient management
 
@@ -227,6 +240,7 @@ Base path: `/api/v1`. JWT Bearer auth on all protected routes.
 | GET | `/doctor/patients/{id}` | doctor | Full patient detail payload |
 | PATCH | `/doctor/patients/{id}` | doctor | Update profile fields |
 | POST | `/doctor/patients/{id}/archive` | doctor | Set `archived_at` |
+| POST | `/doctor/patients/{id}/credentials/reset` | doctor | Generate a new patient login/password pair, replace existing credentials, return plaintext once |
 
 ### 4.3 Doctor — Clinical configuration
 
@@ -245,18 +259,15 @@ Base path: `/api/v1`. JWT Bearer auth on all protected routes.
 
 ### 4.4 Doctor — Appointments
 
-| Verb | Path | Auth | Notes |
-|------|------|------|-------|
-| GET | `/doctor/appointments` | doctor | All scheduled appointments |
-| POST | `/doctor/patients/{id}/appointments` | doctor | Schedule appointment |
-| PATCH | `/doctor/appointments/{aid}` | doctor | Reschedule/cancel |
+Deferred. Appointment DB/API work is not part of the implemented MVP until a later phase defines
+explicit product value and contracts.
 
 ### 4.5 Patient — Tasks & data entry
 
 | Verb | Path | Auth | Notes |
 |------|------|------|-------|
 | GET | `/patient/tasks` | patient | Today's task list |
-| GET | `/patient/history` | patient | Paginated activity log |
+| GET | `/patient/history` | patient | Paginated completed assessment history (`TestCompletionPage`) |
 | POST | `/patient/tests/{patient_scale_id}/submit` | patient | Submit test answers + score |
 | PATCH | `/patient/medications/{id}/log` | patient | Log taken/missed |
 | GET | `/patient/medications` | patient | Current medication list |
@@ -267,6 +278,8 @@ Base path: `/api/v1`. JWT Bearer auth on all protected routes.
 | PATCH | `/patient/side-effects/{id}` | patient | Edit SE (creates `se_correction` event) |
 | DELETE | `/patient/side-effects/{id}` | patient | Mark deleted (soft; original event preserved) |
 | GET | `/patient/side-effects` | patient | List patient's SE |
+| GET | `/patient/me` | patient | Current patient profile + linked doctor identity |
+| PATCH | `/patient/me/credentials` | patient | Change own patient login and/or password using current password |
 
 ### 4.6 Reference data
 
@@ -305,26 +318,25 @@ Stack: React Router v7, TypeScript, pnpm. Shared between both roles; route-level
 | Route | Page | Key components |
 |-------|------|----------------|
 | `/login` | Login | `LoginForm`, role-aware redirect |
-| `/` (patient home) | Dashboard | `GreetingHeader`, `TaskCard` (×3 types), `StatBar`, `CareTeamCard`, `NextAppointmentCard`, `RecentActivityList`, `DailyReminder` |
+| `/` (patient home) | Dashboard | `GreetingHeader`, `TaskCard` (×3 types), `StatBar`, `CareTeamCard`, `RecentActivityList`, in-app indicator badges |
 | `/assessment/:patientScaleId` | Assessment wizard | `AssessmentHeader` (progress bar), `QuestionCard`, `AnswerOption`, `NavButtons` |
-| `/history` | Activity history | `FilterTabs`, `ActivityTable`, `StatusBadge` |
-| `/profile` | Patient profile | `EmailBindForm`, `PasswordChangeForm`, `NotificationToggle` |
+| `/history` | Assessment history | `FilterTabs`, `ActivityTable`, `StatusBadge`, empty/loading/error states backed by `GET /patient/history` |
+| `/profile` | Patient profile | `PatientCredentialForm`, `PasswordChangeForm`, `SessionInfoPanel`, in-app notification preferences placeholder |
 
 #### Doctor views
 
 | Route | Page | Key components |
 |-------|------|----------------|
 | `/doctor` | Patient roster | `PatientCard` (color-coded), `SortControls`, `AddPatientModal` |
-| `/doctor/patients/:id` | Patient detail | `PatientHeader`, `DiagnosisTabSwitcher`, `MedicationChart`, `ScoreChart`, `SEChart`, `EventTimeline`, `TherapyGoals`, `AssignTestModal`, `SEMonitoringModal`, `NextAppointmentCard` (Reschedule only; no Join Call link) |
-| `/doctor/schedule` | Schedule | `AppointmentList`, `AppointmentCard` (no "Join Call" — telehealth link removed from MVP scope) |
-| `/doctor/settings` | Settings | `ProfileForm` |
+| `/doctor/patients/:id` | Patient detail | `PatientHeader`, `DiagnosisTabSwitcher`, `MedicationChart`, `ScoreChart`, `SEChart`, `EventTimeline`, `TherapyGoals`, `AssignTestModal`, `SEMonitoringModal`, `PatientCredentialResetAction` |
+| `/doctor/profile` | Doctor profile | `DoctorProfileCard`, `PreferenceControls`, `SessionInfoPanel`, `AccessTokenPanel` |
 
 ### 5.2 Components
 
 | Component | Purpose |
 |-----------|---------|
-| `Sidebar` | Left nav (180 px); role-aware links; `DoctorView` / `PatientView` toggle at bottom |
-| `TopBar` | Breadcrumb + notifications bell + user avatar |
+| `Sidebar` | Left nav (180 px); role-aware links only for the authenticated role; no cross-role view switching |
+| `TopBar` | Brand/header area + in-app indicator bell + current-user affordance; no doctor/patient role switch |
 | `TaskCard` | Unified task tile; variants: `test`, `medication`, `side_effect`; status badge |
 | `StatusBadge` | Color pill: `completed` (blue) / `logged` (green) / `flagged` (red) / `pending` (amber) / `optional` (gray) |
 | `PatientCard` | Roster card with color indicator strip (red/yellow/green/gray) |
@@ -332,17 +344,33 @@ Stack: React Router v7, TypeScript, pnpm. Shared between both roles; route-level
 | `AssessmentHeader` | Purple header with step indicator dots and progress bar |
 | `EventTimeline` | Vertical timeline; append-only entries |
 | `TherapyGoals` | Checkbox list with completion bar |
-| `StatBar` | Three KPI cells (Tasks Done / Next Appt / Medication) |
-| `CareTeamCard` | Doctor info + Message / Schedule buttons |
+| `StatBar` | Three KPI cells (Tasks Done / Pending Tests / Medication) |
+| `CareTeamCard` | Doctor info only; message/schedule actions are deferred |
 
 ### 5.3 Design References
 
-The following screens were provided as Figma/UI reference (Docassist brand):
+Design references live in [`docs/assets/`](./assets/) and are the canonical visual target for
+frontend implementation. Phase documents must inventory the relevant screenshots before planning
+frontend work.
 
-1. **Patient Home** — Today's tasks in cards, right sidebar with stats, care team, appointment, recent activity, and motivational quote.
-2. **PHQ-9 Assessment wizard** — Purple header with question counter + dot progress bar; radio answer options with score values; Back/Next buttons.
-3. **Activity History** — Filterable full-width table; colored status badges (Completed / Logged / Flagged).
-4. **Doctor Patient Detail** — Patient header with severity tags; tabbed diagnosis switcher; dual-line trend chart (PHQ-9 green, GAD-7 purple); right sidebar with appointment, therapy goals, and side effects.
+Current provided references:
+
+1. **Doctor roster** — `patients-list-page.png`, `patients-list-empty-page.png`.
+2. **Add patient flow** — `add-patient-form-first-step.png`, `add-patient-form-second-step.png`, `add-patient-form-third-step.png`.
+3. **Doctor patient detail** — `patient-detail-overview-tab-page.png`, `patient-detail-dynamics-tab-page.png`, `patient-detail-drugs-tab-page.png`, `patient-detail-side-effects-tab-page.png`, `patient-detail-events-log-tab-page.png`.
+4. **Doctor profile** — `doctor-profile-page.png`, `doctor-profile-page-dark.png`.
+5. **Doctor patient credential reset** — `doctor-reset-login-pass-for-patient-page.png`.
+6. **Patient portal** — `patient-profile-main-page.png`, `patient-profile-tests-page.png`, `patient-profile-test-steps-form-page.png`, `patient-profile-test-success-page.png`, `patient-profile-drugs-page.png`, `patient-profile-side-effects-page.png`, `patient-profile-page.png`.
+7. **Patient side-effect wizard** — `patient-profile-add-side-effect-first-step-page.png`, `patient-profile-add-side-effect-second-step-page.png`, `patient-profile-add-side-effect-third-step-page.png`, `patient-profile-add-side-effect-final-step-page.png`.
+
+Known reference gaps to close in Phase 09:
+
+1. **Login and role entry** — no explicit visual reference currently exists for doctor/patient login,
+   role selection, patient login/password login, registration links, or auth error states.
+2. **Assessment history** — `/history` has real backend data but lacks complete visual reference
+   coverage for MVP-quality UI.
+3. **Responsive states** — desktop screenshots are present; mobile/tablet sidebar, dialogs, and
+   long-content states must be derived from the design system and verified explicitly.
 
 ### 5.4 Design System
 
@@ -548,14 +576,120 @@ All design tokens are canonical source-of-truth for the frontend implementation.
 | `06` | Event Timeline & Color Logic | Full event audit trail; patient card color computed | append-only event_log, color computation service, task generation cron, doctor roster with color sorting |
 | `07` | Charts & Doctor Detail | Visual analytics page for doctor | Medication/score/SE chart endpoints, React charts (Recharts), doctor patient detail page, therapy goals |
 | `08` | Patient Portal Polish | Complete patient UX | Today's tasks dashboard, activity history page, profile page, onboarding soft-gate |
-| `09` | Appointments & Notifications | Appointment scheduling; in-app task reminders | Appointment model, schedule endpoints, due-task badge, DailyReminder widget |
+| `09` | Frontend Design-System Completion & UX Refactor | Bring the implemented MVP frontend to the Docassist design target and complete patient credential/profile gaps | Visual audit, patient credential/session API, real history UI, doctor credential reset, global language/theme controls, responsive/accessibility pass, e2e smoke coverage |
 
 ---
+
+### 8.1 Phase 09 Detailed Scope
+
+Phase 09 replaces the previous "Appointments & Notifications" plan. Appointment scheduling and
+notification expansion remain deferred until the implemented MVP frontend matches the design
+system and reference screenshots.
+
+**Goal:** perform a full design-system completion and UX refactor across doctor, patient, and
+public auth surfaces, plus the narrowly scoped patient credential/session API work required by the
+profile and recovery UX.
+
+**Required outputs:**
+
+1. **Design/reference audit**
+   - Create a per-route audit of current frontend screens against `docs/assets/`.
+   - Document which existing screenshots are authoritative for each route and which missing screens
+     are derived from the shared Docassist chrome/tokens.
+   - Record missing reference gaps for future screenshots without blocking implementation of
+     already-defined functionality.
+
+2. **Global application chrome**
+   - Align doctor, patient, and public auth layouts with the same Docassist visual language:
+     sidebar/top-bar spacing, active states, badges, avatar blocks, typography, empty states,
+     loading states, and error states.
+   - Place `LanguageSwitcher` and `ThemeToggle` visibly in the shared navigation/account chrome for
+     both roles, with mobile-safe states.
+   - Preserve existing i18n/theme functionality; this phase is about visual integration and
+     interaction polish, not new localization semantics.
+   - Remove production UI artifacts that came from generated design/demo scaffolding rather than
+     product requirements. The authenticated role is fixed by the token and backend authorization;
+     the UI must not offer a doctor/patient view switch unless a later spec defines impersonation or
+     role-switching semantics.
+
+3. **Public auth UX**
+   - Redesign `/login` to support doctor login, patient login/password login, and clear role
+     switching in a single reference-aligned screen.
+   - Patient email/password login is explicitly out of MVP scope.
+   - Align `/register` with the same auth visual system and doctor registration contract.
+   - Cover validation, loading, error, and redirect states.
+
+4. **Patient portal completion**
+   - Reconcile `/dashboard`, `/tests`, `/assessment/:patientScaleId`, `/drugs`, `/side-effects`,
+     `/profile`, and `/history` with the patient-profile references and SPEC §5.1. Use
+     `patient-profile-page.png` as the canonical `/profile` target for login/password,
+     preferences, and current-session layout.
+   - Finish `/history` as a real completed-assessment history screen backed by
+     `GET /patient/history`; do not leave it as a placeholder.
+   - Implement profile visual states: patient login/password change, current-session/token
+     metadata, in-app notification placeholder, account identity, and linked doctor information.
+   - Patient credential edits must use generic login-validation errors and must not disclose whether
+     another patient owns a rejected login.
+   - Ensure task badges, test overdue states, medication log states, side-effect severity states,
+     and success screens are visually consistent.
+
+5. **Doctor portal completion**
+   - Reconcile `/doctor`, `/doctor/profile`, add-patient modal, and `/doctor/patients/:id` tabs
+     with the doctor roster/detail/add-patient/profile references. Use `doctor-profile-page.png`
+     and `doctor-profile-page-dark.png` as canonical light/dark profile targets.
+   - Add a doctor-only credential reset action for a patient. It generates a new login/password
+     pair, replaces the existing pair, returns plaintext once, and is visibly framed as account
+     recovery rather than routine editing. Use `doctor-reset-login-pass-for-patient-page.png` as
+     the canonical modal target.
+   - Ensure chart panels, tab bars, modals, right-side clinical panels, empty states, and long data
+     states match the reference density and spacing.
+
+6. **Design-system refactor**
+   - Consolidate repeated page/card/status styles into shared primitives where it reduces real
+     duplication.
+   - Keep API-derived frontend types sourced from `frontend/app/shared/types/schema.ts`.
+   - Preserve `docs/FRONTEND_CONVENTIONS.md`: kebab-case files, `type` over `interface`,
+     `React.FC<Props>`, `props.x`, named `Fx` effects, typed router/search-param helpers, and no raw
+     API escape hatches.
+
+7. **Responsive, accessibility, and regression coverage**
+   - Verify desktop, tablet, and mobile states for every public, doctor, and patient route in scope.
+   - Confirm WCAG 2.1 AA contrast, keyboard navigation, focus indicators, accessible names, and
+     no text overlap/truncation in core workflows.
+   - Add/update e2e smoke tests for auth, patient portal, real history, patient credential profile
+     controls, doctor roster/detail, add-patient modal, doctor credential reset controls, language
+     switcher, theme toggle, and responsive navigation.
+   - Add unit tests for any new pure utilities introduced during the refactor.
+
+**Explicit non-goals for Phase 09:**
+
+- New appointment DB model, migrations, or schedule endpoints.
+- `/doctor/settings` or `/doctor/schedule` frontend routes unless a later phase defines explicit
+  user value, route logic, and contracts.
+- Any production-facing role impersonation, cross-role "view as", or doctor/patient toggle that is
+  not backed by a real authorization contract.
+- Patient email/password login or email-based account recovery.
+- Push, browser, web, or email notifications. Phase 09 may use in-app visual indicators only:
+  badges, counters, highlighted task rows, and a bell icon that reflects already-loaded in-app state.
+- Server-side token inventory, device management, revoke-all-sessions, or refresh-token blacklist.
+- New clinical calculations or unrelated backend contracts beyond patient credentials/session.
+- Manual edits to generated `frontend/app/shared/types/schema.ts`.
+
+**Known generated/demo artifacts to remove in Phase 09:**
+
+- **К удалению:** `TopBar` doctor/patient links (`Врач` / `Пациент`) that navigate between role
+  areas. They are a design/demo artifact and violate the app's role model.
+- **К удалению:** any `/doctor/settings` or `/doctor/schedule` navigation affordance still present
+  in frontend chrome. Those routes remain out of MVP scope.
+- **К удалению:** hardcoded demo identity in production chrome, e.g. doctor footer text such as
+  `Волков А.Н.` / `Психиатр`; use authenticated profile data or a loading/empty state.
+- **К удалению или строгому dev-only guard:** visible demo credential helpers in auth UI. Production
+  builds must not expose seed/demo login values or fill-buttons.
 
 ## 9. Out of Scope
 
 - Document verification or medical license checks for doctors.
-- Email invitations to patients (temp credentials shared offline/messenger).
+- Email invitations to patients (patient credentials are shared offline/messenger).
 - EMR / HIS integration.
 - Multi-domain symptom scale analysis (domains within PHQ-9, etc.).
 - Predictive models, AI-generated clinical conclusions.
@@ -580,4 +714,6 @@ All questions resolved — no open items.
 | 2 | Medication self-add | Patient **can** add, edit, and stop their own medications. Every write emits the corresponding event (`drug_started` / `dose_changed` / `drug_stopped`) so the doctor sees the full change audit in the timeline. See §2.1 and §4.5. |
 | 3 | UKU catalogue locale | **Bilingual (RU + EN)**. Both `name_ru` and `name_en` are required fields on `se_dictionary`. UI locale switching is a §8 Phase 05 concern. |
 | 4 | Scale seed scope | **PHQ-9, GAD-7, YMRS** ship in MVP. HAM-D deferred to V2. Clinical rules configured per scale per diagnosis per TEMP_SPEC §3. |
-| 5 | Telehealth "Join Call" | **Removed from scope entirely.** Appointments UI shows Reschedule only. External video-service integration is out of scope (§9). |
+| 5 | Telehealth "Join Call" | **Removed from MVP scope entirely.** Appointment UI/API is deferred until a later phase; external video-service integration is out of scope (§9). |
+| 6 | Patient credentials | MVP patients authenticate only with doctor-issued/self-changed login/password. Patient email/password login and email recovery are deferred. Doctor can reset patient credentials for recovery. |
+| 7 | Notifications | MVP notification UX is in-app-only visual indicators. Browser push, email, background delivery, and server-side notification contracts are deferred. |
