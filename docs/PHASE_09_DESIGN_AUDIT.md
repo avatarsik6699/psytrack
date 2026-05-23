@@ -11,7 +11,7 @@ route-level UX gaps before the phase gate.
 | Route | Current implementation | Target reference | Gap / action |
 |-------|------------------------|------------------|--------------|
 | `/login` | Public route uses a compact shared login form with doctor/patient mode buttons and visible dev credential helper in development. | Derived from Docassist chrome; no screenshot supplied. | Redesign as production auth surface with doctor email/password mode and patient login/password mode only. Keep role switching inside the form, not as app impersonation. Demo helper must stay dev-only and visually separate from production state. |
-| `/register` | Public route exists for doctor registration. Needs visual review with auth shell. | Derived from Docassist chrome; no screenshot supplied. | Align spacing, validation, loading, error, and link states with `/login`. Do not add patient email/password registration. |
+| `/register` | Closed for MVP by architect decision; route redirects to `/login`. Doctor accounts are created manually during real-world testing. | n/a | No public registration UI or registration link should be exposed in the MVP. |
 | `/` | Patient-protected index route exists. | `patient-profile-main-page.png` derived home/dashboard pattern. | Confirm redirect/content behavior after chrome refactor. Avoid duplicate home/dashboard mismatch. |
 | `/dashboard` | Patient dashboard route exists from Phase 08. | `patient-profile-main-page.png`. | Align cards, task state, notification placeholder, spacing, and mobile layout with patient reference. |
 | `/history` | Route exists and calls `useTestHistory`; UI is a minimal English list. | Derived from patient profile/tests design; no screenshot supplied. | Localize copy, align with patient portal card/table patterns, expose empty/loading/error states, and verify it uses real `GET /patient/history` data. |
@@ -45,7 +45,7 @@ route-level UX gaps before the phase gate.
 ## Screenshot Gaps For Future Design Input
 
 - `/login` doctor mode, patient mode, validation, loading, and error states.
-- `/register` form states.
+- Future `/register` form states, if public doctor onboarding is restored after MVP testing.
 - `/history` completed-assessment list and empty state.
 - Responsive mobile/tablet states for authenticated doctor and patient chrome.
 - Keyboard focus and high-contrast states for dialogs, tabs, segmented controls, and wizard steps.

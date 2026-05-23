@@ -130,22 +130,20 @@ test.describe('Phase 07 — Charts & Doctor Detail', () => {
 	test('patient detail page shows ScoreChart section', async ({ page }) => {
 		await page.goto(`/doctor/patients/${patientId}`);
 		await page.locator('[data-slot="tabs-trigger"]', { hasText: 'Динамика' }).first().click();
-		// ScoreChart renders "No score data." when empty
-		await expect(page.getByText(/No score data\./i)).toBeVisible({ timeout: 8000 });
+		await expect(page.getByText('Данные об оценках отсутствуют.')).toBeVisible({ timeout: 8000 });
 	});
 
 	test('TherapyGoals section renders with Add goal button', async ({ page }) => {
 		await page.goto(`/doctor/patients/${patientId}`);
 		await expect(page.getByRole('heading', { name: 'Цели терапии' })).toBeVisible({ timeout: 8000 });
-		await expect(page.getByText(/Add goal/i)).toBeVisible();
+		await expect(page.getByRole('button', { name: /\+ Добавить цель/i })).toBeVisible();
 	});
 
 	test('AssignTestModal opens when + Assign Test is clicked', async ({ page }) => {
 		await page.goto(`/doctor/patients/${patientId}`);
 		await page.locator('[data-slot="tabs-trigger"]', { hasText: 'Динамика' }).first().click();
 		await page.getByRole('button', { name: /Назначить тест/i }).click();
-		// The modal renders an inline form; assert the visible "Scale *" label is shown
-		await expect(page.getByText('Scale *')).toBeVisible();
+		await expect(page.getByText('Шкала *')).toBeVisible();
 	});
 
 	// -------------------------------------------------------------------------

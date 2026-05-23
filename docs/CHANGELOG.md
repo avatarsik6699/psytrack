@@ -6,6 +6,36 @@
 
 ---
 
+## [2026-05-23] — Phase 09 complete
+
+**Type**: phase-completion
+**Author**: AI (context-update)
+**Triggered by**: PHASE_09 gate passed
+
+### Changes
+- Completed frontend design-system and UX refactor across public, patient, and doctor routes.
+- Added patient current-session and credential update contracts.
+- Added doctor-side patient credential reset contract and UI.
+- Completed real patient `/history`, doctor `/doctor/profile`, and credential/profile UX.
+- Added Russian scale-question seed migration and localized test/medication UX coverage.
+- Kept public `/register` closed for MVP; it redirects to `/login` while doctor accounts are created manually.
+
+### Affected Phases
+- None (additive change)
+
+### Contract Updates
+- Added `GET /api/v1/public/auth/session`.
+- Added `PATCH /api/v1/patient/me/credentials`.
+- Added `POST /api/v1/doctor/patients/{patient_id}/credentials/reset`.
+- Added OpenAPI schemas `SessionInfoOut`, `PatientCredentialUpdateIn`, and `PatientCredentialResetOut`.
+- Updated alembic head to `0010_scale_questions_ru`.
+- Added active UI routes `/history`, `/doctor/profile`, and MVP `/register` redirect behavior.
+
+### Notes
+Public doctor self-registration remains disabled for MVP until real-world testing validates onboarding. Existing auth registration API remains available for controlled/manual account creation and test setup.
+
+---
+
 ## 2026-05-23 — Generated demo/design artifacts marked for removal
 
 **Type**: spec-change

@@ -23,7 +23,7 @@
 | PHASE_06 | ✅ done    | v0.06.0 | ✅ | 🤝 hybrid | Event Timeline & Color Logic |
 | PHASE_07 | ✅ done    | v0.07.0 | ✅ | 🤝 hybrid | Charts & Doctor Detail |
 | PHASE_08 | ✅ done    | v0.08.0 | ✅ | 🤝 hybrid | Patient Portal Polish |
-| PHASE_09 | ⚠️ NEEDS_REVIEW | v0.09.0 | ⬜ | — | Scope revised: patient credentials, real history, in-app indicators |
+| PHASE_09 | ✅ done    | v0.09.0 | ✅ | 🤝 hybrid | Frontend design-system completion, patient credentials, real history |
 
 <!-- Add new rows here via /phase-init N -->
 
@@ -33,7 +33,7 @@
 
 <!-- Format: PHASE_XX [YYYY-MM-DD]: description — who must resolve it -->
 
-PHASE_09 [2026-05-23]: needs architect review after new profile/credential-reset references and generated-demo-artifact cleanup scope were added. Confirm `/doctor/profile`, updated reference mapping, and **К удалению** artifact list before implementation.
+<!-- None -->
 
 ---
 

@@ -53,7 +53,8 @@ Docassist chrome, spacing, typography, and token system.
 
 ### Missing References To Derive
 
-- `/login` and `/register`: doctor login, patient login/password login, role switching, validation/loading/error states.
+- `/login`: doctor login, patient login/password login, role switching, validation/loading/error states.
+- `/register`: closed for MVP; redirects to `/login`. Doctor accounts are created manually until real-world testing validates the onboarding flow.
 - `/history`: completed-assessment history backed by real `GET /patient/history` data.
 - Responsive states: mobile/tablet navigation, dialogs, long data, text wrapping, and focus states.
 
@@ -84,7 +85,7 @@ Audit, visual refactor, responsive checks, and e2e smoke must cover every route 
 
 Public:
 - `/login`
-- `/register`
+- `/register` (redirects to `/login`; no public registration UI in MVP)
 
 Patient:
 - `/`
@@ -118,7 +119,7 @@ Explicitly out of scope:
 
 ### Frontend
 - [x] `F1` Global application chrome — align doctor, patient, and public auth layouts with Docassist sidebar/top-bar spacing, active states, badges, avatar blocks, typography, empty/loading/error states; place `LanguageSwitcher` and `ThemeToggle` visibly in role-aware navigation/account chrome with mobile-safe states; remove production artifacts listed above, including the top-bar doctor/patient switch, out-of-scope doctor nav links, and hardcoded identity data — _Depends on:_ `T1`
-- [x] `F2` Public auth UX — redesign `/login` and `/register` for doctor login, patient login/password login, role switching between login form modes only, registration links, validation, loading, error, and redirect states; do not add patient email/password login; remove or strictly dev-guard visible demo credential helpers — _Depends on:_ `F1`, `B1`
+- [x] `F2` Public auth UX — redesign `/login` for doctor login, patient login/password login, role switching between login form modes only, validation, loading, error, and redirect states; keep `/register` closed with redirect to `/login` because doctor accounts are created manually during MVP testing; do not add patient email/password login; remove or strictly dev-guard visible demo credential helpers — _Depends on:_ `F1`, `B1`
 - [x] `F3` Patient portal completion — reconcile `/dashboard`, `/tests`, `/assessment/:patientScaleId`, `/drugs`, `/side-effects`, `/profile`, and `/history` with patient-profile references and SPEC §5.1; use `patient-profile-page.png` for the canonical profile layout; finish real `/history`, patient credential forms, current-session panel, in-app notification placeholder, and task/test/medication/side-effect/success states — _Depends on:_ `F1`, `B1`
 - [x] `F4` Doctor portal completion — reconcile `/doctor`, `/doctor/profile`, add-patient modal, and `/doctor/patients/:id` tabs with roster/detail/add-patient/profile references; use `doctor-profile-page.png` and `doctor-profile-page-dark.png` for profile light/dark states; add patient credential reset UX from `doctor-reset-login-pass-for-patient-page.png`; do not add `/doctor/settings` or `/doctor/schedule` routes in this phase — _Depends on:_ `F1`, `B2`
 - [x] `F5` Design-system refactor — consolidate repeated page/card/status/control patterns into shared primitives where it reduces duplication; preserve `docs/FRONTEND_CONVENTIONS.md`, generated API types from `schema.ts`, typed router/search helpers, and no raw API escape hatches — _Depends on:_ `F2`, `F3`, `F4`

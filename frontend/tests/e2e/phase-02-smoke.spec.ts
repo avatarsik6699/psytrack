@@ -100,19 +100,17 @@ test.describe('Phase 02 — Patient Management', () => {
 
 		// Open modal
 		await page.getByRole('button', { name: /Добавить пациента/i }).click();
-		await expect(page.getByRole('heading', { name: 'Добавить пациента' })).toBeVisible();
+		await expect(page.getByRole('heading', { name: 'Имя пациента' })).toBeVisible();
 
-		// Fill full name (first text input inside the modal)
-		await page.locator('form input[type="text"]').fill('E2E Test Patient');
+		await page.getByPlaceholder('Фамилия Имя Отчество').fill('E2E Test Patient');
+		await page.getByRole('button', { name: /Далее/i }).click();
 
-		// Fill date of birth
+		await expect(page.getByRole('heading', { name: 'Данные пациента' })).toBeVisible();
 		await page.locator('input[type="date"]').fill('1990-06-15');
+		await page.getByRole('button', { name: /Далее/i }).click();
 
-		// Select gender
-		await page.locator('select').selectOption('female');
-
-		// Submit
-		await page.getByRole('button', { name: 'Создать' }).click();
+		await expect(page.getByRole('heading', { name: 'Подтверждение' })).toBeVisible();
+		await page.getByRole('button', { name: 'Создать пациента' }).click();
 
 		// Credentials panel appears with Login and Password copy-fields
 		await expect(page.getByText('Пациент добавлен')).toBeVisible();
@@ -141,10 +139,10 @@ test.describe('Phase 02 — Patient Management', () => {
 		await expect(page.getByRole('button', { name: /Архив/i })).toBeVisible();
 
 		// Diagnoses section heading
-		await expect(page.getByRole('heading', { name: /Диагнозы/i })).toBeVisible();
+		await expect(page.getByRole('heading', { name: /Диагнозы/i }).first()).toBeVisible();
 
 		// Medications section heading
-		await expect(page.getByRole('heading', { name: /Препараты/i })).toBeVisible();
+		await expect(page.getByRole('heading', { name: /Препараты/i }).first()).toBeVisible();
 	});
 
 	// -------------------------------------------------------------------------

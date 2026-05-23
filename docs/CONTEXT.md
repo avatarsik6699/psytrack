@@ -5,7 +5,7 @@
   },
 
   "captured_at": "2026-05-23",
-  "phase_completed": "08",
+  "phase_completed": "09",
   "phase_in_progress": null,
 
   "stack": {
@@ -159,13 +159,16 @@
     { "phase": "07", "method": "PATCH", "path": "/api/v1/doctor/patients/{id}/goals/{gid}",                 "auth": "doctor",  "response": "TherapyGoalOut" },
     { "phase": "08", "method": "GET",   "path": "/api/v1/patient/tasks",                                    "auth": "patient", "response": "TaskOut[]" },
     { "phase": "08", "method": "GET",   "path": "/api/v1/patient/me",                                       "auth": "patient", "response": "PatientMeOut" },
-    { "phase": "08", "method": "PATCH", "path": "/api/v1/public/auth/me/email",                             "auth": "bearer",  "response": "{ ok: true }" }
+    { "phase": "08", "method": "PATCH", "path": "/api/v1/public/auth/me/email",                             "auth": "bearer",  "response": "{ ok: true }" },
+    { "phase": "09", "method": "GET",   "path": "/api/v1/public/auth/session",                              "auth": "bearer",  "response": "SessionInfoOut" },
+    { "phase": "09", "method": "PATCH", "path": "/api/v1/patient/me/credentials",                           "auth": "patient", "response": "PatientMeOut" },
+    { "phase": "09", "method": "POST",  "path": "/api/v1/doctor/patients/{patient_id}/credentials/reset",   "auth": "doctor",  "response": "PatientCredentialResetOut" }
   ],
 
   "db_schema": {
     "tables": ["users", "doctor_profiles", "patients", "diagnoses", "medications_reference", "patient_medications", "scales", "clinical_rules", "patient_scales", "test_completions", "event_log", "se_dictionary", "patient_side_effects", "se_monitoring_rules", "tasks", "therapy_goals"],
     "source": "alembic/versions/",
-    "current_head": "0009_therapy_goals"
+    "current_head": "0010_scale_questions_ru"
   },
 
   "ui_pages_active": [
@@ -177,7 +180,10 @@
     { "phase": "08", "route": "/drugs",     "component": "frontend/app/routes/drugs/index.tsx",    "auth": "patient" },
     { "phase": "08", "route": "/side-effects", "component": "frontend/app/routes/side-effects/index.tsx", "auth": "patient" },
     { "phase": "08", "route": "/profile",   "component": "frontend/app/routes/profile/index.tsx",  "auth": "patient" },
-    { "phase": "08", "route": "/assessment/:patientScaleId", "component": "frontend/app/routes/assessment/index.tsx", "auth": "patient" }
+    { "phase": "08", "route": "/assessment/:patientScaleId", "component": "frontend/app/routes/assessment/index.tsx", "auth": "patient" },
+    { "phase": "09", "route": "/history",   "component": "frontend/app/routes/history.tsx", "auth": "patient" },
+    { "phase": "09", "route": "/doctor/profile", "component": "frontend/app/routes/doctor/profile.tsx", "auth": "doctor" },
+    { "phase": "09", "route": "/register", "component": "frontend/app/routes/register.tsx", "auth": "public redirect to /login; public registration closed for MVP" }
   ],
 
   "env_config": {
@@ -194,5 +200,5 @@
 
   "db_seeds": {},
 
-  "notes": "Phase 08 complete. Added patient portal polish and full frontend refactoring, including patient task/profile/email endpoints, patient dashboard/tests/drugs/side-effects/profile routes, assessment success polish, shared frontend conventions/utilities, semantic UI components/tokens, responsive sidebar, and expanded frontend test coverage."
+  "notes": "Phase 09 complete. Added patient credential/session contracts, doctor credential reset, real patient history UI, doctor profile UI, Russian scale-question seed migration, and frontend design-system/UX completion with public registration closed for MVP."
 }

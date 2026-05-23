@@ -58,19 +58,18 @@ async function seedAuth(page: import('@playwright/test').Page, tokens: TokenPair
 test.describe('Phase 09 — public auth', () => {
 	test('login exposes doctor and patient modes without app role-switch links', async ({ page }) => {
 		await page.goto('/login');
-		await expect(page.getByRole('heading', { name: 'Вход в Docassist' })).toBeVisible();
+		await expect(page.getByRole('heading', { name: 'Добро пожаловать' })).toBeVisible();
 		await expect(page.getByRole('button', { name: 'Врач' })).toBeVisible();
 		await page.getByRole('button', { name: 'Пациент' }).click();
-		await expect(page.getByLabel('Логин пациента')).toBeVisible();
-		await expect(page.getByRole('link', { name: /Зарегистрироваться/i })).toBeVisible();
+		await expect(page.getByLabel('Логин')).toBeVisible();
+		await expect(page.getByRole('link', { name: /Зарегистрироваться|Регистрация/i })).toHaveCount(0);
 		await expect(page.getByRole('link', { name: 'Врач' })).toHaveCount(0);
 	});
 
-	test('register is doctor-only and links back to login', async ({ page }) => {
+	test('register route is closed for MVP and redirects to login', async ({ page }) => {
 		await page.goto('/register');
-		await expect(page.getByRole('heading', { name: 'Регистрация врача' })).toBeVisible();
-		await expect(page.getByLabel('ФИО врача')).toBeVisible();
-		await expect(page.getByRole('link', { name: 'Войти' })).toBeVisible();
+		await expect(page).toHaveURL(/\/login$/);
+		await expect(page.getByRole('heading', { name: 'Добро пожаловать' })).toBeVisible();
 	});
 });
 
@@ -125,7 +124,7 @@ test.describe('Phase 09 — doctor portal', () => {
 	test('doctor profile renders session and preferences', async ({ page }) => {
 		await page.goto('/doctor/profile');
 		await expect(page.getByRole('heading', { name: 'Профиль врача' })).toBeVisible({ timeout: 8000 });
-		await expect(page.getByText('Access token')).toBeVisible();
+		await expect(page.getByRole('heading', { name: 'Токен доступа' })).toBeVisible();
 		await expect(page.getByRole('heading', { name: 'Интерфейс' })).toBeVisible();
 	});
 
