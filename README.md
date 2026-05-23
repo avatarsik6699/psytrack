@@ -1,15 +1,22 @@
-# Template App
+# Docassist Patient Tracker
 
-Reusable starter based on the current stack:
-- Backend: FastAPI, SQLAlchemy async, Alembic, Pydantic v2
-- Frontend: React 19, React Router SSR, Vite, TypeScript, Tailwind
-- Infra: PostgreSQL, Redis, Docker Compose, Nginx
+Web application for psychiatric and psychotherapy inter-visit monitoring.
+
+Docassist helps doctors track patient progress between appointments: medication adherence,
+test results, side effects, therapy goals, tasks, and patient status summaries.
+
+## Stack
+
+- Backend: FastAPI, SQLAlchemy async, Alembic, Pydantic
+- Frontend: React Router, TypeScript, pnpm
+- Database: PostgreSQL
+- Infra: Docker Compose, Nginx
 
 ## Prerequisites
 
-- `docker` + `docker compose`
-- `uv`
-- `node` + `pnpm`
+- Docker + Docker Compose
+- uv
+- Node.js + pnpm
 
 ## Run
 
@@ -18,16 +25,14 @@ cp .env.example .env
 docker compose up --build
 ```
 
-## Backend checks
+All services are expected to run through Docker Compose.
+
+## Checks
 
 ```bash
-uv run alembic upgrade head
-uv run pytest tests/ -v
-```
+uv sync --dev
+uv run pytest
 
-## Frontend checks
-
-```bash
 cd frontend
 pnpm install
 pnpm typecheck
