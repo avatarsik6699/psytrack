@@ -1,7 +1,8 @@
 """Database seed runner.
 
 Usage:
-    uv run python scripts/seed.py                        # run all seeders
+    uv run python scripts/seed.py                        # run reference seeders
+    uv run python scripts/seed.py --all                  # run all seeders, including demo data
     uv run python scripts/seed.py --list                 # list registered seeders
     uv run python scripts/seed.py --seeder NAME          # run one specific seeder
     uv run python scripts/seed.py --dry-run              # preview without writing
@@ -18,6 +19,8 @@ from sqlalchemy.ext.asyncio import async_sessionmaker, create_async_engine
 
 from app.core.config import settings
 from app.seeders import ALL_SEEDERS
+
+REFERENCE_SEEDERS = ["medications_reference", "scales", "side_effects"]
 
 
 async def _run(seeder_names: list[str] | None, dry_run: bool) -> None:
@@ -65,6 +68,11 @@ def main() -> None:
         help="run a specific seeder by name (repeatable)",
     )
     parser.add_argument(
+        "--all",
+        action="store_true",
+        help="run all registered seeders, including demo data",
+    )
+    parser.add_argument(
         "--list",
         action="store_true",
         help="list all registered seeders and exit",
@@ -83,7 +91,11 @@ def main() -> None:
             print(f"  {s.name:<35} {s.description}")
         sys.exit(0)
 
-    asyncio.run(_run(seeder_names=args.seeders, dry_run=args.dry_run))
+    selected_seeders = args.seeders
+    if selected_seeders is None and not args.all:
+        selected_seeders = REFERENCE_SEEDERS
+
+    asyncio.run(_run(seeder_names=selected_seeders, dry_run=args.dry_run))
 
 
 if __name__ == "__main__":

@@ -1381,6 +1381,11 @@ export interface components {
             /** Refresh Token */
             refresh_token: string;
         };
+        /** RegisterDisabledResponse */
+        RegisterDisabledResponse: {
+            /** Detail */
+            detail: string;
+        };
         /** RegisterRequest */
         RegisterRequest: {
             /**
@@ -1798,12 +1803,12 @@ export interface operations {
         };
         responses: {
             /** @description Successful Response */
-            201: {
+            403: {
                 headers: {
                     [name: string]: unknown;
                 };
                 content: {
-                    "application/json": components["schemas"]["TokenPair"];
+                    "application/json": components["schemas"]["RegisterDisabledResponse"];
                 };
             };
             /** @description Validation Error */

@@ -21,6 +21,10 @@ class TokenPair(BaseModel):
     token_type: str = "bearer"
 
 
+class RegisterDisabledResponse(BaseModel):
+    detail: str
+
+
 class CurrentSessionOut(BaseModel):
     user_id: UUID
     role: UserRole

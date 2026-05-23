@@ -6,6 +6,65 @@
 
 ---
 
+## [2026-05-24] — Phase 10 complete
+
+**Type**: phase-completion
+**Author**: AI (context-update)
+**Triggered by**: PHASE_10 gate passed and committed
+
+### Changes
+- Closed public doctor self-registration at API level; `POST /api/v1/public/auth/register` now returns a deterministic disabled response and creates no account.
+- Added operator-side doctor provisioning through `scripts/create-doctor.py` / Make target.
+- Added auth rate limiting for login, patient login, refresh, and disabled registration paths.
+- Disabled `/docs`, `/redoc`, and `/openapi.json` when `APP_ENV=production` while keeping development OpenAPI available for generated frontend types.
+- Made startup seeding reference-only and kept demo seeding manual.
+- Added production API base URL handling, dev-only login helper guarding, production setup, nginx/certbot renewal, and single-backend scheduler deployment constraints for `psycker.ru`.
+
+### Affected Phases
+- None (additive/superseding production-readiness change)
+
+### Contract Updates
+- Superseded `POST /api/v1/public/auth/register`: response is now `RegisterDisabledResponse`; public registration is disabled and creates no account.
+- Added operational command `scripts/create-doctor.py` / Make target for manual doctor account creation.
+- Added production env contract for `INTERNAL_KEY`.
+- Enforced production env values: `APP_ENV=production`, `DOMAIN=psycker.ru`, `API_BASE_URL=https://psycker.ru`, `API_BASE_INTERNAL_URL=http://backend:8000`, and production CORS for `psycker.ru` and `www.psycker.ru`.
+- Production `/docs`, `/redoc`, and `/openapi.json` are unavailable.
+
+### Notes
+Broader security, operations, and legal/compliance work remains deferred to Phases 11 and 12.
+
+---
+
+## 2026-05-23 — Production readiness phases added
+
+**Type**: spec-change
+**Author**: AI (spec-sync)
+**Triggered by**: Architect requested a dedicated production-readiness phase before deploying to the new `psycker.ru` VPS domain.
+
+### Changes
+- `docs/SPEC.md` updated from `v1.7` to `v1.8`
+- Added Phase 10: Production Readiness & VPS Deployment
+- Added Phase 11: Security Hardening & Operations
+- Added Phase 12: Legal/Compliance Readiness
+- Public doctor registration is now specified as disabled at API level until a later verified onboarding phase.
+- Production infrastructure contract now defines canonical `https://psycker.ru`, `www` redirect, disabled production OpenAPI/docs, setup script expectations, reference-only startup seeding, and single-backend scheduler constraints.
+
+### Affected Phases
+- PHASE_10 — new pending phase to implement production readiness blockers.
+- PHASE_11 — future phase for deeper security and operational hardening.
+- PHASE_12 — future phase for legal/compliance readiness.
+- PHASE_01 / PHASE_09 — historical auth/register documentation is superseded by the new Phase 10 production-readiness contract; completed implementation is not reopened here.
+
+### Contract Updates
+- Planned change: `POST /api/v1/public/auth/register` must become a disabled route that creates no account.
+- Planned env/setup additions: `scripts/setup-prod.sh`, production `DOMAIN=psycker.ru`, `API_BASE_URL=https://psycker.ru`, `API_BASE_INTERNAL_URL=http://backend:8000`, production CORS for `psycker.ru` and `www.psycker.ru`, generated `INTERNAL_KEY`.
+- Planned production behaviour: `/docs`, `/redoc`, and `/openapi.json` return 404 when `APP_ENV=production`.
+
+### Notes
+No `docs/CONTEXT.md` update was made by this spec-sync because the active runtime contract is unchanged until Phase 10 is implemented and closed via `context-update`.
+
+---
+
 ## [2026-05-23] — Phase 09 complete
 
 **Type**: phase-completion

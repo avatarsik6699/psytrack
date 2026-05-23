@@ -17,7 +17,7 @@ from app.core.config import settings
 from app.core.logging import configure_logging
 from app.core.middleware import register_middleware
 from app.core.rate_limit import limiter
-from app.db.session import close_db, init_db, get_db
+from app.db.session import close_db, get_db, init_db
 
 configure_logging()
 
@@ -34,32 +34,47 @@ async def _run_task_generation() -> None:
 @asynccontextmanager
 async def lifespan(_app: FastAPI) -> AsyncIterator[None]:
     await init_db()
-    scheduler = AsyncIOScheduler()
-    scheduler.add_job(_run_task_generation, "cron", hour=0, minute=5)
-    scheduler.start()
+    scheduler: AsyncIOScheduler | None = None
+    if settings.SCHEDULER_ENABLED:
+        scheduler = AsyncIOScheduler()
+        scheduler.add_job(_run_task_generation, "cron", hour=0, minute=5)
+        scheduler.start()
     try:
         yield
     finally:
-        scheduler.shutdown(wait=False)
+        if scheduler is not None:
+            scheduler.shutdown(wait=False)
         await close_db()
 
 
-app = FastAPI(
-    title="Docassist",
-    version="0.1.0",
-    description="Psychiatric inter-visit monitoring",
-    lifespan=lifespan,
-)
+def create_app() -> FastAPI:
+    docs_url = None if settings.is_production else "/docs"
+    redoc_url = None if settings.is_production else "/redoc"
+    openapi_url = None if settings.is_production else "/openapi.json"
 
-app.add_middleware(
-    CORSMiddleware,
-    allow_origins=settings.CORS_ORIGINS,
-    allow_credentials=True,
-    allow_methods=["*"],
-    allow_headers=["*"],
-)
+    app = FastAPI(
+        title="Docassist",
+        version="0.1.0",
+        description="Psychiatric inter-visit monitoring",
+        lifespan=lifespan,
+        docs_url=docs_url,
+        redoc_url=redoc_url,
+        openapi_url=openapi_url,
+    )
 
-register_middleware(app)
-app.state.limiter = limiter
-app.add_exception_handler(RateLimitExceeded, _rate_limit_exceeded_handler)
-app.include_router(api_v1_router)
+    app.add_middleware(
+        CORSMiddleware,
+        allow_origins=settings.CORS_ORIGINS,
+        allow_credentials=True,
+        allow_methods=["*"],
+        allow_headers=["*"],
+    )
+
+    register_middleware(app)
+    app.state.limiter = limiter
+    app.add_exception_handler(RateLimitExceeded, _rate_limit_exceeded_handler)
+    app.include_router(api_v1_router)
+    return app
+
+
+app = create_app()

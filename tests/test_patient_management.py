@@ -13,17 +13,7 @@ from app.modules.users.models import User, UserRole
 
 
 async def _register_doctor(client: AsyncClient, suffix: str) -> str:
-    resp = await client.post(
-        "/api/v1/public/auth/register",
-        json={
-            "email": f"doc_{suffix}@test.com",
-            "password": "Pass1234!",
-            "full_name": f"Dr {suffix}",
-            "consent_152fz": True,
-        },
-    )
-    assert resp.status_code == 201, resp.text
-    return resp.json()["access_token"]
+    return await client.create_doctor_token(f"doc_{suffix}@test.com", f"Dr {suffix}")
 
 
 async def test_create_patient_returns_temp_credentials(

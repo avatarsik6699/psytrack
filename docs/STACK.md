@@ -66,7 +66,7 @@ STACK.md` for those.
 | Reference data seed | n/a | Seeding runs automatically via `entrypoint.sh` inside the Docker backend container. |
 | Backend / unit tests | `uv run pytest` | Uses aiosqlite in-memory; no Docker needed |
 | **Schema sync** | `cd frontend && pnpm generate:api` | Backend must be running on :8000; regenerates `schema.ts` from live OpenAPI spec — **run after every API change** |
-| Frontend prep | `cd frontend && pnpm install && pnpm build` | Requires Node >= 22 and pnpm |
+| Frontend prep | `cd frontend && pnpm install && VITE_API_BASE_URL=https://psycker.ru pnpm build` | Requires Node >= 22 and pnpm; Phase 10 production builds require an explicit public API base URL. |
 | Frontend type-check | `cd frontend && pnpm typecheck` | Runs tsc --noEmit; will surface stale `schema.ts` mismatches |
 | Frontend unit tests | `cd frontend && pnpm test` | Vitest |
 | E2E lint / determinism | `cd frontend && pnpm test:e2e:lint` | Checks for anti-flake patterns |
@@ -131,6 +131,12 @@ make migrate-seed
 # Seed reference data only (idempotent — safe to run multiple times)
 make seed
 
+# Seed demo data manually; demo data is never run at startup
+make seed-demo
+
+# Create a doctor account from inside the backend container
+make create-doctor EMAIL=doctor@example.com FULL_NAME="Doctor Name"
+
 # Run a single seeder by name
 uv run python scripts/seed.py --seeder medications_reference
 
@@ -152,6 +158,49 @@ make lint   # uv run ruff check . && uv run ruff format --check .
 # Install all dependencies
 make install   # uv sync --dev
 ```
+
+## Production Deployment
+
+Canonical VPS setup for `psycker.ru`:
+
+```bash
+git clone <repo-url> /opt/patient_tracker
+cd /opt/patient_tracker
+./scripts/setup-prod.sh psycker.ru
+docker run --rm -p 80:80 \
+  -v /etc/letsencrypt:/etc/letsencrypt \
+  certbot/certbot certonly --standalone \
+  -d psycker.ru -d www.psycker.ru \
+  --email admin@psycker.ru --agree-tos --no-eff-email
+docker compose -f docker-compose.yml -f docker-compose.prod.yml up -d --build
+docker compose exec backend uv run python scripts/create-doctor.py \
+  --email doctor@psycker.ru --full-name "Primary Doctor"
+```
+
+Production deployment constraints:
+- `docker-compose.override.yml` must not exist on the VPS; `scripts/setup-prod.sh` removes it.
+- `docker-compose.prod.yml` keeps exactly one backend replica so APScheduler runs once.
+- `APP_ENV=production` disables `/docs`, `/redoc`, and `/openapi.json`.
+- `API_BASE_URL=https://psycker.ru` is passed into the frontend build as `VITE_API_BASE_URL`.
+- Startup seeding runs reference data only. Demo data is manual via `make seed-demo` or `make seed-all`.
+
+Certificate renewal:
+
+```bash
+0 */12 * * * cd /opt/patient_tracker && ./scripts/renew-certs.sh
+```
+
+Production smoke checklist:
+
+```bash
+curl -I https://psycker.ru
+curl -I https://www.psycker.ru
+curl -s https://psycker.ru/api/v1/health
+curl -I https://psycker.ru/docs
+curl -I https://psycker.ru/openapi.json
+```
+
+Expected: canonical HTTPS works, `www.psycker.ru` redirects to `psycker.ru`, health is OK, and docs/OpenAPI are blocked.
 
 ---
 

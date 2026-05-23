@@ -5,6 +5,8 @@
  *   Backend  → BACKEND_URL  (default http://localhost:8000)
  *   Frontend → PLAYWRIGHT_BASE_URL (default http://localhost:3000)
  */
+import { execFileSync } from 'node:child_process';
+
 import { expect, request as playwrightRequest, test } from '@playwright/test';
 
 const BACKEND_URL = process.env.BACKEND_URL ?? 'http://localhost:8000';
@@ -14,12 +16,22 @@ const LS_VERSION = 2;
 type TokenPair = { access_token: string; refresh_token: string; token_type: string };
 
 async function registerDoctor(email: string, password: string): Promise<void> {
-	const ctx = await playwrightRequest.newContext({ baseURL: BACKEND_URL });
-	const res = await ctx.post('/api/v1/public/auth/register', {
-		data: { email, password, full_name: 'E2E Doctor P07', consent_152fz: true },
-	});
-	if (!res.ok()) throw new Error(`Register failed ${res.status()}: ${await res.text()}`);
-	await ctx.dispose();
+	execFileSync('docker', [
+		'compose',
+		'exec',
+		'-T',
+		'backend',
+		'uv',
+		'run',
+		'python',
+		'scripts/create-doctor.py',
+		'--email',
+		email,
+		'--full-name',
+		'E2E Doctor P07',
+		'--password',
+		password,
+	]);
 }
 
 async function loginDoctor(email: string, password: string): Promise<TokenPair> {

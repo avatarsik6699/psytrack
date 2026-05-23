@@ -5,9 +5,11 @@
  *   Backend  → BACKEND_URL  (default http://localhost:8000)
  *   Frontend → PLAYWRIGHT_BASE_URL (default http://localhost:3000)
  *
- * Strategy: register a doctor, create a patient, then authenticate as the
+ * Strategy: provision a doctor, create a patient, then authenticate as the
  * patient via temp credentials and walk every new patient route.
  */
+import { execFileSync } from 'node:child_process';
+
 import { expect, request as playwrightRequest, test } from '@playwright/test';
 
 const BACKEND_URL = process.env.BACKEND_URL ?? 'http://localhost:8000';
@@ -17,11 +19,26 @@ const LS_VERSION = 2;
 type TokenPair = { access_token: string; refresh_token: string; token_type: string };
 
 async function registerDoctor(email: string, password: string) {
+	execFileSync('docker', [
+		'compose',
+		'exec',
+		'-T',
+		'backend',
+		'uv',
+		'run',
+		'python',
+		'scripts/create-doctor.py',
+		'--email',
+		email,
+		'--full-name',
+		'E2E Doctor P08',
+		'--password',
+		password,
+	]);
+
 	const ctx = await playwrightRequest.newContext({ baseURL: BACKEND_URL });
-	const res = await ctx.post('/api/v1/public/auth/register', {
-		data: { email, password, full_name: 'E2E Doctor P08', consent_152fz: true },
-	});
-	if (!res.ok()) throw new Error(`Register failed ${res.status()}: ${await res.text()}`);
+	const res = await ctx.post('/api/v1/public/auth/login', { data: { email, password } });
+	if (!res.ok()) throw new Error(`Login failed ${res.status()}: ${await res.text()}`);
 	const tokens = (await res.json()) as TokenPair;
 	await ctx.dispose();
 	return tokens;

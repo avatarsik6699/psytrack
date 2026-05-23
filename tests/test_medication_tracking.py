@@ -15,17 +15,7 @@ from app.modules.medications.models import MedicationReference
 
 
 async def _register_doctor(client: AsyncClient, suffix: str) -> str:
-    resp = await client.post(
-        "/api/v1/public/auth/register",
-        json={
-            "email": f"trackdoc_{suffix}@test.com",
-            "password": "Pass1234!",
-            "full_name": f"Dr {suffix}",
-            "consent_152fz": True,
-        },
-    )
-    assert resp.status_code == 201, resp.text
-    return resp.json()["access_token"]
+    return await client.create_doctor_token(f"trackdoc_{suffix}@test.com", f"Dr {suffix}")
 
 
 async def _create_patient(client: AsyncClient, doc_token: str) -> dict:

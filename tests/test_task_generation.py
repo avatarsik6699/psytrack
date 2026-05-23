@@ -30,17 +30,7 @@ from app.modules.tasks.service import TaskGenerationService
 
 
 async def _register_doctor(client: AsyncClient, suffix: str) -> str:
-    resp = await client.post(
-        "/api/v1/public/auth/register",
-        json={
-            "email": f"tgen_{suffix}@test.com",
-            "password": "Pass1234!",
-            "full_name": f"Dr TGen {suffix}",
-            "consent_152fz": True,
-        },
-    )
-    assert resp.status_code == 201, resp.text
-    return resp.json()["access_token"]
+    return await client.create_doctor_token(f"tgen_{suffix}@test.com", f"Dr TGen {suffix}")
 
 
 async def _create_patient(client: AsyncClient, token: str, name: str = "TGen Patient") -> UUID:

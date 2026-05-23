@@ -29,18 +29,38 @@ os.environ.setdefault("DATABASE_URL", TEST_DATABASE_URL)
 os.environ.setdefault("SECRET_KEY", "test-secret-key-for-ci-only")
 os.environ.setdefault("REFRESH_TOKEN_EXPIRE_DAYS", "14")
 
-import app.modules.diagnoses  # noqa: F401
-import app.modules.doctors  # noqa: F401
-import app.modules.medications  # noqa: F401
-import app.modules.patients  # noqa: F401
-import app.modules.side_effects  # noqa: F401
-import app.modules.tasks  # noqa: F401
-import app.modules.therapy_goals  # noqa: F401
+import app.modules.diagnoses  # noqa: E402,F401
+import app.modules.doctors  # noqa: E402,F401
+import app.modules.medications  # noqa: E402,F401
+import app.modules.patients  # noqa: E402,F401
+import app.modules.side_effects  # noqa: E402,F401
+import app.modules.tasks  # noqa: E402,F401
+import app.modules.therapy_goals  # noqa: E402,F401
+from app.core.rate_limit import limiter  # noqa: E402
 from app.db.base import Base  # noqa
 from app.db.session import get_db  # noqa: E402
 from app.main import app  # noqa: E402
-from app.modules.auth.utils import hash_password  # noqa: E402
+from app.modules.auth.utils import create_access_token, hash_password  # noqa: E402
+from app.modules.doctors.models import DoctorProfile  # noqa: E402
 from app.modules.users.models import User, UserRole  # noqa: E402
+
+
+class PatientTrackerTestClient(AsyncClient):
+    db_session: AsyncSession
+
+    async def create_doctor_token(self, email: str, full_name: str) -> str:
+        user = User(
+            email=email,
+            hashed_password=hash_password("Pass1234!"),
+            role=UserRole.doctor,
+            consent_152fz=True,
+            is_active=True,
+        )
+        self.db_session.add(user)
+        await self.db_session.flush()
+        self.db_session.add(DoctorProfile(user_id=user.id, full_name=full_name))
+        await self.db_session.flush()
+        return create_access_token({"sub": str(user.id), "role": user.role.value})
 
 
 @pytest.fixture(scope="session")
@@ -90,10 +110,15 @@ async def db_session(test_engine) -> AsyncSession:
 
 @pytest.fixture()
 async def client(db_session: AsyncSession) -> AsyncClient:
+    limiter.reset()
+
     async def override_get_db() -> AsyncSession:
         yield db_session
 
     app.dependency_overrides[get_db] = override_get_db
-    async with AsyncClient(transport=ASGITransport(app=app), base_url="http://test") as ac:
+    async with PatientTrackerTestClient(
+        transport=ASGITransport(app=app), base_url="http://test"
+    ) as ac:
+        ac.db_session = db_session
         yield ac
     app.dependency_overrides.clear()

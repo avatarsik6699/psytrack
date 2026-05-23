@@ -1,6 +1,8 @@
 /**
  * Phase 09 smoke — design-system completion and credential/profile flows.
  */
+import { execFileSync } from 'node:child_process';
+
 import { expect, request as playwrightRequest, test } from '@playwright/test';
 
 const BACKEND_URL = process.env.BACKEND_URL ?? 'http://localhost:8000';
@@ -15,11 +17,26 @@ async function apiContext() {
 }
 
 async function registerDoctor(email: string, password: string): Promise<TokenPair> {
+	execFileSync('docker', [
+		'compose',
+		'exec',
+		'-T',
+		'backend',
+		'uv',
+		'run',
+		'python',
+		'scripts/create-doctor.py',
+		'--email',
+		email,
+		'--full-name',
+		'E2E Phase09 Doctor',
+		'--password',
+		password,
+	]);
+
 	const ctx = await apiContext();
-	const res = await ctx.post('/api/v1/public/auth/register', {
-		data: { email, password, full_name: 'E2E Phase09 Doctor', consent_152fz: true },
-	});
-	if (!res.ok()) throw new Error(`Register failed ${res.status()}: ${await res.text()}`);
+	const res = await ctx.post('/api/v1/public/auth/login', { data: { email, password } });
+	if (!res.ok()) throw new Error(`Login failed ${res.status()}: ${await res.text()}`);
 	const tokens = (await res.json()) as TokenPair;
 	await ctx.dispose();
 	return tokens;

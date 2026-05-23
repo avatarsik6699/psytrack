@@ -22,6 +22,8 @@ class Settings(BaseSettings):
     API_BASE_URL: str = "http://localhost:8000"
 
     INTERNAL_KEY: str = "CHANGE_ME_INTERNAL_KEY"
+    AUTH_RATE_LIMIT: str = "20/minute"
+    SCHEDULER_ENABLED: bool = True
 
     @field_validator("CORS_ORIGINS", mode="before")
     @classmethod
@@ -37,6 +39,10 @@ class Settings(BaseSettings):
                 return parsed
             return [item.strip() for item in stripped.split(",") if item.strip()]
         return v
+
+    @property
+    def is_production(self) -> bool:
+        return self.APP_ENV.lower() == "production"
 
 
 settings = Settings()

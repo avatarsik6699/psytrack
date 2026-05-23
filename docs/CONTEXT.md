@@ -4,8 +4,8 @@
     "update_rule": "Append contracts after each phase via /context-update. Never remove existing entries."
   },
 
-  "captured_at": "2026-05-23",
-  "phase_completed": "09",
+  "captured_at": "2026-05-24",
+  "phase_completed": "10",
   "phase_in_progress": null,
 
   "stack": {
@@ -162,7 +162,8 @@
     { "phase": "08", "method": "PATCH", "path": "/api/v1/public/auth/me/email",                             "auth": "bearer",  "response": "{ ok: true }" },
     { "phase": "09", "method": "GET",   "path": "/api/v1/public/auth/session",                              "auth": "bearer",  "response": "SessionInfoOut" },
     { "phase": "09", "method": "PATCH", "path": "/api/v1/patient/me/credentials",                           "auth": "patient", "response": "PatientMeOut" },
-    { "phase": "09", "method": "POST",  "path": "/api/v1/doctor/patients/{patient_id}/credentials/reset",   "auth": "doctor",  "response": "PatientCredentialResetOut" }
+    { "phase": "09", "method": "POST",  "path": "/api/v1/doctor/patients/{patient_id}/credentials/reset",   "auth": "doctor",  "response": "PatientCredentialResetOut" },
+    { "phase": "10", "method": "POST",  "path": "/api/v1/public/auth/register",                             "auth": "none",    "response": "RegisterDisabledResponse; public registration disabled and creates no account" }
   ],
 
   "db_schema": {
@@ -194,11 +195,16 @@
       { "phase": "01", "key": "ACCESS_TOKEN_EXPIRE_MINUTES", "required": true,  "example": "15" },
       { "phase": "01", "key": "REFRESH_TOKEN_EXPIRE_DAYS",   "required": true,  "example": "7" },
       { "phase": "01", "key": "CORS_ORIGINS",                "required": true,  "example": "[\"http://localhost:3000\"]" },
-      { "phase": "01", "key": "REDIS_URL",                   "required": true,  "example": "redis://redis:6379/0" }
+      { "phase": "01", "key": "REDIS_URL",                   "required": true,  "example": "redis://redis:6379/0" },
+      { "phase": "10", "key": "APP_ENV",                     "required": true,  "example": "production" },
+      { "phase": "10", "key": "DOMAIN",                      "required": true,  "example": "psycker.ru" },
+      { "phase": "10", "key": "API_BASE_URL",                "required": true,  "example": "https://psycker.ru" },
+      { "phase": "10", "key": "API_BASE_INTERNAL_URL",       "required": true,  "example": "http://backend:8000" },
+      { "phase": "10", "key": "INTERNAL_KEY",                "required": true,  "example": "generated 32-byte hex string" }
     ]
   },
 
   "db_seeds": {},
 
-  "notes": "Phase 09 complete. Added patient credential/session contracts, doctor credential reset, real patient history UI, doctor profile UI, Russian scale-question seed migration, and frontend design-system/UX completion with public registration closed for MVP."
+  "notes": "Phase 10 complete. Added production deployment contract for psycker.ru, disabled public registration at API level, blocked production OpenAPI/docs, added operator doctor provisioning, enforced production API base URL, reference-only startup seeding, nginx/certbot renewal, and single-backend scheduler constraints."
 }

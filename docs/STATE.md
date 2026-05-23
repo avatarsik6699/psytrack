@@ -24,6 +24,7 @@
 | PHASE_07 | ✅ done    | v0.07.0 | ✅ | 🤝 hybrid | Charts & Doctor Detail |
 | PHASE_08 | ✅ done    | v0.08.0 | ✅ | 🤝 hybrid | Patient Portal Polish |
 | PHASE_09 | ✅ done    | v0.09.0 | ✅ | 🤝 hybrid | Frontend design-system completion, patient credentials, real history |
+| PHASE_10 | ✅ done    | v0.10.0 | ✅ | 🤝 hybrid | Production Readiness & VPS Deployment |
 
 <!-- Add new rows here via /phase-init N -->
 

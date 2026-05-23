@@ -1,5 +1,7 @@
-from fastapi import APIRouter, Depends, status
+from fastapi import APIRouter, Depends, Request, status
 
+from app.core.config import settings
+from app.core.rate_limit import limiter
 from app.modules.auth.dependencies import get_auth_service, get_current_user
 from app.modules.auth.schemas import (
     AccountDeletionResponse,
@@ -9,6 +11,7 @@ from app.modules.auth.schemas import (
     PasswordChangeRequest,
     PatientTempLoginRequest,
     RefreshRequest,
+    RegisterDisabledResponse,
     RegisterRequest,
     TokenPair,
 )
@@ -19,23 +22,32 @@ router = APIRouter(prefix="/public/auth", tags=["auth"])
 
 
 @router.post("/login", response_model=TokenPair)
+@limiter.limit(settings.AUTH_RATE_LIMIT)
 async def login(
+    request: Request,
     body: LoginRequest,
     service: AuthService = Depends(get_auth_service),
 ) -> TokenPair:
     return await service.login(body.email, body.password)
 
 
-@router.post("/register", response_model=TokenPair, status_code=status.HTTP_201_CREATED)
+@router.post(
+    "/register",
+    response_model=RegisterDisabledResponse,
+    status_code=status.HTTP_403_FORBIDDEN,
+)
+@limiter.limit(settings.AUTH_RATE_LIMIT)
 async def register(
+    request: Request,
     body: RegisterRequest,
-    service: AuthService = Depends(get_auth_service),
-) -> TokenPair:
-    return await service.register(body.email, body.password, body.full_name)
+) -> RegisterDisabledResponse:
+    return RegisterDisabledResponse(detail="Public registration is disabled")
 
 
 @router.post("/refresh", response_model=TokenPair)
+@limiter.limit(settings.AUTH_RATE_LIMIT)
 async def refresh(
+    request: Request,
     body: RefreshRequest,
     service: AuthService = Depends(get_auth_service),
 ) -> TokenPair:
@@ -43,7 +55,9 @@ async def refresh(
 
 
 @router.post("/patient-login", response_model=TokenPair)
+@limiter.limit(settings.AUTH_RATE_LIMIT)
 async def patient_login(
+    request: Request,
     body: PatientTempLoginRequest,
     service: AuthService = Depends(get_auth_service),
 ) -> TokenPair:

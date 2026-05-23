@@ -1,4 +1,4 @@
-.PHONY: dev install migrate seed seed-demo seed-all migrate-seed lint test deploy deploy-logs deploy-ps
+.PHONY: dev install migrate seed seed-demo seed-all create-doctor migrate-seed lint test deploy deploy-logs deploy-ps
 
 # WARNING: Running uvicorn directly on the host is discouraged.
 # Use `docker compose up` instead to avoid port conflicts and code-version desync.
@@ -19,7 +19,10 @@ seed-demo:
 	docker compose exec backend uv run python scripts/seed.py --seeder demo_data
 
 seed-all:
-	docker compose exec backend uv run python scripts/seed.py
+	docker compose exec backend uv run python scripts/seed.py --all
+
+create-doctor:
+	docker compose exec backend uv run python scripts/create-doctor.py --email "$(EMAIL)" --full-name "$(FULL_NAME)"
 
 migrate-seed: migrate seed
 

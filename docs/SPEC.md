@@ -8,7 +8,7 @@
 
 | Field | Value |
 |-------|-------|
-| Document Version | `v1.7` |
+| Document Version | `v1.8` |
 | Date | `2026-05-23` |
 | Architect / Owner | `v.godlevskiy` |
 | Contract Version | `v1.0` (see `docs/CONTEXT.md`) |
@@ -45,7 +45,7 @@ Build **Docassist** — a web-based inter-visit monitoring platform for psychiat
 
 | Included (MVP) | Excluded (V2+) |
 |----------------|----------------|
-| Doctor registration (email + password) | Document verification, e-mail invite to patient |
+| Manual doctor account provisioning for MVP testing; public doctor self-registration disabled | Document verification, e-mail invite to patient |
 | Doctor-issued patient login/password, patient self-change, doctor credential reset | Patient email/password login, email-based account recovery |
 | Soft onboarding with flexible dates | Multi-domain symptom scales, predictive models |
 | Color logic: side-effect severity > clinical dynamics | Chart overlays, automated clinical conclusions |
@@ -211,12 +211,20 @@ Base path: `/api/v1`. JWT Bearer auth on all protected routes.
 
 | Verb | Path | Auth | Notes |
 |------|------|------|-------|
-| POST | `/auth/register` | — | Doctor registration; creates `users` + `doctor_profiles` |
+| POST | `/auth/register` | — | Temporarily disabled; returns a disabled response and creates no account |
 | POST | `/auth/login` | — | Returns `access_token` (JWT) + `refresh_token` |
 | POST | `/auth/refresh` | refresh token | Rotates tokens |
 | POST | `/auth/patient-login` | — | Patient login via patient `login` + password only |
 | PATCH | `/auth/me/password` | bearer | Change current user's password; patient changes update the patient credential password |
 | GET | `/auth/session` | bearer | Current-session metadata derived from JWT/client context; no multi-session store in MVP |
+
+Doctor account rules:
+- Public HTTP-based doctor self-registration is disabled for MVP production testing. The endpoint
+  remains in the OpenAPI contract only as a disabled route until a later onboarding phase restores
+  a verified registration flow.
+- Doctor accounts are provisioned manually through a non-HTTP operational script or command. That
+  provisioning path must be explicit, auditable by operators, and unavailable to unauthenticated
+  web clients.
 
 Patient login/password rules:
 - MVP patients do **not** authenticate by email/password. Patient email may exist later as contact
@@ -528,7 +536,19 @@ All design tokens are canonical source-of-truth for the frontend implementation.
 - **Frontend**: Static React build served by Nginx under `/`.
 - **Task scheduling**: Python `APScheduler` or a Celery Beat–lite cron job inside the backend container. Generates `tasks` rows daily.
 - **Secrets**: injected via environment variables; see `.env.example`.
-- **Production**: separate `docker-compose.prod.yml`; TLS termination at Nginx.
+- **Production**: separate `docker-compose.prod.yml`; TLS termination at Nginx; canonical domain
+  `https://psycker.ru`; `https://www.psycker.ru` redirects to the canonical host.
+- **Production setup**: `scripts/setup-prod.sh` generates a production `.env`, replaces nginx
+  `[DOMAIN]` placeholders, removes the dev-only compose override on VPS, and validates the rendered
+  production Compose config before launch.
+- **Production OpenAPI/docs**: `/docs`, `/redoc`, and `/openapi.json` are disabled in production
+  and return 404. Development keeps OpenAPI enabled for `pnpm generate:api`.
+- **Production seeding**: backend startup runs migrations and reference seeders only. Demo data is
+  never auto-seeded, but operators may run `make seed-demo` or `make seed-all` manually in
+  production for explicit smoke testing.
+- **Production scheduler**: Phase 10 production deployment runs one backend container/worker.
+  Backend horizontal scaling is blocked until Phase 11 introduces scheduler extraction or a
+  distributed lock.
 
 ---
 
@@ -577,6 +597,9 @@ All design tokens are canonical source-of-truth for the frontend implementation.
 | `07` | Charts & Doctor Detail | Visual analytics page for doctor | Medication/score/SE chart endpoints, React charts (Recharts), doctor patient detail page, therapy goals |
 | `08` | Patient Portal Polish | Complete patient UX | Today's tasks dashboard, activity history page, profile page, onboarding soft-gate |
 | `09` | Frontend Design-System Completion & UX Refactor | Bring the implemented MVP frontend to the Docassist design target and complete patient credential/profile gaps | Visual audit, patient credential/session API, real history UI, doctor credential reset, global language/theme controls, responsive/accessibility pass, e2e smoke coverage |
+| `10` | Production Readiness & VPS Deployment | Make the MVP safe to deploy on `psycker.ru` for controlled production testing | Production SPEC sync, disabled public registration, prod setup script, TLS/certbot renewal, production-only OpenAPI/docs shutdown, frontend build-time API URL, reference-only startup seeding, scheduler single-instance guard |
+| `11` | Security Hardening & Operations | Close deeper security and operational risks after first production deploy | Frontend/backend secret separation, token storage/session-store redesign, backup/restore automation, restore drills, monitoring/alerting, audit logging, scheduler scaling strategy |
+| `12` | Legal/Compliance Readiness | Prepare the product and operations for regulated real-world use | 152-ФЗ/privacy policy, consent text/process, data retention/deletion, incident procedure, hosting/data-location requirements, compliance acceptance checklist |
 
 ---
 
@@ -685,6 +708,104 @@ profile and recovery UX.
   `Волков А.Н.` / `Психиатр`; use authenticated profile data or a loading/empty state.
 - **К удалению или строгому dev-only guard:** visible demo credential helpers in auth UI. Production
   builds must not expose seed/demo login values or fill-buttons.
+
+---
+
+### 8.2 Phase 10 Detailed Scope
+
+Phase 10 turns the completed MVP into a deployable production candidate for a VPS under
+`psycker.ru`. The phase is intentionally limited to blocking deployment risks; broader security,
+operations, and legal work are tracked in phases 11 and 12.
+
+**Goal:** provide a repeatable production setup path and remove the behaviours that make the
+current stack unsafe to expose publicly: automatic demo data, public doctor registration, public
+OpenAPI/docs, stale frontend API base URL, incomplete HTTPS renewal, and duplicate scheduler risk.
+
+**Required outputs:**
+
+1. **Production setup automation**
+   - Add `scripts/setup-prod.sh` adapted for this repository. It accepts a bare domain and optional
+     admin email, generates `.env` from `.env.example`, creates strong `POSTGRES_PASSWORD`,
+     `SECRET_KEY`, and `INTERNAL_KEY`, sets `APP_ENV=production`, `DOMAIN=psycker.ru`,
+     `API_BASE_URL=https://psycker.ru`, `API_BASE_INTERNAL_URL=http://backend:8000`, and
+     `CORS_ORIGINS=["https://psycker.ru","https://www.psycker.ru"]`.
+   - Replace `[DOMAIN]` in `nginx/nginx.conf`, remove `docker-compose.override.yml` when present on
+     the VPS, and run/render `docker compose -f docker-compose.yml -f docker-compose.prod.yml config`
+     as a validation step.
+   - Update production deployment documentation in `docs/STACK.md` and/or `README.md` so a VPS
+     operator has one canonical command sequence.
+
+2. **Seeding and demo data safety**
+   - Backend startup runs Alembic migrations plus reference seeders only:
+     `medications_reference`, `scales`, and `side_effects`.
+   - `demo_data` is never included in automatic startup seeding.
+   - Manual `make seed-demo` and `make seed-all` remain available in production for explicit
+     operator-triggered smoke testing.
+   - `/login` demo credential helper and fill action remain available in development only and must
+     not render in production builds.
+
+3. **Public auth hardening**
+   - `POST /api/v1/public/auth/register` is disabled and creates no account. The response must be a
+     deterministic disabled/closed response suitable for clients and tests.
+   - Add a non-HTTP operational doctor provisioning command or script so the owner can create the
+     first doctor account without reopening public registration.
+   - Add rate limiting to unauthenticated auth endpoints: doctor login, patient login, refresh, and
+     the disabled register route.
+
+4. **Production OpenAPI/docs shutdown**
+   - In production, FastAPI initializes with OpenAPI, Swagger UI, and ReDoc disabled so `/docs`,
+     `/redoc`, and `/openapi.json` return 404.
+   - Development keeps the existing OpenAPI behaviour for `frontend/scripts/generate-api.js`.
+
+5. **Frontend production API URL**
+   - Docker production frontend build receives `VITE_API_BASE_URL` as a build-time value.
+   - Browser-side API calls in production target `https://psycker.ru/api/v1/...` exactly once; no
+     duplicated `/api/v1` prefix and no `localhost:8000` fallback in production output.
+
+6. **HTTPS, certbot, and nginx**
+   - Nginx redirects `www.psycker.ru` to canonical `psycker.ru` and keeps HTTP ACME challenge
+     handling for certificate issuance/renewal.
+   - Certbot renewal reloads nginx after successful renewal, either through a documented VPS cron
+     command or a container hook.
+   - Production smoke documentation includes checks for `https://psycker.ru`,
+     `https://www.psycker.ru` redirect, `/api/v1/health`, auth login, and blocked docs.
+
+7. **Scheduler single-instance safety**
+   - Phase 10 deployment explicitly supports one backend container/worker.
+   - Add a guard or documented startup constraint preventing accidental duplicate APScheduler
+     execution in production.
+   - Document that backend horizontal scaling is deferred until Phase 11 scheduler extraction or a
+     distributed lock.
+
+8. **Production readiness tests**
+   - Backend tests cover disabled register, auth rate limits, production docs shutdown,
+     development docs availability, and automatic reference-only seeding.
+   - Frontend tests cover dev-only demo credential rendering and production API base URL behaviour.
+   - Infra checks confirm rendered production Compose config contains no `[DOMAIN]`, `changeme`,
+     `localhost:8000`, or template database names after setup.
+
+**Explicit non-goals for Phase 10:**
+
+- Splitting frontend/backend secrets into separate env files or Docker secrets.
+- Replacing localStorage JWT storage with HttpOnly cookies or a persistent session store.
+- Automated backup/restore, restore drills, monitoring/alerting, or audit-log expansion.
+- Legal/compliance policy authoring, consent rewrite, hosting jurisdiction review, or incident
+  response process.
+- Multi-backend scaling beyond one production backend container/worker.
+
+### 8.3 Phase 11 Deferred Security & Operations Scope
+
+Phase 11 owns hardening that is important but not a blocker for the first controlled deployment:
+separate frontend/backend secrets, remove backend secrets from the frontend container environment,
+evaluate HttpOnly-cookie/session-store auth, add refresh-token inventory and revocation, design
+backup/restore automation with restore drills, add monitoring/alerting, expand audit logging, and
+replace the single-process scheduler constraint with a scalable scheduler architecture.
+
+### 8.4 Phase 12 Deferred Legal & Compliance Scope
+
+Phase 12 owns regulated-use readiness: 152-ФЗ/privacy policy, explicit consent copy and capture
+process, data retention and deletion rules, incident response procedure, hosting/data-location
+requirements, and a legal/compliance acceptance checklist before broader patient use.
 
 ## 9. Out of Scope
 

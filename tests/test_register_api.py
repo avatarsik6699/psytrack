@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 from httpx import AsyncClient
-from sqlalchemy import select
+from sqlalchemy import func, select
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.modules.users.models import User, UserRole
@@ -21,10 +21,11 @@ async def test_register_requires_152fz_consent(client: AsyncClient) -> None:
     assert response.status_code == 422
 
 
-async def test_register_returns_tokens_and_persists_consent(
+async def test_register_is_disabled_and_persists_no_user(
     client: AsyncClient,
     db_session: AsyncSession,
 ) -> None:
+    before_count = await db_session.scalar(select(func.count()).select_from(User))
     response = await client.post(
         "/api/v1/public/auth/register",
         json={
@@ -35,22 +36,18 @@ async def test_register_returns_tokens_and_persists_consent(
         },
     )
 
-    assert response.status_code == 201
-    data = response.json()
-    assert data["token_type"] == "bearer"
-    assert data["access_token"]
-    assert data["refresh_token"]
+    assert response.status_code == 403
+    assert response.json() == {"detail": "Public registration is disabled"}
 
     user = await db_session.scalar(
         select(User).where(User.email == "registered@example.com")
     )
-    assert user is not None
-    assert user.role == UserRole.doctor
-    assert user.consent_152fz is True
-    assert user.consent_at is not None
+    after_count = await db_session.scalar(select(func.count()).select_from(User))
+    assert user is None
+    assert after_count == before_count
 
 
-async def test_register_rejects_duplicate_email(
+async def test_register_disabled_response_takes_precedence_over_duplicate_email(
     client: AsyncClient,
     db_session: AsyncSession,
 ) -> None:
@@ -75,4 +72,5 @@ async def test_register_rejects_duplicate_email(
         },
     )
 
-    assert response.status_code == 409
+    assert response.status_code == 403
+    assert response.json() == {"detail": "Public registration is disabled"}
