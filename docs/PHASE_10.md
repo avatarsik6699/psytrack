@@ -203,10 +203,10 @@ feat(phase-10): production readiness for psycker.ru deploy
 - [x] All Scope checkboxes checked (or deferred in Architect Review Notes)
 - [x] `FT1` checked — `frontend/tests/e2e/phase-10-smoke.spec.ts` exists, or deferral documented in Architect Review Notes
 - [x] `docs/PHASE_10_NOTES.md` complete — Implementation Plans filled, key decisions recorded
-- [ ] All automated gate checks green
+- [x] All automated gate checks green
 - [x] All architect review notes resolved
 - [x] `docs/CONTEXT.md` updated — run `/context-update 10`
 - [x] `docs/STATE.md` phase row updated to `✅ done`
 - [x] `docs/CHANGELOG.md` entry added (if contracts changed)
-- [ ] Committed atomically on `feat/phase-10` branch
-- [ ] Tag created after merge to develop: `git tag -a v0.10.0 -m "Phase 10: Production Readiness & VPS Deployment"`
+- [x] Committed atomically on `feat/phase-10` branch
+- [x] Tag created after merge to develop: `git tag -a v0.10.0 -m "Phase 10: Production Readiness & VPS Deployment"`
