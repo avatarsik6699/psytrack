@@ -2,11 +2,13 @@ import React from 'react';
 import { useTranslation } from 'react-i18next';
 
 import { useCurrentSession, useLogoutMutation } from '@shared/api/auth';
+import { useRouter } from '@shared/hooks/use-router';
 
 import { Button } from '@/components/ui/button';
 
 export const SessionInfoPanel: React.FC = () => {
 	const { t } = useTranslation('common');
+	const router = useRouter();
 	const sessionQuery = useCurrentSession();
 	const logoutMutation = useLogoutMutation();
 	const session = sessionQuery.data;
@@ -35,7 +37,9 @@ export const SessionInfoPanel: React.FC = () => {
 				type='button'
 				variant='destructive'
 				disabled={logoutMutation.isPending}
-				onClick={() => logoutMutation.mutate()}
+				onClick={() =>
+					logoutMutation.mutate(undefined, { onSettled: () => router.navigate('/login', { replace: true }) })
+				}
 			>
 				{t('session.end')}
 			</Button>

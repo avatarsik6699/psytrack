@@ -19,7 +19,7 @@ const DoctorProfileRoute: React.FC = () => {
 	const tokenPreview = accessToken ? `${accessToken.slice(0, 18)}...${accessToken.slice(-10)}` : t('session.noToken');
 
 	return (
-		<div className='mx-auto max-w-5xl space-y-5 p-4 md:p-6'>
+		<div className='mx-auto max-w-5xl space-y-5 p-4 sm:p-6'>
 			<div>
 				<h1 className='text-xl font-semibold'>{t('profile.doctorTitle')}</h1>
 				<p className='text-sm text-muted-foreground'>{t('profile.doctorSubtitle')}</p>
@@ -63,7 +63,9 @@ const DoctorProfileRoute: React.FC = () => {
 
 				<section className='rounded-xl border border-border bg-card p-5 text-card-foreground'>
 					<h2 className='text-sm font-semibold'>{t('session.accessToken')}</h2>
-					<p className='mt-3 break-all rounded-lg border border-border bg-muted/40 p-3 font-mono text-xs'>{tokenPreview}</p>
+					<p className='mt-3 break-all rounded-lg border border-border bg-muted/40 p-3 font-mono text-xs'>
+						{tokenPreview}
+					</p>
 					<Button
 						type='button'
 						variant='outline'

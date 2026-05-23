@@ -10,6 +10,7 @@ class ScaleOut(BaseModel):
     id: UUID
     code: str
     name: str
+    name_ru: str | None = None
     score_min: int
     score_max: int
     improvement_direction: str | None
@@ -18,6 +19,7 @@ class ScaleOut(BaseModel):
 class ScaleQuestion(BaseModel):
     id: int
     text: str
+    text_ru: str | None = None
     options: list[dict]
 
 

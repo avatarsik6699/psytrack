@@ -1,6 +1,8 @@
 import i18n from 'i18next';
-import LanguageDetector from 'i18next-browser-languagedetector';
 import { initReactI18next } from 'react-i18next';
+
+import { I18NEXT_LANGUAGE_STORAGE } from '@shared/lib/i18n-storage';
+import { safeLs } from '@shared/lib/safe-ls';
 
 const resources = {
 	en: {
@@ -62,11 +64,37 @@ const resources = {
 				consentRequired: 'Consent is required to create an account.',
 			},
 			login: {
-				title: 'Sign in to Docassist',
+				title: 'Welcome back',
+				subtitle: 'Sign in to your account to continue.',
 				hint: 'Doctors sign in with email and password. Patients sign in with the login and password issued by their doctor.',
 				noDoctorAccount: 'No doctor account?',
-				patientLogin: 'Patient login',
+				patientLogin: 'Login',
 				devCredentials: 'Local dev credentials',
+				brandTagline: 'Clinical monitoring\nat your fingertips.',
+				brandHeadline: 'Clinical insights,\nalways at hand.',
+				featureDescription:
+					'Monitor PHQ-9 and GAD-7 trends, track medication adherence, and receive real-time safety alerts.',
+				feature1: 'Real-time safety flag alerts',
+				feature2: 'Patient score trend visualization',
+				feature3: 'Medication adherence tracking',
+				feature4: 'Secure, HIPAA-aligned workflows',
+				testimonial0Text: 'This platform has significantly improved how I track patient progress between sessions.',
+				testimonial0Name: 'Dr. A. Sokolov',
+				testimonial0Role: 'Psychiatrist, Moscow',
+				testimonial0Initials: 'AS',
+				testimonial1Text: 'PHQ-9 trend visualization helps me make more informed and timely treatment decisions.',
+				testimonial1Name: 'Dr. M. Kovalev',
+				testimonial1Role: 'Clinical Psychologist',
+				testimonial1Initials: 'MK',
+				testimonial2Text: 'Managing medication adherence has never been more transparent for me and my patients.',
+				testimonial2Name: 'Dr. E. Volkova',
+				testimonial2Role: 'Psychiatrist',
+				testimonial2Initials: 'EV',
+				disclaimer:
+					'For licensed healthcare professionals only. If a patient is in crisis, call emergency services immediately.',
+				emailPlaceholder: 'you@hospital.org',
+				loginPlaceholder: 'patient.login',
+				passwordPlaceholder: 'Enter your password',
 			},
 			status: {
 				critical: 'critical',
@@ -117,8 +145,10 @@ const resources = {
 				title: 'Patients',
 				all: 'All',
 				attention: 'Need attention',
+				archive: 'Archived',
 				empty: 'No patients added yet.',
 				notFound: 'Nothing found.',
+				noArchive: 'No archived patients.',
 				search: 'Search by name...',
 			},
 			patientPortal: {
@@ -137,6 +167,7 @@ const resources = {
 				testsSubtitle: 'Questionnaires assigned by your doctor',
 				noTests: 'No assigned tests.',
 				awaiting: 'Pending',
+				completed: 'Done',
 				everyDays: 'Every {{days}} days',
 				start: 'Start',
 				drugsHint: 'Log today’s dose',
@@ -159,9 +190,16 @@ const resources = {
 			},
 			addPatient: {
 				title: 'Add patient',
+				step1Title: 'Patient name',
+				step1Hint: "Enter the patient's full name to create the profile.",
+				step2Title: 'Demographics',
+				step2Hint: 'Optional: fill in birth date and gender.',
+				step3Title: 'Confirm',
+				step3Hint: 'Review and confirm the patient profile.',
 				createdTitle: 'Patient added',
 				createdHint: 'Give these credentials to the patient. They will not be shown again.',
-				fullName: 'Full name *',
+				fullName: 'Full name',
+				fullNamePlaceholder: 'Last First Patronymic',
 				birthDate: 'Birth date',
 				gender: 'Gender',
 				genderEmpty: '- not specified -',
@@ -170,9 +208,29 @@ const resources = {
 				genderOther: 'Other',
 				login: 'Login',
 				password: 'Password',
+				copyBoth: 'Copy both',
+				copied: 'Copied!',
 				error: 'Could not add patient. Try again.',
 				creating: 'Creating...',
-				create: 'Create',
+				create: 'Create patient',
+				next: 'Next →',
+				back: '← Back',
+			},
+			medicationChart: {
+				title: 'Medication Dose History',
+				loading: 'Loading chart...',
+				empty: 'No medication data.',
+			},
+			scoreChart: {
+				title: 'Score Trends',
+				loading: 'Loading chart...',
+				noData: 'No assessment data.',
+				colDate: 'Date',
+				colTest: 'Test',
+				colScore: 'Score',
+				colInterpretation: 'Interpretation',
+				colDelta: 'Δ',
+				deltaTooltip: 'Change from previous result (↑ increase, ↓ decrease)',
 			},
 			resetCredentials: {
 				action: 'Reset access',
@@ -232,9 +290,13 @@ const resources = {
 			},
 			medication: {
 				label: 'Medication',
-				searchPlaceholder: 'Search by INN (type ≥ 2 chars)',
+				searchPlaceholder: 'Search by INN...',
 				dose: 'Dose',
 				unit: 'Unit',
+				unitMg: 'mg',
+				unitMcg: 'mcg',
+				unitMl: 'ml',
+				unitG: 'g',
 				precision: 'Precision',
 				frequency: 'Frequency',
 				frequencyPlaceholder: 'e.g. once daily, PRN',
@@ -259,6 +321,8 @@ const resources = {
 			},
 			seMonitoring: {
 				title: 'SE monitoring',
+				description:
+					'Define which side effects to track for this patient and at what frequency. The doctor will receive a notification when a patient reports a monitored side effect.',
 				activeRules: 'Active rules',
 				noRules: 'No monitoring rules assigned.',
 				everyDays: 'every {{days}} d.',
@@ -266,6 +330,7 @@ const resources = {
 				addRule: 'Add rule',
 				searchPlaceholder: 'Search side effect...',
 				periodPlaceholder: 'Period (days)',
+				periodOptional: 'optional',
 				adding: 'Adding...',
 				add: 'Add',
 				close: 'Close',
@@ -277,6 +342,20 @@ const resources = {
 				newGoalPlaceholder: 'New goal...',
 				cancel: 'Cancel',
 				add: 'Add',
+			},
+			events: {
+				loading: 'Loading events...',
+				empty: 'No events recorded yet.',
+				prev: 'Prev',
+				next: 'Next',
+				unknown: 'Event',
+				assessmentCompleted: 'Assessment completed',
+				medicationTaken: 'Medication taken',
+				medicationMissed: 'Medication missed',
+				sideEffectReported: 'Side effect reported',
+				sideEffectResolved: 'Side effect resolved',
+				patientCreated: 'Patient profile created',
+				profileUpdated: 'Profile updated',
 			},
 			passwordForm: {
 				currentPassword: 'Current password',
@@ -354,11 +433,38 @@ const resources = {
 				consentRequired: 'Согласие обязательно для создания аккаунта.',
 			},
 			login: {
-				title: 'Вход в Docassist',
+				title: 'Добро пожаловать',
+				subtitle: 'Войдите в систему, чтобы продолжить.',
 				hint: 'Врач входит по email и паролю. Пациент входит по логину и паролю, выданным врачом.',
 				noDoctorAccount: 'Нет кабинета врача?',
-				patientLogin: 'Логин пациента',
+				patientLogin: 'Логин',
 				devCredentials: 'Локальные dev-данные',
+				brandTagline: 'Клинический мониторинг\nвсегда под рукой.',
+				brandHeadline: 'Клинические данные,\nвсегда под рукой.',
+				featureDescription:
+					'Отслеживайте динамику PHQ-9 и GAD-7, контролируйте приём препаратов и получайте тревожные оповещения в реальном времени.',
+				feature1: 'Тревожные оповещения в реальном времени',
+				feature2: 'Визуализация динамики оценок пациентов',
+				feature3: 'Контроль приёма лекарственных препаратов',
+				feature4: 'Безопасные рабочие процессы клинического стандарта',
+				testimonial0Text: 'Эта платформа значительно улучшила то, как я отслеживаю прогресс пациентов между сессиями.',
+				testimonial0Name: 'Д-р А. Соколов',
+				testimonial0Role: 'Психиатр, Москва',
+				testimonial0Initials: 'АС',
+				testimonial1Text:
+					'Визуализация динамики PHQ-9 помогает принимать более обоснованные и своевременные терапевтические решения.',
+				testimonial1Name: 'Д-р М. Ковалёв',
+				testimonial1Role: 'Клинический психолог',
+				testimonial1Initials: 'МК',
+				testimonial2Text: 'Контроль приёма препаратов стал гораздо прозрачнее — и для меня, и для моих пациентов.',
+				testimonial2Name: 'Д-р Е. Волкова',
+				testimonial2Role: 'Психиатр',
+				testimonial2Initials: 'ЕВ',
+				disclaimer:
+					'Только для лицензированных медицинских специалистов. Если пациент в кризисной ситуации — немедленно вызовите экстренные службы.',
+				emailPlaceholder: 'вы@больница.ru',
+				loginPlaceholder: 'логин.пациента',
+				passwordPlaceholder: 'Введите пароль',
 			},
 			status: {
 				critical: 'критический',
@@ -409,8 +515,10 @@ const resources = {
 				title: 'Пациенты',
 				all: 'Все',
 				attention: 'Требуют внимания',
+				archive: 'Архивные',
 				empty: 'Пациенты ещё не добавлены.',
 				notFound: 'Ничего не найдено.',
+				noArchive: 'Архивных пациентов нет.',
 				search: 'Поиск по имени...',
 			},
 			patientPortal: {
@@ -429,6 +537,7 @@ const resources = {
 				testsSubtitle: 'Опросники, назначенные врачом',
 				noTests: 'Нет назначенных тестов.',
 				awaiting: 'Ожидает',
+				completed: 'Пройден',
 				everyDays: 'Каждые {{days}} дн.',
 				start: 'Пройти',
 				drugsHint: 'Отметьте приём на сегодня',
@@ -451,9 +560,16 @@ const resources = {
 			},
 			addPatient: {
 				title: 'Добавить пациента',
+				step1Title: 'Имя пациента',
+				step1Hint: 'Введите ФИО пациента для создания профиля.',
+				step2Title: 'Данные пациента',
+				step2Hint: 'Необязательно: укажите дату рождения и пол.',
+				step3Title: 'Подтверждение',
+				step3Hint: 'Проверьте данные и подтвердите создание профиля.',
 				createdTitle: 'Пациент добавлен',
 				createdHint: 'Передайте эти данные пациенту. Они не будут показаны повторно.',
-				fullName: 'ФИО *',
+				fullName: 'ФИО',
+				fullNamePlaceholder: 'Фамилия Имя Отчество',
 				birthDate: 'Дата рождения',
 				gender: 'Пол',
 				genderEmpty: '- не указан -',
@@ -462,9 +578,29 @@ const resources = {
 				genderOther: 'Другой',
 				login: 'Логин',
 				password: 'Пароль',
+				copyBoth: 'Скопировать оба',
+				copied: 'Скопировано!',
 				error: 'Не удалось добавить пациента. Попробуйте ещё раз.',
 				creating: 'Создание...',
-				create: 'Создать',
+				create: 'Создать пациента',
+				next: 'Далее →',
+				back: '← Назад',
+			},
+			medicationChart: {
+				title: 'История доз препаратов',
+				loading: 'Загрузка графика...',
+				empty: 'Данные о препаратах отсутствуют.',
+			},
+			scoreChart: {
+				title: 'Динамика результатов',
+				loading: 'Загрузка графика...',
+				noData: 'Данные об оценках отсутствуют.',
+				colDate: 'Дата',
+				colTest: 'Тест',
+				colScore: 'Балл',
+				colInterpretation: 'Интерпретация',
+				colDelta: 'Δ',
+				deltaTooltip: 'Изменение по сравнению с предыдущим результатом (↑ рост, ↓ снижение)',
 			},
 			resetCredentials: {
 				action: 'Сбросить доступ',
@@ -524,9 +660,13 @@ const resources = {
 			},
 			medication: {
 				label: 'Препарат',
-				searchPlaceholder: 'Поиск по МНН (минимум 2 символа)',
+				searchPlaceholder: 'Поиск по МНН...',
 				dose: 'Доза',
 				unit: 'Ед.',
+				unitMg: 'мг',
+				unitMcg: 'мкг',
+				unitMl: 'мл',
+				unitG: 'г',
 				precision: 'Точность',
 				frequency: 'Кратность',
 				frequencyPlaceholder: 'напр. 1×/день, по требованию',
@@ -551,6 +691,8 @@ const resources = {
 			},
 			seMonitoring: {
 				title: 'Мониторинг побочных эффектов',
+				description:
+					'Настройте, за какими побочными эффектами следить у этого пациента и с какой периодичностью. Врач получит уведомление, когда пациент сообщит об отслеживаемом побочном эффекте.',
 				activeRules: 'Активные правила',
 				noRules: 'Правила мониторинга не назначены.',
 				everyDays: 'каждые {{days}} д.',
@@ -558,6 +700,7 @@ const resources = {
 				addRule: 'Добавить правило',
 				searchPlaceholder: 'Поиск побочного эффекта...',
 				periodPlaceholder: 'Период (дней)',
+				periodOptional: 'необязательно',
 				adding: 'Добавление...',
 				add: 'Добавить',
 				close: 'Закрыть',
@@ -569,6 +712,20 @@ const resources = {
 				newGoalPlaceholder: 'Новая цель...',
 				cancel: 'Отмена',
 				add: 'Добавить',
+			},
+			events: {
+				loading: 'Загрузка событий...',
+				empty: 'События ещё не записаны.',
+				prev: 'Назад',
+				next: 'Вперёд',
+				unknown: 'Событие',
+				assessmentCompleted: 'Тест пройден',
+				medicationTaken: 'Препарат принят',
+				medicationMissed: 'Препарат пропущен',
+				sideEffectReported: 'Побочный эффект отмечен',
+				sideEffectResolved: 'Побочный эффект прошёл',
+				patientCreated: 'Профиль пациента создан',
+				profileUpdated: 'Профиль обновлён',
 			},
 			passwordForm: {
 				currentPassword: 'Текущий пароль',
@@ -589,14 +746,19 @@ const resources = {
 	},
 };
 
-void i18n
-	.use(LanguageDetector)
-	.use(initReactI18next)
-	.init({
-		resources,
-		fallbackLng: 'en',
-		defaultNS: 'common',
-		interpolation: { escapeValue: false },
+void i18n.use(initReactI18next).init({
+	resources,
+	lng: 'ru',
+	fallbackLng: 'en',
+	defaultNS: 'common',
+	interpolation: { escapeValue: false },
+});
+
+// Persist language changes to localStorage (runs only on client, only on user action)
+if (typeof window !== 'undefined') {
+	i18n.on('languageChanged', lng => {
+		safeLs.set(I18NEXT_LANGUAGE_STORAGE, lng);
 	});
+}
 
 export { i18n };

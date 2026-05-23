@@ -6,14 +6,14 @@ import { useRouter } from '@shared/hooks/use-router';
 import { date } from '@shared/lib/date';
 import type { components } from '@shared/types/schema';
 
-import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
-
 import { AddPatientModal } from '@/components/doctor/add-patient-modal';
 import { PatientCard } from '@/components/doctor/patient-card';
+import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
+import { Skeleton } from '@/components/ui/skeleton';
 
 type PatientOut = components['schemas']['PatientOut'];
-type Filter = 'all' | 'attention';
+type Filter = 'all' | 'attention' | 'archive';
 
 const DoctorIndexRoute: React.FC = () => {
 	const { t } = useTranslation('common');
@@ -36,8 +36,13 @@ const DoctorIndexRoute: React.FC = () => {
 
 	const displayed = useMemo(() => {
 		let list = patients;
-		if (filter === 'attention') {
-			list = list.filter(p => p.card_color === 'red' || p.card_color === 'yellow');
+		if (filter === 'archive') {
+			list = list.filter(p => p.archived_at !== null && p.archived_at !== undefined);
+		} else {
+			list = list.filter(p => !p.archived_at);
+			if (filter === 'attention') {
+				list = list.filter(p => p.card_color === 'red' || p.card_color === 'yellow');
+			}
 		}
 		if (search.trim()) {
 			const q = search.trim().toLowerCase();
@@ -47,11 +52,19 @@ const DoctorIndexRoute: React.FC = () => {
 	}, [patients, filter, search]);
 
 	if (patientsQuery.isLoading) {
-		return <div className='p-6 text-sm text-muted-foreground'>{t('loading')}</div>;
+		return (
+			<div className='mx-auto max-w-5xl p-4 sm:p-6'>
+				<div className='grid grid-cols-[repeat(auto-fill,minmax(240px,1fr))] gap-4'>
+					{Array.from({ length: 6 }).map((_, i) => (
+						<Skeleton key={i} className='h-40 w-full' />
+					))}
+				</div>
+			</div>
+		);
 	}
 
 	return (
-		<div className='p-6 max-w-3xl'>
+		<div className='mx-auto max-w-5xl p-4 sm:p-6'>
 			<div className='flex items-start justify-between mb-5'>
 				<div>
 					<h1 className='text-2xl font-bold text-foreground'>{t('doctorRoster.title')}</h1>
@@ -120,6 +133,15 @@ const DoctorIndexRoute: React.FC = () => {
 					>
 						{t('doctorRoster.attention')}
 					</button>
+					<button
+						type='button'
+						onClick={() => setFilter('archive')}
+						className={`px-3 py-1 text-xs rounded-md transition-colors font-medium ${
+							filter === 'archive' ? 'bg-foreground text-background' : 'text-muted-foreground hover:text-foreground'
+						}`}
+					>
+						{t('doctorRoster.archive')}
+					</button>
 				</div>
 				<Input
 					type='text'
@@ -132,10 +154,14 @@ const DoctorIndexRoute: React.FC = () => {
 
 			{displayed.length === 0 ? (
 				<p className='text-muted-foreground text-sm py-8 text-center'>
-					{patients.length === 0 ? t('doctorRoster.empty') : t('doctorRoster.notFound')}
+					{patients.length === 0
+						? t('doctorRoster.empty')
+						: filter === 'archive'
+							? t('doctorRoster.noArchive')
+							: t('doctorRoster.notFound')}
 				</p>
 			) : (
-				<div className='flex flex-col gap-3'>
+				<div className='grid grid-cols-[repeat(auto-fill,minmax(240px,1fr))] gap-4'>
 					{displayed.map(p => (
 						<PatientCard key={p.id} patient={p} onClick={() => router.navigate(`/doctor/patients/${p.id}`)} />
 					))}

@@ -1,5 +1,5 @@
-import { Pill } from 'lucide-react';
-import React from 'react';
+import { CheckCircle2, Pill, XCircle } from 'lucide-react';
+import React, { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
 import { useLogDoseMutation } from '@shared/api/medications';
@@ -15,9 +15,10 @@ type Props = {
 export const MedLogCard: React.FC<Props> = props => {
 	const { t } = useTranslation('common');
 	const logMutation = useLogDoseMutation(props.med.id);
+	const [logged, setLogged] = useState<'taken' | 'missed' | null>(null);
 
 	const handleLog = (status: 'taken' | 'missed') => {
-		logMutation.mutate({ status, occurred_at: date.nowIso() });
+		logMutation.mutate({ status, occurred_at: date.nowIso() }, { onSuccess: () => setLogged(status) });
 	};
 
 	return (
@@ -33,21 +34,35 @@ export const MedLogCard: React.FC<Props> = props => {
 					{t('patientPortal.since', { date: date.formatMonthShortRu(props.med.started_at ?? null) })}
 				</p>
 			</div>
-			<div className='shrink-0 flex gap-2'>
-				<button
-					disabled={logMutation.isPending}
-					onClick={() => handleLog('taken')}
-					className='px-3 py-1.5 text-xs border border-primary text-primary rounded-md hover:bg-primary hover:text-primary-foreground transition-colors disabled:opacity-40'
-				>
-					✓ {t('patientPortal.taken')}
-				</button>
-				<button
-					disabled={logMutation.isPending}
-					onClick={() => handleLog('missed')}
-					className='px-3 py-1.5 text-xs border border-border text-muted-foreground rounded-md hover:bg-muted transition-colors disabled:opacity-40'
-				>
-					{t('patientPortal.missed')}
-				</button>
+			<div className='shrink-0 flex gap-2 items-center'>
+				{logged === 'taken' ? (
+					<span className='flex items-center gap-1.5 text-xs font-medium text-green-700 dark:text-green-400 bg-green-50 dark:bg-green-950/30 border border-green-200 dark:border-green-800 rounded-md px-3 py-1.5'>
+						<CheckCircle2 size={13} />
+						{t('patientPortal.taken')}
+					</span>
+				) : logged === 'missed' ? (
+					<span className='flex items-center gap-1.5 text-xs font-medium text-muted-foreground bg-muted border border-border rounded-md px-3 py-1.5'>
+						<XCircle size={13} />
+						{t('patientPortal.missed')}
+					</span>
+				) : (
+					<>
+						<button
+							disabled={logMutation.isPending}
+							onClick={() => handleLog('taken')}
+							className='px-3 py-1.5 text-xs border border-primary text-primary rounded-md hover:bg-primary hover:text-primary-foreground transition-colors disabled:opacity-40'
+						>
+							✓ {t('patientPortal.taken')}
+						</button>
+						<button
+							disabled={logMutation.isPending}
+							onClick={() => handleLog('missed')}
+							className='px-3 py-1.5 text-xs border border-border text-muted-foreground rounded-md hover:bg-muted transition-colors disabled:opacity-40'
+						>
+							{t('patientPortal.missed')}
+						</button>
+					</>
+				)}
 			</div>
 		</div>
 	);

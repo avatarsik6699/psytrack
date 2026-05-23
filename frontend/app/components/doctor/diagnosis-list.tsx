@@ -3,9 +3,8 @@ import { useTranslation } from 'react-i18next';
 
 import { useDiagnoses } from '@shared/api/diagnoses';
 
-import { Button } from '@/components/ui/button';
-
 import { DiagnosisForm } from '@/components/doctor/diagnosis-form';
+import { Button } from '@/components/ui/button';
 
 type Props = {
 	patientId: string;

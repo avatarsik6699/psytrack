@@ -34,6 +34,7 @@ export const SEMonitoringModal: React.FC<Props> = props => {
 	const [searchQ, setSearchQ] = useState('');
 	const [selectedSeId, setSelectedSeId] = useState('');
 	const [frequencyDays, setFrequencyDays] = useState('');
+	const [showDropdown, setShowDropdown] = useState(false);
 
 	const dictQuery = useSeDictionary(searchQ);
 	const dictItems = ((dictQuery.data as { items?: SeDictionaryItem[] })?.items ?? []) as SeDictionaryItem[];
@@ -66,6 +67,7 @@ export const SEMonitoringModal: React.FC<Props> = props => {
 					setSelectedSeId('');
 					setSearchQ('');
 					setFrequencyDays('');
+					setShowDropdown(false);
 					void rulesQuery.refetch();
 				},
 			}
@@ -73,10 +75,16 @@ export const SEMonitoringModal: React.FC<Props> = props => {
 	};
 
 	return (
-		<Dialog open onOpenChange={open => { if (!open) props.onClose(); }}>
+		<Dialog
+			open
+			onOpenChange={open => {
+				if (!open) props.onClose();
+			}}
+		>
 			<DialogContent className='max-w-md space-y-4'>
 				<DialogHeader>
 					<DialogTitle>{t('seMonitoring.title')}</DialogTitle>
+					<p className='text-xs text-muted-foreground pt-1'>{t('seMonitoring.description')}</p>
 				</DialogHeader>
 
 				<div>
@@ -116,9 +124,14 @@ export const SEMonitoringModal: React.FC<Props> = props => {
 							type='text'
 							placeholder={t('seMonitoring.searchPlaceholder')}
 							value={searchQ}
-							onChange={e => setSearchQ(e.target.value)}
+							onFocus={() => setShowDropdown(true)}
+							onChange={e => {
+								setSearchQ(e.target.value);
+								setShowDropdown(true);
+								setSelectedSeId('');
+							}}
 						/>
-						{dictItems.length > 0 && (
+						{showDropdown && dictItems.length > 0 && (
 							<ul className='absolute z-10 w-full border border-border rounded-lg mt-1 max-h-36 overflow-y-auto bg-popover text-popover-foreground text-sm shadow-sm'>
 								{dictItems.map(item => (
 									<li
@@ -127,6 +140,7 @@ export const SEMonitoringModal: React.FC<Props> = props => {
 										onClick={() => {
 											setSelectedSeId(item.id);
 											setSearchQ(item.name_ru);
+											setShowDropdown(false);
 										}}
 									>
 										{item.uku_code} — {item.name_ru}
@@ -136,15 +150,18 @@ export const SEMonitoringModal: React.FC<Props> = props => {
 						)}
 					</div>
 
-					<div className='flex gap-2 items-center'>
-						<Input
-							type='number'
-							min={1}
-							placeholder={t('seMonitoring.periodPlaceholder')}
-							className='w-36'
-							value={frequencyDays}
-							onChange={e => setFrequencyDays(e.target.value)}
-						/>
+					<div className='flex gap-2 items-start'>
+						<div>
+							<Input
+								type='number'
+								min={1}
+								placeholder={t('seMonitoring.periodPlaceholder')}
+								className='w-36'
+								value={frequencyDays}
+								onChange={e => setFrequencyDays(e.target.value)}
+							/>
+							<span className='text-[10px] text-muted-foreground mt-0.5 block'>{t('seMonitoring.periodOptional')}</span>
+						</div>
 						<Button type='submit' size='sm' disabled={addMutation.isPending || !selectedSeId}>
 							{addMutation.isPending ? t('seMonitoring.adding') : t('seMonitoring.add')}
 						</Button>

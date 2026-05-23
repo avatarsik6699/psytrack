@@ -1,3 +1,5 @@
+from typing import TYPE_CHECKING
+
 from fastapi import Depends
 from sqlalchemy.ext.asyncio import AsyncSession
 
@@ -9,6 +11,10 @@ from app.modules.scales.repository import (
     TestCompletionRepository,
 )
 from app.modules.scales.service import PatientScaleService, ScaleService, TestCompletionService
+from app.modules.tasks.repository import TaskRepository
+
+if TYPE_CHECKING:
+    from app.modules.scales.charts import ScoreChartService
 
 
 def get_scale_repository(session: AsyncSession = Depends(get_db)) -> ScaleRepository:
@@ -42,12 +48,17 @@ def get_event_log_repository(session: AsyncSession = Depends(get_db)) -> EventLo
     return EventLogRepository(session)
 
 
+def get_task_repository(session: AsyncSession = Depends(get_db)) -> TaskRepository:
+    return TaskRepository(session)
+
+
 def get_test_completion_service(
     tc_repo: TestCompletionRepository = Depends(get_test_completion_repository),
     ps_repo: PatientScaleRepository = Depends(get_patient_scale_repository),
     event_repo: EventLogRepository = Depends(get_event_log_repository),
+    task_repo: TaskRepository = Depends(get_task_repository),
 ) -> TestCompletionService:
-    return TestCompletionService(tc_repo, ps_repo, event_repo)
+    return TestCompletionService(tc_repo, ps_repo, event_repo, task_repo)
 
 
 def get_score_chart_service(

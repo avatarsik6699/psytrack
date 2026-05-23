@@ -13,7 +13,6 @@ import type { components } from '@shared/types/schema';
 import { ScoreChart } from '@/components/charts/score-chart';
 import { AssignTestModal } from '@/components/doctor/assign-test-modal';
 import { DiagnosisList } from '@/components/doctor/diagnosis-list';
-import { DiagnosisTabSwitcher } from '@/components/doctor/diagnosis-tab-switcher';
 import { EventTimeline } from '@/components/doctor/event-timeline';
 import { MedicationAssignForm } from '@/components/doctor/medication-assign-form';
 import { MedicationChart } from '@/components/doctor/medication-chart';
@@ -22,6 +21,7 @@ import { PatientHeader } from '@/components/doctor/patient-header';
 import { SEChart } from '@/components/doctor/se-chart';
 import { SEMonitoringModal } from '@/components/doctor/se-monitoring-modal';
 import { TherapyGoals } from '@/components/doctor/therapy-goals';
+import { Skeleton } from '@/components/ui/skeleton';
 import { Tabs, TabsList, TabsTrigger, TabsContent } from '@/components/ui/tabs';
 
 type PatientMedicationOut = components['schemas']['PatientMedicationOut'];
@@ -65,7 +65,6 @@ const PatientDetailRoute: React.FC = () => {
 	const [addingMed, setAddingMed] = useState(false);
 	const [showAssignTest, setShowAssignTest] = useState(false);
 	const [showSeMonitoring, setShowSeMonitoring] = useState(false);
-	const [activeDiagId, setActiveDiagId] = useState<string | null>(null);
 	const archiveMutation = useArchivePatientMutation(id);
 	const medsQuery = usePatientMedications(id);
 	const meds = medsQuery.data ?? [];
@@ -76,7 +75,16 @@ const PatientDetailRoute: React.FC = () => {
 	const deleteMutation = useDeleteScaleMutation(id);
 
 	if (patientQuery.isLoading) {
-		return <div className='p-6 text-sm text-muted-foreground'>Загрузка…</div>;
+		return (
+			<div className='mx-auto max-w-5xl p-4 sm:p-6 space-y-4'>
+				<Skeleton className='h-20 w-full' />
+				<Skeleton className='h-8 w-64' />
+				<div className='space-y-3'>
+					<Skeleton className='h-48 w-full' />
+					<Skeleton className='h-48 w-full' />
+				</div>
+			</div>
+		);
 	}
 	if (!patientQuery.data) {
 		return <div className='p-6 text-sm'>Пациент не найден.</div>;
@@ -114,7 +122,7 @@ const PatientDetailRoute: React.FC = () => {
 	).latest_scores?.[0];
 
 	return (
-		<div className='p-6 max-w-5xl'>
+		<div className='mx-auto max-w-5xl p-4 sm:p-6'>
 			<div className='flex items-center gap-1.5 text-sm text-muted-foreground mb-4'>
 				<Link to='/doctor' className='hover:text-foreground flex items-center gap-1'>
 					<ChevronLeft size={14} />
@@ -125,12 +133,12 @@ const PatientDetailRoute: React.FC = () => {
 			</div>
 
 			<div className='bg-card text-card-foreground rounded-xl border border-border p-5 mb-4'>
-				<div className='space-y-4'>
-					<PatientHeader patient={patient as never} diagnoses={diagnoses} onEdit={() => {}} onArchive={handleArchive} />
-					<div className='flex justify-end border-t border-border pt-3'>
-						<PatientCredentialResetAction patientId={id} patientName={patient.full_name} />
-					</div>
-				</div>
+				<PatientHeader
+					patient={patient as never}
+					diagnoses={diagnoses}
+					onArchive={handleArchive}
+					credentialResetSlot={<PatientCredentialResetAction patientId={id} patientName={patient.full_name} />}
+				/>
 			</div>
 
 			<Tabs defaultValue='overview' className='space-y-4'>
@@ -272,17 +280,6 @@ const PatientDetailRoute: React.FC = () => {
 				</TabsContent>
 
 				<TabsContent value='dynamics' className='space-y-4'>
-					{diagnoses.length > 0 && (
-						<div className='bg-card text-card-foreground rounded-xl border border-border p-5'>
-							<h2 className='font-semibold text-sm mb-3'>Диагноз</h2>
-							<DiagnosisTabSwitcher
-								diagnoses={diagnoses}
-								activeId={activeDiagId ?? diagnoses[0]?.id ?? null}
-								onChange={setActiveDiagId}
-							/>
-						</div>
-					)}
-
 					<div className='bg-card text-card-foreground rounded-xl border border-border p-5'>
 						<ScoreChart patientId={id} />
 					</div>
@@ -299,7 +296,7 @@ const PatientDetailRoute: React.FC = () => {
 								</button>
 							)}
 						</div>
-						{assignedScalesQuery.isLoading && <p className='text-xs text-muted-foreground'>Загрузка…</p>}
+						{assignedScalesQuery.isLoading && <Skeleton className='h-10 w-full' />}
 						{!assignedScalesQuery.isLoading && assignedScales.length === 0 && !showAssignTest && (
 							<p className='text-xs text-muted-foreground'>Шкалы не назначены.</p>
 						)}

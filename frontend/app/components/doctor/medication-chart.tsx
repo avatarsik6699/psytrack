@@ -1,4 +1,5 @@
 import React from 'react';
+import { useTranslation } from 'react-i18next';
 import { CartesianGrid, Legend, Line, LineChart, ResponsiveContainer, Tooltip, XAxis, YAxis } from 'recharts';
 
 import { useMedicationChart } from '@shared/api/medications';
@@ -21,11 +22,12 @@ type Props = {
 const COLORS = ['#5B5BD6', '#10b981', '#f59e0b', '#ef4444', '#8b5cf6'];
 
 export const MedicationChart: React.FC<Props> = props => {
+	const { t } = useTranslation('common');
 	const chartQuery = useMedicationChart(props.patientId);
 	const series = (chartQuery.data ?? []) as ChartSeries[];
 
-	if (chartQuery.isLoading) return <p className='text-xs text-muted-foreground'>Loading chart…</p>;
-	if (!series.length) return <p className='text-xs text-muted-foreground'>No medication data.</p>;
+	if (chartQuery.isLoading) return <p className='text-xs text-muted-foreground'>{t('medicationChart.loading')}</p>;
+	if (!series.length) return <p className='text-xs text-muted-foreground'>{t('medicationChart.empty')}</p>;
 
 	const allDates = Array.from(new Set(series.flatMap(s => s.points.map(p => p.date)))).sort();
 
@@ -40,7 +42,7 @@ export const MedicationChart: React.FC<Props> = props => {
 
 	return (
 		<div className='mt-4'>
-			<h3 className='text-xs font-semibold text-muted-foreground mb-2'>Medication Dose History</h3>
+			<h3 className='text-xs font-semibold text-muted-foreground mb-2'>{t('medicationChart.title')}</h3>
 			<ResponsiveContainer width='100%' height={220}>
 				<LineChart data={chartData} margin={{ top: 4, right: 8, left: 0, bottom: 4 }}>
 					<CartesianGrid strokeDasharray='3 3' stroke='#e5e7eb' />

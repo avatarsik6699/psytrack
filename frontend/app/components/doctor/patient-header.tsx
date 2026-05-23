@@ -1,4 +1,4 @@
-import { Archive, Pencil } from 'lucide-react';
+import { Archive } from 'lucide-react';
 import React from 'react';
 import { useTranslation } from 'react-i18next';
 
@@ -39,8 +39,8 @@ function genderLabel(gender: string | null, t: (key: string) => string): string 
 type Props = {
 	patient: PatientOutExtended;
 	diagnoses?: DiagnosisOut[];
-	onEdit: () => void;
 	onArchive: () => void;
+	credentialResetSlot?: React.ReactNode;
 };
 
 export const PatientHeader: React.FC<Props> = props => {
@@ -96,10 +96,7 @@ export const PatientHeader: React.FC<Props> = props => {
 			</div>
 
 			<div className='flex items-center gap-2 shrink-0'>
-				<Button variant='outline' size='sm' onClick={props.onEdit}>
-					<Pencil size={13} />
-					{t('actions.edit')}
-				</Button>
+				{props.credentialResetSlot}
 				{!props.patient.archived_at && (
 					<Button variant='outline' size='sm' onClick={props.onArchive}>
 						<Archive size={13} />

@@ -41,8 +41,8 @@ export const SECard: React.FC<Props> = props => {
 						)}
 					</div>
 					<p className='text-xs text-muted-foreground mt-0.5'>
-					{props.se.se.body_system ?? '—'} ·{' '}
-					{t('patientPortal.since', { date: date.formatMonthShortRu(props.se.started_at ?? null) })}
+						{props.se.se.body_system ?? '—'} ·{' '}
+						{t('patientPortal.since', { date: date.formatMonthShortRu(props.se.started_at ?? null) })}
 					</p>
 				</div>
 				{!props.se.resolved && (

@@ -6,6 +6,8 @@ import { usePatientMe } from '@shared/api/patient-me';
 import { LanguageSwitcher } from '@shared/ui/language-switcher';
 import { ThemeToggle } from '@shared/ui/theme-toggle';
 
+import { Skeleton } from '@/components/ui/skeleton';
+
 import { PatientCredentialForm } from './components/patient-credential-form';
 import { ProfileSection } from './components/profile-section';
 import { SessionInfoPanel } from './components/session-info-panel';
@@ -19,11 +21,20 @@ const ProfileRoute: React.FC = () => {
 	const meQuery = usePatientMe();
 
 	if (meQuery.isLoading) {
-		return <div className='p-6 text-sm text-muted-foreground'>{t('loading')}</div>;
+		return (
+			<div className='mx-auto max-w-5xl space-y-5 p-4 sm:p-6'>
+				<Skeleton className='h-7 w-48' />
+				<div className='space-y-4'>
+					<Skeleton className='h-24 w-full' />
+					<Skeleton className='h-24 w-full' />
+					<Skeleton className='h-24 w-full' />
+				</div>
+			</div>
+		);
 	}
 
 	return (
-		<div className='mx-auto max-w-5xl space-y-5 p-4 md:p-6'>
+		<div className='mx-auto max-w-5xl space-y-5 p-4 sm:p-6'>
 			<div>
 				<h1 className='text-xl font-semibold'>{t('profile.title')}</h1>
 				<p className='text-sm text-muted-foreground'>{t('profile.patientSubtitle')}</p>

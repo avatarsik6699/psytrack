@@ -1,6 +1,7 @@
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 
 import { api } from '@shared/api/client';
+import { taskQueryKeys } from '@shared/api/tasks';
 import type { components } from '@shared/types/schema';
 
 type PatientScaleCreate = components['schemas']['PatientScaleCreate'];
@@ -87,6 +88,8 @@ export function useSubmitTestMutation(patientScaleId: string) {
 			}),
 		onSuccess: () => {
 			queryClient.invalidateQueries({ queryKey: scalesQueryKeys.history() });
+			queryClient.invalidateQueries({ queryKey: ['scales', 'my-assigned'] });
+			queryClient.invalidateQueries({ queryKey: taskQueryKeys.myTasks() });
 		},
 	});
 }

@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
-import { useAssignMedicationMutation, useMedicationSearch } from '@shared/api/medications';
+import { useAssignMedicationMutation, useMedicationBrowse } from '@shared/api/medications';
 import type { components } from '@shared/types/schema';
 
 import { Button } from '@/components/ui/button';
@@ -21,17 +21,19 @@ export const MedicationAssignForm: React.FC<Props> = props => {
 	const { t } = useTranslation('common');
 	const [query, setQuery] = useState('');
 	const [selected, setSelected] = useState<MedicationReferenceOut | null>(null);
+	const [showDropdown, setShowDropdown] = useState(false);
 	const [doseMg, setDoseMg] = useState('');
 	const [unit, setUnit] = useState('mg');
 	const [frequency, setFrequency] = useState('');
 	const [dosePrecision, setDosePrecision] = useState<'exact' | 'approx' | 'range'>('exact');
-	const searchQuery = useMedicationSearch(query);
-	const results = searchQuery.data ?? [];
+	const browseQuery = useMedicationBrowse(query);
+	const results = (browseQuery.data ?? []) as MedicationReferenceOut[];
 	const mutation = useAssignMedicationMutation(props.patientId);
 
 	const handleSelect = (med: MedicationReferenceOut) => {
 		setSelected(med);
 		setQuery('');
+		setShowDropdown(false);
 	};
 
 	const handleSubmit = (e: React.FormEvent) => {
@@ -70,10 +72,15 @@ export const MedicationAssignForm: React.FC<Props> = props => {
 							type='text'
 							placeholder={t('medication.searchPlaceholder')}
 							value={query}
-							onChange={e => setQuery(e.target.value)}
+							onChange={e => {
+								setQuery(e.target.value);
+								setShowDropdown(true);
+							}}
+							onFocus={() => setShowDropdown(true)}
+							onBlur={() => setTimeout(() => setShowDropdown(false), 150)}
 							className='h-7 text-xs'
 						/>
-						{results.length > 0 && query.length >= 2 && (
+						{showDropdown && results.length > 0 && (
 							<ul className='absolute z-10 w-full mt-1 bg-popover text-popover-foreground border border-border rounded-lg shadow-sm text-xs'>
 								{results.map(med => (
 									<li
@@ -113,10 +120,10 @@ export const MedicationAssignForm: React.FC<Props> = props => {
 							<SelectValue />
 						</SelectTrigger>
 						<SelectContent>
-							<SelectItem value='mg'>mg</SelectItem>
-							<SelectItem value='mcg'>mcg</SelectItem>
-							<SelectItem value='ml'>ml</SelectItem>
-							<SelectItem value='g'>g</SelectItem>
+							<SelectItem value='mg'>{t('medication.unitMg')}</SelectItem>
+							<SelectItem value='mcg'>{t('medication.unitMcg')}</SelectItem>
+							<SelectItem value='ml'>{t('medication.unitMl')}</SelectItem>
+							<SelectItem value='g'>{t('medication.unitG')}</SelectItem>
 						</SelectContent>
 					</Select>
 				</div>

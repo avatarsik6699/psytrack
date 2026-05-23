@@ -6,6 +6,7 @@ import { useMySideEffects } from '@shared/api/side-effects';
 import type { components } from '@shared/types/schema';
 
 import { SEWizard } from '@/components/patient/se-wizard';
+import { Skeleton } from '@/components/ui/skeleton';
 
 import { SECard } from './components/se-card';
 
@@ -25,11 +26,17 @@ const SideEffectsPage: React.FC = () => {
 	const resolved = records.filter(r => r.resolved);
 
 	if (sideEffectsQuery.isLoading) {
-		return <div className='p-6 text-sm text-muted-foreground'>{t('loading')}</div>;
+		return (
+			<div className='mx-auto max-w-5xl p-4 sm:p-6 space-y-3'>
+				{Array.from({ length: 3 }).map((_, i) => (
+					<Skeleton key={i} className='h-14 w-full' />
+				))}
+			</div>
+		);
 	}
 
 	return (
-		<div className='p-6 space-y-4'>
+		<div className='mx-auto max-w-5xl p-4 sm:p-6 space-y-4'>
 			<div className='flex items-start justify-between'>
 				<div>
 					<h1 className='text-lg font-semibold'>{t('nav.sideEffects')}</h1>

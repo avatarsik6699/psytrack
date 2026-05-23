@@ -85,12 +85,7 @@ export const DiagnosisForm: React.FC<Props> = props => {
 			</div>
 			<div className='space-y-1'>
 				<Label className='text-xs'>{t('diagnosis.notes')}</Label>
-				<Textarea
-					value={notes}
-					onChange={e => setNotes(e.target.value)}
-					rows={2}
-					className='text-xs min-h-0'
-				/>
+				<Textarea value={notes} onChange={e => setNotes(e.target.value)} rows={2} className='text-xs min-h-0' />
 			</div>
 			{mutation.error && <p className='text-xs text-destructive'>{t('diagnosis.error')}</p>}
 			<div className='flex gap-2'>

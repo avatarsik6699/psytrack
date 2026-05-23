@@ -1,4 +1,5 @@
 import React from 'react';
+import { useTranslation } from 'react-i18next';
 import { CartesianGrid, Legend, Line, LineChart, ResponsiveContainer, Tooltip, XAxis, YAxis } from 'recharts';
 
 import { useScoreChart } from '@shared/api/charts';
@@ -18,11 +19,12 @@ type Props = {
 };
 
 export const ScoreChart: React.FC<Props> = props => {
+	const { t } = useTranslation('common');
 	const chartQuery = useScoreChart(props.patientId);
 	const series = chartQuery.data ?? [];
 
-	if (chartQuery.isLoading) return <p className='text-xs text-muted-foreground'>Loading chart…</p>;
-	if (!series.length) return <p className='text-xs text-muted-foreground'>No score data.</p>;
+	if (chartQuery.isLoading) return <p className='text-xs text-muted-foreground'>{t('scoreChart.loading')}</p>;
+	if (!series.length) return <p className='text-xs text-muted-foreground'>{t('scoreChart.noData')}</p>;
 
 	const allDates = Array.from(new Set(series.flatMap(s => s.points.map(p => p.completed_at)))).sort();
 
@@ -48,7 +50,7 @@ export const ScoreChart: React.FC<Props> = props => {
 	return (
 		<div>
 			<div className='flex items-center justify-between mb-2'>
-				<h3 className='text-xs font-semibold text-muted-foreground'>Score Trends</h3>
+				<h3 className='text-xs font-semibold text-muted-foreground'>{t('scoreChart.title')}</h3>
 				<div className='flex gap-2'>
 					{deltaChips.map(
 						chip =>

@@ -1,9 +1,9 @@
-import HomePage from '@pages/home';
+import { redirect } from 'react-router';
 
-export function meta() {
-	return [{ title: 'PsychTrack' }, { name: 'description', content: 'Кабинет клинического мониторинга.' }];
+export function loader() {
+	return redirect('/dashboard');
 }
 
 export default function HomeRoute() {
-	return <HomePage />;
+	return null;
 }

@@ -1409,6 +1409,8 @@ export interface components {
             code: string;
             /** Name */
             name: string;
+            /** Name Ru */
+            name_ru?: string | null;
             /** Score Min */
             score_min: number;
             /** Score Max */
@@ -1422,6 +1424,8 @@ export interface components {
             id: number;
             /** Text */
             text: string;
+            /** Text Ru */
+            text_ru?: string | null;
             /** Options */
             options: {
                 [key: string]: unknown;

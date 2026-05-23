@@ -29,14 +29,19 @@ export function useAssessmentWizard(params: Params) {
 	const progressPct = questions.length > 0 ? Math.round((step / questions.length) * 100) : 0;
 	const currentAnswer = currentQuestion ? answers.find(a => a.question_id === currentQuestion.id) : undefined;
 
-	function handleAnswer(value: number) {
-		if (!currentQuestion) {
-			return;
-		}
+	function selectAnswer(value: number) {
+		if (!currentQuestion) return;
+		setAnswers(prev => [
+			...prev.filter(a => a.question_id !== currentQuestion.id),
+			{ question_id: currentQuestion.id, value },
+		]);
+	}
 
+	function advance() {
+		if (!currentQuestion || !currentAnswer) return;
 		const updated: Answer[] = [
 			...answers.filter(a => a.question_id !== currentQuestion.id),
-			{ question_id: currentQuestion.id, value },
+			{ question_id: currentQuestion.id, value: currentAnswer.value },
 		];
 		setAnswers(updated);
 
@@ -72,7 +77,8 @@ export function useAssessmentWizard(params: Params) {
 		result,
 		isMutationPending: mutation.isPending,
 		mutationError: mutation.error,
-		handleAnswer,
+		selectAnswer,
+		advance,
 		goBack,
 	};
 }

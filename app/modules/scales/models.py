@@ -13,6 +13,7 @@ class Scale(UUIDMixin, Base):
 
     code: Mapped[str] = mapped_column(String, unique=True, nullable=False)
     name: Mapped[str] = mapped_column(Text, nullable=False)
+    name_ru: Mapped[str | None] = mapped_column(Text, nullable=True)
     score_min: Mapped[int] = mapped_column(Integer, nullable=False)
     score_max: Mapped[int] = mapped_column(Integer, nullable=False)
     improvement_direction: Mapped[str | None] = mapped_column(String(10), nullable=True)

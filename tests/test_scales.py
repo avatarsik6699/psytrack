@@ -2,14 +2,15 @@
 
 from __future__ import annotations
 
-from datetime import datetime, timezone
+from datetime import UTC, datetime
+from uuid import UUID
 
 import pytest
 from httpx import AsyncClient
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from app.modules.scales.models import PatientScale, Scale, TestCompletion
-
+from app.modules.scales.models import Scale, TestCompletion
+from app.modules.tasks.models import Task
 
 # ---------------------------------------------------------------------------
 # Helpers
@@ -40,6 +41,18 @@ async def _create_patient(client: AsyncClient, token: str, name: str = "Scale Pa
     return resp.json()
 
 
+async def _patient_token(client: AsyncClient, patient_data: dict) -> str:
+    resp = await client.post(
+        "/api/v1/public/auth/patient-login",
+        json={
+            "temp_login": patient_data["temp_login"],
+            "password": patient_data["temp_password"],
+        },
+    )
+    assert resp.status_code == 200, resp.text
+    return resp.json()["access_token"]
+
+
 async def _add_diagnosis(client: AsyncClient, token: str, patient_id: str) -> dict:
     resp = await client.post(
         f"/api/v1/doctor/patients/{patient_id}/diagnoses",
@@ -62,7 +75,10 @@ async def scale(db_session: AsyncSession) -> Scale:
             {
                 "id": i,
                 "text": f"Question {i}",
-                "options": [{"value": 0, "label": "Not at all"}, {"value": 1, "label": "Several days"}],
+                "options": [
+                    {"value": 0, "label": "Not at all"},
+                    {"value": 1, "label": "Several days"},
+                ],
             }
             for i in range(1, 10)
         ],
@@ -137,6 +153,61 @@ async def test_list_patient_scales_empty_by_default(
     assert resp.json() == []
 
 
+async def test_submit_test_marks_matching_pending_task_done(
+    client: AsyncClient, db_session: AsyncSession, scale: Scale
+) -> None:
+    token = await _register_doctor(client, "submit01")
+    patient = await _create_patient(client, token)
+    p_token = await _patient_token(client, patient)
+    pid = patient["id"]
+    diag = await _add_diagnosis(client, token, pid)
+
+    assign_resp = await client.post(
+        f"/api/v1/doctor/patients/{pid}/scales",
+        headers={"Authorization": f"Bearer {token}"},
+        json={"scale_id": str(scale.id), "diagnosis_id": diag["id"], "frequency_days": 7},
+    )
+    assert assign_resp.status_code == 201, assign_resp.text
+    patient_scale_id = assign_resp.json()["id"]
+
+    now = datetime.now(UTC)
+    db_session.add(
+        Task(
+            patient_id=UUID(pid),
+            task_type="test",
+            reference_id=UUID(patient_scale_id),
+            due_at=now,
+            status="pending",
+            created_at=now,
+        )
+    )
+    await db_session.flush()
+
+    before_resp = await client.get(
+        "/api/v1/patient/tasks",
+        headers={"Authorization": f"Bearer {p_token}"},
+    )
+    assert before_resp.status_code == 200, before_resp.text
+    assert any(task["reference_id"] == patient_scale_id for task in before_resp.json())
+
+    submit_resp = await client.post(
+        f"/api/v1/patient/tests/{patient_scale_id}/submit",
+        headers={"Authorization": f"Bearer {p_token}"},
+        json={
+            "baseline": False,
+            "answers": [{"question_id": i, "value": 1} for i in range(1, 10)],
+        },
+    )
+    assert submit_resp.status_code == 201, submit_resp.text
+
+    after_resp = await client.get(
+        "/api/v1/patient/tasks",
+        headers={"Authorization": f"Bearer {p_token}"},
+    )
+    assert after_resp.status_code == 200, after_resp.text
+    assert all(task["reference_id"] != patient_scale_id for task in after_resp.json())
+
+
 # ---------------------------------------------------------------------------
 # Tests: delete — no completions (allowed)
 # ---------------------------------------------------------------------------
@@ -209,7 +280,7 @@ async def test_delete_scale_with_completions_returns_409(
         score=5,
         answers_json=[{"question_id": 1, "value": 1}],
         baseline=False,
-        completed_at=datetime.now(timezone.utc),
+        completed_at=datetime.now(UTC),
     )
     db_session.add(tc)
     await db_session.flush()

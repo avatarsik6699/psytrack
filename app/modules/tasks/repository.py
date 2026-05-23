@@ -30,6 +30,28 @@ class TaskRepository:
         )
         return list(rows)
 
+    async def mark_pending_done(
+        self,
+        patient_id: UUID,
+        task_type: str,
+        reference_id: UUID,
+        completed_at: datetime,
+    ) -> int:
+        rows = await self._session.scalars(
+            select(Task).where(
+                Task.patient_id == patient_id,
+                Task.task_type == task_type,
+                Task.reference_id == reference_id,
+                Task.status == "pending",
+            )
+        )
+        tasks = list(rows)
+        for task in tasks:
+            task.status = "done"
+            task.updated_at = completed_at
+        await self._session.flush()
+        return len(tasks)
+
     async def has_pending_task(
         self,
         patient_id: UUID,

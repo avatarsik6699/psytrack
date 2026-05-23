@@ -20,20 +20,11 @@ export const PasswordChangeForm: React.FC = () => {
 		<form onSubmit={handleSubmit} className='space-y-3'>
 			<div className='space-y-1.5'>
 				<Label>{t('passwordForm.currentPassword')}</Label>
-				<Input
-					type='password'
-					value={form.current}
-					onChange={e => form.setCurrent(e.target.value)}
-				/>
+				<Input type='password' value={form.current} onChange={e => form.setCurrent(e.target.value)} />
 			</div>
 			<div className='space-y-1.5'>
 				<Label>{t('passwordForm.newPassword')}</Label>
-				<Input
-					type='password'
-					value={form.next}
-					onChange={e => form.setNext(e.target.value)}
-					minLength={8}
-				/>
+				<Input type='password' value={form.next} onChange={e => form.setNext(e.target.value)} minLength={8} />
 			</div>
 			{form.success && <p className='text-xs text-status-ok-fg'>{t('passwordForm.success')}</p>}
 			{form.error && <p className='text-xs text-destructive'>{t('passwordForm.error')}</p>}

@@ -1,4 +1,4 @@
-from datetime import datetime, timezone
+from datetime import UTC, datetime
 from uuid import UUID
 
 from fastapi import HTTPException
@@ -12,6 +12,7 @@ from app.modules.scales.repository import (
     TestCompletionRepository,
 )
 from app.modules.scales.schemas import PatientScaleCreate, TestSubmitIn
+from app.modules.tasks.repository import TaskRepository
 
 
 class ScaleService:
@@ -60,7 +61,10 @@ class PatientScaleService:
         if await self._tc_repository.has_completions(ps_id):
             raise HTTPException(
                 status_code=409,
-                detail="Cannot remove scale: it has completed assessments. Archive the patient or contact support.",
+                detail=(
+                    "Cannot remove scale: it has completed assessments. "
+                    "Archive the patient or contact support."
+                ),
             )
         await self._repository.delete(ps)
 
@@ -80,10 +84,12 @@ class TestCompletionService:
         tc_repo: TestCompletionRepository,
         ps_repo: PatientScaleRepository,
         event_repo: EventLogRepository,
+        task_repo: TaskRepository,
     ) -> None:
         self._tc_repo = tc_repo
         self._ps_repo = ps_repo
         self._event_repo = event_repo
+        self._task_repo = task_repo
 
     async def submit(
         self,
@@ -97,14 +103,17 @@ class TestCompletionService:
             raise HTTPException(status_code=404, detail="Patient scale not found")
 
         score = sum(a["value"] for a in data.answers)
-        now = datetime.now(timezone.utc)
+        now = datetime.now(UTC)
 
         tc = TestCompletion(
             patient_id=patient_id,
             patient_scale_id=ps_id,
             scale_id=ps.scale_id,
             score=score,
-            answers_json=[{"question_id": a["question_id"], "value": a["value"]} for a in data.answers],
+            answers_json=[
+                {"question_id": a["question_id"], "value": a["value"]}
+                for a in data.answers
+            ],
             baseline=data.baseline,
             completed_at=now,
         )
@@ -119,6 +128,12 @@ class TestCompletionService:
             created_by=created_by,
         )
         await self._event_repo.add(event)
+        await self._task_repo.mark_pending_done(
+            patient_id=patient_id,
+            task_type="test",
+            reference_id=ps_id,
+            completed_at=now,
+        )
 
         result = await self._tc_repo.get_by_id_with_scale(tc.id)
         return result  # type: ignore[return-value]

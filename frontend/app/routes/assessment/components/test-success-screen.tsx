@@ -1,4 +1,5 @@
 import React from 'react';
+import { useTranslation } from 'react-i18next';
 import { Link } from 'react-router';
 
 import type { components } from '@shared/types/schema';
@@ -27,7 +28,11 @@ function severityLabel(code: string, score: number): string {
 }
 
 export const TestSuccessScreen: React.FC<Props> = props => {
-	const scaleName = props.result.scale?.name ?? 'Тест';
+	const { i18n } = useTranslation();
+	const isRu = i18n.language === 'ru';
+	const scaleName = isRu
+		? props.result.scale?.name_ru || props.result.scale?.name || 'Тест'
+		: (props.result.scale?.name ?? 'Тест');
 	const scaleCode = props.result.scale?.code ?? '';
 	const label = scaleCode ? severityLabel(scaleCode, props.result.score) : '';
 

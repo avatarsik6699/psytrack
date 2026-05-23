@@ -1,11 +1,11 @@
 export const BODY_SYSTEMS = [
 	{ key: '', label: 'Все' },
-	{ key: 'Психические', label: 'Психические' },
-	{ key: 'ЦНС', label: 'ЦНС' },
-	{ key: 'Вегетативные', label: 'Вегетативные' },
-	{ key: 'ЖКТ', label: 'ЖКТ' },
-	{ key: 'Кожные', label: 'Кожные' },
-	{ key: 'Другое', label: 'Другое' },
+	{ key: 'psychic', label: 'Психические' },
+	{ key: 'neurological', label: 'Неврологические' },
+	{ key: 'autonomic', label: 'Вегетативные' },
+	{ key: 'global', label: 'Глобальные' },
+	{ key: 'tardive', label: 'Поздние' },
+	{ key: 'other', label: 'Другое' },
 ] as const;
 
 export const SEVERITY_LABELS: Record<number, string> = {

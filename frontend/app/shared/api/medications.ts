@@ -22,6 +22,14 @@ export function useMedicationSearch(q: string) {
 	});
 }
 
+export function useMedicationBrowse(q: string) {
+	return useQuery({
+		queryKey: medicationQueryKeys.ref(q),
+		queryFn: () => api.get('/api/v1/ref/medications', { query: { q: q || undefined, limit: 50 } }),
+		enabled: true,
+	});
+}
+
 export function usePatientMedications(patientId: string) {
 	return useQuery({
 		queryKey: medicationQueryKeys.patientMeds(patientId),

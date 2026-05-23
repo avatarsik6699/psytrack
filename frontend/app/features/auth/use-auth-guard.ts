@@ -8,19 +8,19 @@ export function shouldRedirectToLogin(accessToken?: string): boolean {
 }
 
 export function useAuthGuard() {
-	const router = useRouter();
+	const { navigate, location } = useRouter();
 	const tokenQuery = useAuthToken();
 
 	useEffect(
 		function redirectToLoginFx() {
 			if (shouldRedirectToLogin(tokenQuery.data?.access_token)) {
-				router.navigate('/login', {
+				navigate('/login', {
 					replace: true,
-					state: { from: router.location.pathname },
+					state: { from: location.pathname },
 				});
 			}
 		},
-		[router, tokenQuery.data?.access_token]
+		[navigate, location.pathname, tokenQuery.data?.access_token]
 	);
 
 	return {

@@ -1,4 +1,5 @@
 import React from 'react';
+import { useTranslation } from 'react-i18next';
 
 import type { ScoreChartSeries } from '@shared/api/charts';
 import { date } from '@shared/lib/date';
@@ -27,6 +28,7 @@ type Row = {
 };
 
 export const AssessmentResultsTable: React.FC<Props> = props => {
+	const { t } = useTranslation('common');
 	const rows: Row[] = props.series.flatMap(s =>
 		s.points.map((pt, idx) => ({
 			date: pt.completed_at,
@@ -41,7 +43,7 @@ export const AssessmentResultsTable: React.FC<Props> = props => {
 	rows.sort((a, b) => date.timestamp(b.date) - date.timestamp(a.date));
 
 	if (!rows.length) {
-		return <p className='text-xs text-muted-foreground'>No assessment data.</p>;
+		return <p className='text-xs text-muted-foreground'>{t('scoreChart.noData')}</p>;
 	}
 
 	return (
@@ -49,11 +51,13 @@ export const AssessmentResultsTable: React.FC<Props> = props => {
 			<table className='min-w-full text-xs'>
 				<thead>
 					<tr className='border-b border-border text-left text-muted-foreground'>
-						<th className='py-1 pr-3 font-medium'>DATE</th>
-						<th className='py-1 pr-3 font-medium'>TEST</th>
-						<th className='py-1 pr-3 font-medium'>SCORE</th>
-						<th className='py-1 pr-3 font-medium'>INTERPRETATION</th>
-						<th className='py-1 font-medium'>Δ</th>
+						<th className='py-1 pr-3 font-medium'>{t('scoreChart.colDate')}</th>
+						<th className='py-1 pr-3 font-medium'>{t('scoreChart.colTest')}</th>
+						<th className='py-1 pr-3 font-medium'>{t('scoreChart.colScore')}</th>
+						<th className='py-1 pr-3 font-medium'>{t('scoreChart.colInterpretation')}</th>
+						<th className='py-1 font-medium cursor-help' title={t('scoreChart.deltaTooltip')}>
+							{t('scoreChart.colDelta')}
+						</th>
 					</tr>
 				</thead>
 				<tbody>
@@ -71,7 +75,9 @@ export const AssessmentResultsTable: React.FC<Props> = props => {
 							</td>
 							<td className='py-1.5'>
 								{r.delta !== null ? (
-									<span className={r.delta < 0 ? 'text-green-600' : r.delta > 0 ? 'text-red-500' : 'text-muted-foreground'}>
+									<span
+										className={r.delta < 0 ? 'text-green-600' : r.delta > 0 ? 'text-red-500' : 'text-muted-foreground'}
+									>
 										{r.delta > 0 ? `↑${r.delta}` : r.delta < 0 ? `↓${Math.abs(r.delta)}` : '—'}
 									</span>
 								) : (

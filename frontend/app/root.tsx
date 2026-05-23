@@ -6,6 +6,7 @@ import { appError } from '@shared/lib/app-error';
 import { AppProvider } from '@shared/lib/app-provider';
 import { globalErrorNotifier } from '@shared/lib/global-error-notifier';
 import { ErrorState } from '@shared/ui/error-state';
+import { NavigationProgress } from '@shared/ui/navigation-progress';
 
 import './styles/app.css';
 
@@ -20,6 +21,7 @@ export default function App() {
 			</head>
 			<body>
 				<AppProvider>
+					<NavigationProgress />
 					<Outlet />
 				</AppProvider>
 				<ScrollRestoration />

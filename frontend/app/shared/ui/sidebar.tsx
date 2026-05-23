@@ -7,6 +7,7 @@ import { useCurrentSession, useLogoutMutation } from '@shared/api/auth';
 import { usePatientMe } from '@shared/api/patient-me';
 import { useMySideEffects } from '@shared/api/side-effects';
 import { usePatientTasks } from '@shared/api/tasks';
+import { useRouter } from '@shared/hooks/use-router';
 import { date } from '@shared/lib/date';
 
 import { cn } from '@/lib/utils';
@@ -17,8 +18,22 @@ type Props = {
 	role: SidebarRole;
 };
 
+function formatBadgeCount(count: number) {
+	return count > 9 ? '9+' : String(count);
+}
+
+const NotificationBadge: React.FC<{ count: number }> = props => {
+	if (props.count <= 0) return null;
+	return (
+		<span className='inline-flex size-4 shrink-0 items-center justify-center rounded-full bg-red-500 text-[9px] font-bold leading-none text-white tabular-nums'>
+			{formatBadgeCount(props.count)}
+		</span>
+	);
+};
+
 const PatientSidebar: React.FC = () => {
 	const { t } = useTranslation('common');
+	const router = useRouter();
 	const tasksQuery = usePatientTasks();
 	const tasks = tasksQuery.data ?? [];
 	const seQuery = useMySideEffects();
@@ -79,11 +94,7 @@ const PatientSidebar: React.FC = () => {
 						>
 							<navItem.icon size={15} className='shrink-0' />
 							<span className='flex-1 truncate text-xs leading-4'>{navItem.label}</span>
-							{navItem.badge > 0 && (
-								<span className='shrink-0 min-w-4 h-4 rounded-full bg-red-500 text-white text-[10px] font-bold flex items-center justify-center px-1'>
-									{navItem.badge}
-								</span>
-							)}
+							<NotificationBadge count={navItem.badge} />
 						</NavLink>
 					))}
 				</nav>
@@ -105,7 +116,9 @@ const PatientSidebar: React.FC = () => {
 				)}
 				<button
 					type='button'
-					onClick={() => logoutMutation.mutate()}
+					onClick={() =>
+						logoutMutation.mutate(undefined, { onSettled: () => router.navigate('/login', { replace: true }) })
+					}
 					className='flex items-center gap-2 px-3 py-2 text-xs text-muted-foreground hover:text-foreground text-left'
 				>
 					<LogOut size={13} />
@@ -118,11 +131,13 @@ const PatientSidebar: React.FC = () => {
 
 const DoctorSidebar: React.FC = () => {
 	const { t } = useTranslation('common');
+	const router = useRouter();
 	const logoutMutation = useLogoutMutation();
 	const sessionQuery = useCurrentSession();
 	const session = sessionQuery.data;
 	const displayName = session?.display_name ?? (sessionQuery.isLoading ? t('loading') : t('profile.doctorFallback'));
-	const specialty = session?.specialty ?? (sessionQuery.isLoading ? t('profile.checkingSession') : t('profile.specialtyEmpty'));
+	const specialty =
+		session?.specialty ?? (sessionQuery.isLoading ? t('profile.checkingSession') : t('profile.specialtyEmpty'));
 	const initial = displayName.trim()[0]?.toUpperCase() ?? t('roles.doctor')[0]?.toUpperCase() ?? 'D';
 	const doctorNav = [
 		{ to: '/doctor', icon: Users, label: t('nav.patients') },
@@ -184,7 +199,9 @@ const DoctorSidebar: React.FC = () => {
 				</div>
 				<button
 					type='button'
-					onClick={() => logoutMutation.mutate()}
+					onClick={() =>
+						logoutMutation.mutate(undefined, { onSettled: () => router.navigate('/login', { replace: true }) })
+					}
 					className='flex items-center gap-2 px-3 py-2 text-xs text-muted-foreground hover:text-foreground text-left'
 				>
 					<LogOut size={13} />

@@ -17,13 +17,11 @@ export const DashboardPage: React.FC = () => {
 	const greetingName = dashboard.firstName ? t('patientPortal.greetingName', { name: dashboard.firstName }) : '';
 
 	return (
-		<div className='p-6 space-y-6'>
+		<div className='mx-auto max-w-5xl p-4 sm:p-6 space-y-6'>
 			{/* Date + greeting */}
 			<div>
 				<p className='text-xs text-muted-foreground capitalize'>{date.formatDateRu(dashboard.now)}</p>
-				<h1 className='text-xl font-semibold mt-1'>
-					{t('patientPortal.greeting', { name: greetingName })}
-				</h1>
+				<h1 className='text-xl font-semibold mt-1'>{t('patientPortal.greeting', { name: greetingName })}</h1>
 				<p className='text-sm text-muted-foreground'>{t('patientPortal.feeling')}</p>
 			</div>
 
@@ -89,7 +87,9 @@ export const DashboardPage: React.FC = () => {
 											</span>
 										)}
 									</div>
-									<span className='text-xs text-muted-foreground'>{typedMed.frequency ?? t('patientPortal.notLogged')}</span>
+									<span className='text-xs text-muted-foreground'>
+										{typedMed.frequency ?? t('patientPortal.notLogged')}
+									</span>
 								</div>
 							);
 						})}

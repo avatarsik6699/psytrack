@@ -1,7 +1,11 @@
+import { useTranslation } from 'react-i18next';
+
 import { useTestHistory } from '@shared/api/scales';
 import { date } from '@shared/lib/date';
 
 export default function HistoryPage() {
+	const { i18n } = useTranslation();
+	const isRu = i18n.language === 'ru';
 	const { data, isLoading } = useTestHistory();
 	const items = data?.items ?? [];
 
@@ -24,7 +28,11 @@ export default function HistoryPage() {
 					{items.map(item => (
 						<li key={item.id} className='rounded-xl border border-border bg-card p-4 text-card-foreground'>
 							<div className='flex items-start justify-between gap-3'>
-								<span className='text-sm font-medium'>{item.scale?.name ?? item.scale_id}</span>
+								<span className='text-sm font-medium'>
+									{isRu
+										? item.scale?.name_ru || item.scale?.name || item.scale_id
+										: (item.scale?.name ?? item.scale_id)}
+								</span>
 								<span className='text-xs text-muted-foreground'>{date.formatMonthShortRu(item.completed_at)}</span>
 							</div>
 							<p className='text-xs text-muted-foreground mt-0.5'>

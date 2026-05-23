@@ -1,4 +1,5 @@
 import React from 'react';
+import { useTranslation } from 'react-i18next';
 import { Link } from 'react-router';
 
 import { useRouter } from '@shared/hooks/use-router';
@@ -12,6 +13,8 @@ export function meta() {
 
 const AssessmentPage: React.FC = () => {
 	const router = useRouter();
+	const { i18n } = useTranslation();
+	const isRu = i18n.language === 'ru';
 	const patientScaleId = router.params.patientScaleId ?? '';
 
 	const wizard = useAssessmentWizard({ patientScaleId });
@@ -37,7 +40,9 @@ const AssessmentPage: React.FC = () => {
 						← К тестам
 					</Link>
 					<span className='text-sm font-medium flex-1 text-center px-4 truncate'>
-						{wizard.patientScale.scale?.name ?? ''}
+						{isRu
+							? wizard.patientScale.scale?.name_ru || wizard.patientScale.scale?.name
+							: wizard.patientScale.scale?.name}
 					</span>
 					<span className='text-xs text-muted-foreground shrink-0'>
 						{wizard.step + 1} / {wizard.questions.length}
@@ -52,7 +57,9 @@ const AssessmentPage: React.FC = () => {
 			</div>
 
 			<div className='p-6 space-y-6'>
-				<p className='text-sm font-medium'>{wizard.currentQuestion?.text}</p>
+				<p className='text-sm font-medium'>
+					{isRu ? wizard.currentQuestion?.text_ru || wizard.currentQuestion?.text : wizard.currentQuestion?.text}
+				</p>
 
 				<div className='space-y-2'>
 					{(wizard.currentQuestion?.options ?? []).map(opt => {
@@ -61,15 +68,15 @@ const AssessmentPage: React.FC = () => {
 						return (
 							<button
 								key={opt.value as number}
-								onClick={() => wizard.handleAnswer(opt.value as number)}
+								onClick={() => wizard.selectAnswer(opt.value as number)}
 								disabled={wizard.isMutationPending}
 								className={`w-full text-left border rounded-lg px-4 py-3 text-sm transition-colors disabled:opacity-50 ${
 									isSelected
-										? 'border-primary bg-docassist-primary-subtle text-primary'
+										? 'border-primary bg-docassist-primary-subtle text-primary font-medium'
 										: 'border-border hover:bg-muted'
 								}`}
 							>
-								{opt.label as string}
+								{isRu ? (opt.label_ru as string) || (opt.label as string) : (opt.label as string)}
 							</button>
 						);
 					})}
@@ -84,7 +91,7 @@ const AssessmentPage: React.FC = () => {
 						<span />
 					)}
 					<button
-						onClick={() => wizard.currentAnswer && wizard.handleAnswer(wizard.currentAnswer.value)}
+						onClick={wizard.advance}
 						disabled={!wizard.currentAnswer || wizard.isMutationPending}
 						className='px-5 py-2 rounded-lg bg-primary text-primary-foreground text-sm font-medium disabled:opacity-40 transition-opacity'
 					>
